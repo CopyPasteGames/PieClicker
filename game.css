@@ -1,0 +1,135 @@
+:root{
+	--bgTheme:#fc496dff;
+}
+
+body{
+	background-color:black;
+	font-family:sans-serif;
+	overflow-x:hidden;
+	padding:0px;
+	margin:0px;
+}
+
+#pieClicker{
+	position:absolute;
+	left:0%;
+	top:0%;
+	width:30%;
+	height:100%;
+}
+
+#pie{
+	position:absolute;
+	width:90%;
+	height:auto;
+	left:5%;
+	top:15%;
+}
+
+#pieCount{
+	position:absolute;
+	width:100%;
+	top:0%;
+	left:0%;
+	height:3%;
+	text-align:center;
+	background-color:var(--bgTheme);
+	font-size:20px;
+}
+
+#pieGRate{
+	position:absolute;
+	width:100%;
+	top:3%;
+	left:0%;
+	height:3%;
+	text-align:center;
+	background-color:var(--bgTheme);
+	font-size:20px;
+}
+
+#pieRightD{
+	position:absolute;
+	left:30%;
+	top:0%;
+	height:100%;
+	width:0.5%;
+	background-color:var(--bgTheme);
+}
+
+#pieUpgrades{
+	position:absolute;
+	left:30.5%;
+	width:30%;
+	height:100%;
+	top:0%;
+}
+
+.slightPadding{
+	position:absolute;
+	left:0%;
+	width:95%;
+	margin-left:5%;
+	height:97%;
+	top:3%;
+	overflow-y:scroll;
+}
+
+#upgradesTitle{
+	position:absolute;
+	width:100%;
+	top:0%;
+	left:0%;
+	height:3%;
+	text-align:center;
+	background-color:var(--bgTheme);
+	font-size:20px;
+}
+
+.pieUpgrade{
+	width:90%;
+	height:auto;
+}
+
+#pieRightF{
+	position:absolute;
+	left:60.5%;
+	top:0%;
+	height:100%;
+	width:0.5%;
+	background-color:var(--bgTheme);
+}
+
+#pieOtherMenu{
+	position:absolute;
+	left:61%;
+	width:39%;
+	height:100%;
+	top:0%;
+}
+
+#otherMenuTitle{
+	position:absolute;
+	width:100%;
+	top:0%;
+	left:0%;
+	height:3%;
+	text-align:center;
+	background-color:var(--bgTheme);
+	font-size:20px;
+}
+
+.otherMenuOption{
+	position:relative;
+	width:45%;
+	height:auto;
+}
+
+.btnText{
+	position:absolute;
+	top:30%;
+	left:0%;
+	width:100%;
+	text-align:center;
+	font-size:35px;
+}
