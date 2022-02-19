@@ -199,6 +199,7 @@ function purchaseOven(){
 		piesPerClick=piesPerClick+1
 		charge(pieClickOvenPrice)
 		pieClickOvenPrice=pieClickOvenPrice*2
+		refreshGame()
 	}else{
 		messageGame("You Can\'t Afford This (Price: "+pieClickOvenPrice+")")
 	}
