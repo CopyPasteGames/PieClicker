@@ -1,5 +1,6 @@
 :root{
 	--bgTheme:#fc496dff;
+	--textColor:rgb(255,255,255);
 }
 
 body{
@@ -8,6 +9,7 @@ body{
 	overflow-x:hidden;
 	padding:0px;
 	margin:0px;
+	color:var(--textColor);
 	-webkit-user-select:none;
 	-moz-user-select:none;
 	-ms-user-select:none;
@@ -142,7 +144,7 @@ body{
 }
 
 #creditsOverlay{
-	display:none;
+	display:block;
 	position:absolute;
 	top:0px;
 	left:0px;
@@ -187,8 +189,26 @@ body{
 	0%{
 	  	opacity:1;
 	}100%{
-		top:10%;
+		top:15%;
 		opacity:0;
-		z-index:-9999;
 	}
+}
+
+#messageBar{
+	display:none;
+	position:absolute;
+	top:80%;
+	left:25%;
+	width:50%;
+	height:5%;
+	font-size:25px;
+	background-color:var(--bgTheme);
+	border-radius:8px;
+}
+
+.centerText{
+	position:absolute;
+	top:50%;
+	left:50%;
+	transform:translate(-50%,-50%);
 }

@@ -1,41 +1,52 @@
+urlParams=new URLSearchParams(window.location.href)
+devModeEnabled=urlParams.getAll('dev')
 pies=0
 piesPerClick=1
 piesPerSecond=0
-settingsMute=false
 pieClickAnimationId=0
+pieClickMultiplier=1
+pieClickUpgradePrice=500
+pieClickOvenPrice=5
+pieUpgradeTier=0
+hasSeenCreditsThisSession=false
+settingsMute=false
 
 $(document).ready(()=>{
 	loadGame()
+	$("#creditsOverlay").fadeOut(750)
 	refreshGame()
+	if(devModeEnabled=='true')$("#debugMenuContainer").css({"display":"block"})
 })
 
 $("#pie").click((e)=>{
 	$("#pie").stop(true,false)
 	$("#pie").css({"width":"90%","left":"5%","top":"15%"})
-	pieClickAnimationId=pieClickAnimationId+1;
-	$("body").append('<div id="pieInd' + pieClickAnimationId + '" hidden style="pointer-events:none;">+' + piesPerClick + '</div>');
-	$("#pieInd" + pieClickAnimationId).css("top", (e.pageY + getRndInteger(-8,8)) + "px");
-	$("#pieInd" + pieClickAnimationId).css("left", (e.pageX + getRndInteger(-8,8)) + "px");
-	$("#pieInd" + pieClickAnimationId).css("position", "absolute");
-	$("#pieInd" + pieClickAnimationId).css("font-size", "20px");
-	$("#pieInd" + pieClickAnimationId).css("color", "white");
-	$("#pieInd" + pieClickAnimationId).css("animation", "GoUp 2s forwards linear");
-	$("#pieInd" + pieClickAnimationId).show();
-	pies=pies+piesPerClick
+	pieClickAnimationId=pieClickAnimationId+1
+	$("body").append('<div id="pieInd'+pieClickAnimationId+'" hidden style="pointer-events:none;"><b>+'+piesPerClick*pieClickMultiplier+'</b></div>')
+	$("#pieInd" + pieClickAnimationId).css("top",(e.pageY+getRndInteger(-8,8))+"px")
+	$("#pieInd" + pieClickAnimationId).css("left",(e.pageX+getRndInteger(-8,8))+"px")
+	$("#pieInd" + pieClickAnimationId).css("position","absolute")
+	$("#pieInd" + pieClickAnimationId).css("font-size","22.5px")
+	$("#pieInd" + pieClickAnimationId).css("color","white")
+	$("#pieInd" + pieClickAnimationId).css("animation","GoUp 2s forwards linear")
+	$("#pieInd" + pieClickAnimationId).show()
+	pies=pies+piesPerClick*pieClickMultiplier
 	saveGame()
 	refreshGame()
 	$("#pie").animate({"width":"95%","left":"2.5%","top":"14%"},50)
 	$("#pie").animate({"width":"90%","left":"5%","top":"15%"},100)
 })
 
-function getRndInteger(min,max){
-	return Math.floor(Math.random()*(max-min+1))+min
-}
+function getRndInteger(min,max){return Math.floor(Math.random()*(max-min+1))+min}
 
 function saveGame(){
 	localStorage.setItem("pies",pies);
 	localStorage.setItem("piesPerClick",piesPerClick);
 	localStorage.setItem("piesPerSecond",piesPerSecond);
+	localStorage.setItem("pieUpgradeTier",pieUpgradeTier);
+	localStorage.setItem("pieClickMultiplier",pieClickMultiplier);
+	localStorage.setItem("pieClickUpgradePrice",pieClickUpgradePrice);
+	localStorage.setItem("pieClickOvenPrice",pieClickOvenPrice);
 	localStorage.setItem("IsGameSaved?","1")
 }
 
@@ -44,12 +55,64 @@ function loadGame(){
 		pies=localStorage.getItem("pies")*1
 		piesPerClick=localStorage.getItem("piesPerClick")*1
 		piesPerSecond=localStorage.getItem("piesPerSecond")*1
+		pieUpgradeTier=localStorage.getItem("pieUpgradeTier")*1
+		pieClickMultiplier=localStorage.getItem("pieClickMultiplier")*1
+		pieClickUpgradePrice=localStorage.getItem("pieClickUpgradePrice")*1
+		pieClickOvenPrice=localStorage.getItem("pieClickOvenPrice")*1
 	}
 }
 
 function refreshGame(){
-	$("#pieCount").html("Pies: " + pies)
-	$("#pieGRate").html("Pies/Sec: " + piesPerSecond)
+	$("#pieCountReal").html("Pies: "+pies)
+	$("#pieGRateReal").html("Pies/Sec: "+piesPerSecond+" | Pies/Click: "+piesPerClick*pieClickMultiplier)
+	/* pieUpgradeTier Mapping:
+	0 - Normal Pie   |  Pumpkin Pie Upgrade
+	1 - Pumpkin Pie  |  Apple Pie Upgrade
+	2 - Apple Pie    |  Cheesecake Upgrade
+	3 - Cheesecake   |  Oreo Pie?
+	4 - Oero Pie     |  No Upgrade
+	*/
+	if(pieUpgradeTier==0){
+		$("#InitialUpgrade").attr("src","./assets/UpgradeButtonPumpkinPie.png")
+		$("#pieBtn").attr("src","./assets/Pie.png")
+	}else if(pieUpgradeTier==1){
+		$("#InitialUpgrade").attr("src","./assets/UpgradeButtonApplePie.png")
+		$("#pieBtn").attr("src","./assets/PiePumpkin.png")
+	}else if(pieUpgradeTier==2){
+		$("#InitialUpgrade").attr("src","./assets/UpgradeButtonCheesecake.png")
+		$("#pieBtn").attr("src","./assets/PieApple.png")
+	}else if(pieUpgradeTier==3){
+		$("#InitialUpgrade").attr("src","./assets/UpgradeButtonOreoCheesecake.png")
+		$("#pieBtn").attr("src","./assets/PieCheesecake.png")
+	}else if(pieUpgradeTier==4){
+		$("#InitialUpgrade").css({"display":"none"})
+		$("#pieBtn").attr("src","./assets/PieOreoCheesecake.png")
+	}
+	if(canAfford(pieClickOvenPrice))$("#OvenUpgradeContainer").css({"filter":"brightness(1)"})
+	else $("#OvenUpgradeContainer").css({"filter":"brightness(0.5)"})
+	if(canAfford(pieClickUpgradePrice)&&pieUpgradeTier!=4)$("#InitialUpgradeContainer").css({"filter":"brightness(1)"})
+	else $("#InitialUpgradeContainer").css({"filter":"brightness(0.5)"})
+}
+
+function startClickUpgrade(){
+	if(canAfford(pieClickUpgradePrice)){
+		charge(pieClickUpgradePrice)
+		pieClickUpgradePrice=Math.round(pieClickUpgradePrice*5)
+		pieUpgradeTier=pieUpgradeTier+1
+		if(pieUpgradeTier==1){
+			pieClickMultiplier=2
+		}else if(pieUpgradeTier==2){
+			pieClickMultiplier=3
+		}else if(pieUpgradeTier==3){
+			pieClickMultiplier=5
+		}else if(pieUpgradeTier==4){
+			pieClickMultiplier=7
+		}
+		saveGame()
+		refreshGame()
+	}else{
+		messageGame("You Can\'t Afford This (Price: "+pieClickUpgradePrice+")")
+	}
 }
 
 function sleep(ms){
@@ -58,6 +121,7 @@ function sleep(ms){
 
 async function PleasePlayTheCredits(){
 	settingsMute=true
+	hasSeenCreditsThisSession=true
 	$("#creditsOverlay").fadeIn(1000)
 	await sleep(500)
 	$("#creditsName").html("kgsensei")
@@ -102,4 +166,40 @@ async function PleasePlayTheCredits(){
 	await sleep(750)
 	$("#creditsOverlay").fadeOut(1000)
 	settingsMute=false
+}
+
+function canAfford(itemPrice){
+	if(pies>=itemPrice)return true
+	else return false
+}
+
+function debugMenu(){
+	alert("[Debug Variable Menu]\n\nPie.Count?: "+pies+"\nPie.PerSec?: "+piesPerSecond+"\nPie.PerClick?: "+piesPerClick+"\n\
+Pie.ClickMult?: "+pieClickMultiplier+"\nPie.UpTier?: "+pieUpgradeTier+"\nPie.AnimID?: "+pieClickAnimationId+"\n\
+Settings.Mute?: "+settingsMute+"\nCredits.Seen?: "+hasSeenCreditsThisSession+"\nGame.Saved?: "+(localStorage.getItem("IsGameSaved?")*1?'true':'false')+"\n\
+Pie.ClickUpPrice?: "+pieClickUpgradePrice+"\nPie.OvenPrice?: "+pieClickOvenPrice+"\nPie.CanAffordOven?: "+canAfford(pieClickOvenPrice)+"\n\
+Pie.CanAffordUpgrade?: "+canAfford(pieClickUpgradePrice))
+}
+
+async function messageGame(message){
+	$("#messageBar").stop(true,true)
+	$("#messageBarText").html(message)
+	$("#messageBar").fadeIn(250)
+	await sleep(1500)
+	$("#messageBar").fadeOut(250)
+}
+
+function charge(amount){
+	pies=pies-amount
+	refreshGame()
+}
+
+function purchaseOven(){
+	if(canAfford(pieClickOvenPrice)){
+		piesPerClick=piesPerClick+1
+		charge(pieClickOvenPrice)
+		pieClickOvenPrice=pieClickOvenPrice*2
+	}else{
+		messageGame("You Can\'t Afford This (Price: "+pieClickOvenPrice+")")
+	}
 }
