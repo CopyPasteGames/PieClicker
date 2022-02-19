@@ -8,6 +8,10 @@ body{
 	overflow-x:hidden;
 	padding:0px;
 	margin:0px;
+	-webkit-user-select:none;
+	-moz-user-select:none;
+	-ms-user-select:none;
+	user-select:none;
 }
 
 #pieClicker{
@@ -19,6 +23,7 @@ body{
 }
 
 #pie{
+	cursor:pointer;
 	position:absolute;
 	width:90%;
 	height:auto;
@@ -70,9 +75,8 @@ body{
 	left:0%;
 	width:95%;
 	margin-left:5%;
-	height:97%;
-	top:3%;
-	overflow-y:scroll;
+	height:96%;
+	top:4%;
 }
 
 #upgradesTitle{
@@ -80,13 +84,14 @@ body{
 	width:100%;
 	top:0%;
 	left:0%;
-	height:3%;
+	height:4%;
 	text-align:center;
 	background-color:var(--bgTheme);
 	font-size:20px;
 }
 
 .pieUpgrade{
+	cursor:pointer;
 	width:90%;
 	height:auto;
 }
@@ -113,13 +118,15 @@ body{
 	width:100%;
 	top:0%;
 	left:0%;
-	height:3%;
+	height:4%;
 	text-align:center;
 	background-color:var(--bgTheme);
 	font-size:20px;
 }
 
 .otherMenuOption{
+	display:inline-flex;
+	cursor:pointer;
 	position:relative;
 	width:45%;
 	height:auto;
@@ -127,9 +134,61 @@ body{
 
 .btnText{
 	position:absolute;
-	top:30%;
+	top:25%;
 	left:0%;
 	width:100%;
 	text-align:center;
 	font-size:35px;
+}
+
+#creditsOverlay{
+	display:none;
+	position:absolute;
+	top:0px;
+	left:0px;
+	width:100%;
+	height:100%;
+	z-index:9999;
+	background-color:black;
+}
+
+#creditsName{
+	display:none;
+	position:absolute;
+	top:40%;
+	left:0%;
+	width:100%;
+	font-size:50px;
+	color:var(--bgTheme);
+	text-align:center;
+}
+
+#creditsTitle{
+	display:none;
+	position:absolute;
+	top:50%;
+	left:0%;
+	width:100%;
+	font-size:35px;
+	color:var(--bgTheme);
+	text-align:center;
+}
+
+#pieBackground{
+	position:absolute;
+	top:0%;
+	left:0%;
+	width:100%;
+	height:100%;
+	z-index:-5%;
+}
+
+@keyframes GoUp{
+	0%{
+	  	opacity:1;
+	}100%{
+		top:10%;
+		opacity:0;
+		z-index:-9999;
+	}
 }
