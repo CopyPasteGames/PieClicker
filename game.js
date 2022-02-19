@@ -1,5 +1,3 @@
-urlParams=new URLSearchParams(window.location.href)
-devModeEnabled=urlParams.getAll('dev')
 pies=0
 piesPerClick=1
 piesPerSecond=0
@@ -15,7 +13,7 @@ $(document).ready(()=>{
 	loadGame()
 	$("#creditsOverlay").fadeOut(750)
 	refreshGame()
-	if(devModeEnabled=='true')$("#debugMenuContainer").css({"display":"block"})
+	messageGame("!!THIS GAME IS STILL UNDER DEVELOPMENT!!")
 })
 
 $("#pie").click((e)=>{
@@ -23,8 +21,8 @@ $("#pie").click((e)=>{
 	$("#pie").css({"width":"90%","left":"5%","top":"15%"})
 	pieClickAnimationId=pieClickAnimationId+1
 	$("body").append('<div id="pieInd'+pieClickAnimationId+'" hidden style="pointer-events:none;"><b>+'+piesPerClick*pieClickMultiplier+'</b></div>')
-	$("#pieInd" + pieClickAnimationId).css("top",(e.pageY+getRndInteger(-8,8))+"px")
-	$("#pieInd" + pieClickAnimationId).css("left",(e.pageX+getRndInteger(-8,8))+"px")
+	$("#pieInd" + pieClickAnimationId).css("top",(e.pageY+getRndInteger(-10,10))+"px")
+	$("#pieInd" + pieClickAnimationId).css("left",(e.pageX+getRndInteger(-10,10))+"px")
 	$("#pieInd" + pieClickAnimationId).css("position","absolute")
 	$("#pieInd" + pieClickAnimationId).css("font-size","22.5px")
 	$("#pieInd" + pieClickAnimationId).css("color","white")
@@ -33,7 +31,7 @@ $("#pie").click((e)=>{
 	pies=pies+piesPerClick*pieClickMultiplier
 	saveGame()
 	refreshGame()
-	$("#pie").animate({"width":"95%","left":"2.5%","top":"14%"},50)
+	$("#pie").animate({"width":"95%","left":"2.5%","top":"14%"},40)
 	$("#pie").animate({"width":"90%","left":"5%","top":"15%"},100)
 })
 
@@ -64,7 +62,7 @@ function loadGame(){
 
 function refreshGame(){
 	$("#pieCountReal").html("Pies: "+pies)
-	$("#pieGRateReal").html("Pies/Sec: "+piesPerSecond+" | Pies/Click: "+piesPerClick*pieClickMultiplier)
+	$("#pieGRateReal").html("Pies/Sec: "+piesPerSecond)
 	/* pieUpgradeTier Mapping:
 	0 - Normal Pie   |  Pumpkin Pie Upgrade
 	1 - Pumpkin Pie  |  Apple Pie Upgrade
