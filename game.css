@@ -65,6 +65,8 @@ body{
 }
 
 #pieUpgrades{
+	background-image:url("./assets/UpgradesBackground.png");
+	background-repeat:round;
 	position:absolute;
 	left:30.5%;
 	width:30%;
@@ -89,7 +91,7 @@ body{
 	height:4%;
 	text-align:center;
 	background-color:var(--bgTheme);
-	font-size:20px;
+	font-size:22px;
 }
 
 .pieUpgrade{
@@ -123,7 +125,7 @@ body{
 	height:4%;
 	text-align:center;
 	background-color:var(--bgTheme);
-	font-size:20px;
+	font-size:22px;
 }
 
 .otherMenuOption{

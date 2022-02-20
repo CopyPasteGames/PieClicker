@@ -4,14 +4,22 @@ piesPerSecond=0
 pieClickAnimationId=0
 pieClickMultiplier=1
 pieClickUpgradePrice=500
-pieClickOvenPrice=5
+pieClickOvenPrice=15
 pieUpgradeTier=0
+pieRotationDeg=0
+assistantChefPrice=10
 hasSeenCreditsThisSession=false
 settingsMute=false
 
 $(document).ready(()=>{
 	loadGame()
-	refreshGame()
+	a=localStorage.getItem("lastLogTime")
+	if(a!=null||a!=undefined){
+		a=Date.parse(a)
+		b=Date.parse(new Date())
+		pies=pies+piesPerSecond*(b-a)/1000
+	}
+	tickGame()
 })
 
 $(window).bind("load",()=>{
@@ -21,7 +29,7 @@ $(window).bind("load",()=>{
 
 $("#pie").click((e)=>{
 	$("#pie").stop(true,false)
-	$("#pie").css({"width":"90%","left":"5%","top":"15%"})
+	$("#pie").css({"width":"90%","left":"5%","top":"15%","transform":"rotate("+pieRotationDeg+"deg)"})
 	pieClickAnimationId=pieClickAnimationId+1
 	$("body").append('<div id="pieInd'+pieClickAnimationId+'" hidden style="pointer-events:none;"><b>+'+piesPerClick*pieClickMultiplier+'</b></div>')
 	$("#pieInd" + pieClickAnimationId).css("top",(e.pageY+getRndInteger(-10,10))+"px")
@@ -32,7 +40,6 @@ $("#pie").click((e)=>{
 	$("#pieInd" + pieClickAnimationId).css("animation","GoUp 2s forwards linear")
 	$("#pieInd" + pieClickAnimationId).show()
 	pies=pies+piesPerClick*pieClickMultiplier
-	saveGame()
 	refreshGame()
 	$("#pie").animate({"width":"95%","left":"2.5%","top":"14%"},40)
 	$("#pie").animate({"width":"90%","left":"5%","top":"15%"},100)
@@ -43,13 +50,15 @@ function removeElem(animID){setTimeout(()=>{$(animID).remove()},2250)}
 function getRndInteger(min,max){return Math.floor(Math.random()*(max-min+1))+min}
 
 function saveGame(){
-	localStorage.setItem("pies",pies);
-	localStorage.setItem("piesPerClick",piesPerClick);
-	localStorage.setItem("piesPerSecond",piesPerSecond);
-	localStorage.setItem("pieUpgradeTier",pieUpgradeTier);
-	localStorage.setItem("pieClickMultiplier",pieClickMultiplier);
-	localStorage.setItem("pieClickUpgradePrice",pieClickUpgradePrice);
-	localStorage.setItem("pieClickOvenPrice",pieClickOvenPrice);
+	localStorage.setItem("pies",pies)
+	localStorage.setItem("piesPerClick",piesPerClick)
+	localStorage.setItem("piesPerSecond",piesPerSecond)
+	localStorage.setItem("pieUpgradeTier",pieUpgradeTier)
+	localStorage.setItem("pieClickMultiplier",pieClickMultiplier)
+	localStorage.setItem("pieClickUpgradePrice",pieClickUpgradePrice)
+	localStorage.setItem("pieClickOvenPrice",pieClickOvenPrice)
+	localStorage.setItem("assistantChefPrice",assistantChefPrice)
+	localStorage.setItem("lastLogTime",new Date())
 	localStorage.setItem("IsGameSaved?","1")
 }
 
@@ -62,6 +71,7 @@ function loadGame(){
 		pieClickMultiplier=localStorage.getItem("pieClickMultiplier")*1
 		pieClickUpgradePrice=localStorage.getItem("pieClickUpgradePrice")*1
 		pieClickOvenPrice=localStorage.getItem("pieClickOvenPrice")*1
+		assistantChefPrice=localStorage.getItem("assistantChefPrice")*1
 	}
 }
 
@@ -95,6 +105,8 @@ function refreshGame(){
 	else $("#OvenUpgradeContainer").css({"filter":"brightness(0.5)"})
 	if(canAfford(pieClickUpgradePrice)&&pieUpgradeTier!=4)$("#InitialUpgradeContainer").css({"filter":"brightness(1)"})
 	else $("#InitialUpgradeContainer").css({"filter":"brightness(0.5)"})
+	if(canAfford(assistantChefPrice))$("#AssistantChefContainer").css({"filter":"brightness(1)"})
+	else $("#AssistantChefContainer").css({"filter":"brightness(0.5)"})
 }
 
 function startClickUpgrade(){
@@ -111,10 +123,9 @@ function startClickUpgrade(){
 		}else if(pieUpgradeTier==4){
 			pieClickMultiplier=7
 		}
-		saveGame()
 		refreshGame()
 	}else{
-		messageGame("You Can\'t Afford This (Price: "+pieClickUpgradePrice+")")
+		messageGame("You Can\'t Afford This (Price: "+piesToNumber(pieClickUpgradePrice)+")")
 	}
 }
 
@@ -124,7 +135,6 @@ function sleep(ms){
 
 async function PleasePlayTheCredits(){
 	settingsMute=true
-	hasSeenCreditsThisSession=true
 	$("#creditsOverlay").fadeIn(1000)
 	await sleep(500)
 	$("#creditsName").html("kgsensei")
@@ -170,10 +180,12 @@ async function PleasePlayTheCredits(){
 	$("#creditsOverlay").fadeOut(1000)
 	settingsMute=false
 	await sleep(100)
-	x=getRndInteger(50,500)
-	messageGame("Thanks For Watching The Credits (+"+x+" Pies)")
-	pies=pies+x
-	saveGame()
+	if(hasSeenCreditsThisSession==false){
+		x=getRndInteger(250,1000)
+		messageGame("Thanks For Watching The Credits (+"+x+" Pies)")
+		pies=pies+x
+	}
+	hasSeenCreditsThisSession=true
 	refreshGame()
 }
 
@@ -210,7 +222,18 @@ function purchaseOven(){
 		pieClickOvenPrice=Math.round(pieClickOvenPrice*1.25)
 		refreshGame()
 	}else{
-		messageGame("You Can\'t Afford This (Price: "+pieClickOvenPrice+")")
+		messageGame("You Can\'t Afford This (Price: "+piesToNumber(pieClickOvenPrice)+")")
+	}
+}
+
+function purchaseChef(){
+	if(canAfford(assistantChefPrice)){
+		piesPerSecond=piesPerSecond+1
+		charge(assistantChefPrice)
+		assistantChefPrice=Math.round(assistantChefPrice*1.25)
+		refreshGame()
+	}else{
+		messageGame("You Can\'t Afford This (Price: "+piesToNumber(assistantChefPrice)+")")
 	}
 }
 
@@ -225,4 +248,11 @@ function piesToNumber(value){
     :Math.abs(Number(value))>=1.0e+3
     ?(Math.abs(Number(value))/1.0e+3).toFixed(2)+"K"
     :Math.abs(Number(value))
+}
+
+function tickGame(){
+	pies=pies+piesPerSecond
+	saveGame()
+	refreshGame()
+	setTimeout(()=>{tickGame()},1000)
 }
