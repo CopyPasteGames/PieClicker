@@ -33,7 +33,10 @@ $("#pie").click((e)=>{
 	refreshGame()
 	$("#pie").animate({"width":"95%","left":"2.5%","top":"14%"},40)
 	$("#pie").animate({"width":"90%","left":"5%","top":"15%"},100)
+	removeElem("#pieInd"+pieClickAnimationId)
 })
+
+function removeElem(animID){setTimeout(()=>{$(animID).remove()},2250)}
 
 function getRndInteger(min,max){return Math.floor(Math.random()*(max-min+1))+min}
 
@@ -61,8 +64,8 @@ function loadGame(){
 }
 
 function refreshGame(){
-	$("#pieCountReal").html("Pies: "+pies)
-	$("#pieGRateReal").html("Pies/Sec: "+piesPerSecond)
+	$("#pieCountReal").html("Pies: "+piesToNumber(pies))
+	$("#pieGRateReal").html("Pies/Sec: "+piesToNumber(piesPerSecond))
 	/* pieUpgradeTier Mapping:
 	0 - Normal Pie   |  Pumpkin Pie Upgrade
 	1 - Pumpkin Pie  |  Apple Pie Upgrade
@@ -201,4 +204,17 @@ function purchaseOven(){
 	}else{
 		messageGame("You Can\'t Afford This (Price: "+pieClickOvenPrice+")")
 	}
+}
+
+function piesToNumber(value){
+    // Nine Zeroes for Billions
+    return Math.abs(Number(value)) >= 1.0e+9
+    ? (Math.abs(Number(value)) / 1.0e+9).toFixed(2) + "B"
+    // Six Zeroes for Millions 
+    : Math.abs(Number(value)) >= 1.0e+6
+    ? (Math.abs(Number(value)) / 1.0e+6).toFixed(2) + "M"
+    // Three Zeroes for Thousands
+    : Math.abs(Number(value)) >= 1.0e+3
+    ? (Math.abs(Number(value)) / 1.0e+3).toFixed(2) + "K"
+    : Math.abs(Number(value))
 }
