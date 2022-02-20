@@ -11,8 +11,11 @@ settingsMute=false
 
 $(document).ready(()=>{
 	loadGame()
-	$("#creditsOverlay").fadeOut(750)
 	refreshGame()
+})
+
+$(window).bind("load",()=>{
+	$("#creditsOverlay").fadeOut(750)
 	messageGame("!!THIS GAME IS STILL UNDER DEVELOPMENT!!")
 })
 
@@ -37,7 +40,6 @@ $("#pie").click((e)=>{
 })
 
 function removeElem(animID){setTimeout(()=>{$(animID).remove()},2250)}
-
 function getRndInteger(min,max){return Math.floor(Math.random()*(max-min+1))+min}
 
 function saveGame(){
@@ -167,6 +169,12 @@ async function PleasePlayTheCredits(){
 	await sleep(750)
 	$("#creditsOverlay").fadeOut(1000)
 	settingsMute=false
+	await sleep(100)
+	x=getRndInteger(50,500)
+	messageGame("Thanks For Watching The Credits (+"+x+" Pies)")
+	pies=pies+x
+	saveGame()
+	refreshGame()
 }
 
 function canAfford(itemPrice){
@@ -199,7 +207,7 @@ function purchaseOven(){
 	if(canAfford(pieClickOvenPrice)){
 		piesPerClick=piesPerClick+1
 		charge(pieClickOvenPrice)
-		pieClickOvenPrice=pieClickOvenPrice*2
+		pieClickOvenPrice=Math.round(pieClickOvenPrice*1.25)
 		refreshGame()
 	}else{
 		messageGame("You Can\'t Afford This (Price: "+pieClickOvenPrice+")")
@@ -208,13 +216,13 @@ function purchaseOven(){
 
 function piesToNumber(value){
     // Nine Zeroes for Billions
-    return Math.abs(Number(value)) >= 1.0e+9
-    ? (Math.abs(Number(value)) / 1.0e+9).toFixed(2) + "B"
+    return Math.abs(Number(value))>=1.0e+9
+    ?(Math.abs(Number(value))/1.0e+9).toFixed(2)+"B"
     // Six Zeroes for Millions 
-    : Math.abs(Number(value)) >= 1.0e+6
-    ? (Math.abs(Number(value)) / 1.0e+6).toFixed(2) + "M"
+    :Math.abs(Number(value))>=1.0e+6
+    ?(Math.abs(Number(value))/1.0e+6).toFixed(2)+"M"
     // Three Zeroes for Thousands
-    : Math.abs(Number(value)) >= 1.0e+3
-    ? (Math.abs(Number(value)) / 1.0e+3).toFixed(2) + "K"
-    : Math.abs(Number(value))
+    :Math.abs(Number(value))>=1.0e+3
+    ?(Math.abs(Number(value))/1.0e+3).toFixed(2)+"K"
+    :Math.abs(Number(value))
 }
