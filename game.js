@@ -25,7 +25,7 @@ $(document).ready(()=>{
 	if(a!=null&&a!=undefined&&a!=NaN){
 		a=Date.parse(a)
 		b=Date.parse(new Date())
-		pies=pies+piesPerSecond*(b-a)/1000
+		pies=pies+((assistantChefAmount*assistantChefMultiplier)+piesPerSecond)*((b-a)/1000)
 	}
 	tickGame()
 })
