@@ -220,3 +220,44 @@ body{
 	text-align:center;
 	transform:translate(0%,-50%);
 }
+
+#usefulInfoScreen{
+	display:none;
+	position:absolute;
+	left:10%;
+	width:80%;
+	height:90%;
+	top:5%;
+	border-style:solid;
+	border-radius:7px;
+	border-color:black;
+	border-width:3.5px;
+	background-color:var(--bgTheme);
+	font-size:1vw;
+}
+
+.uis_half{
+	width:50%;
+	word-wrap:break-word;
+}
+
+thead{
+	background-color:rgba(0,0,0,0.5);
+}
+
+table,thead,td{
+	padding:2px;
+	border-style:solid;
+	border-width:2px;
+	border-color:black;
+	border-collapse:collapse;
+}
+
+#uis_exit{
+	cursor:pointer;
+	position:absolute;
+	left:96%;
+	top:2%;
+	width:2%;
+	height:auto;
+}

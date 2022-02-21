@@ -15,6 +15,10 @@ masterChefUnlocked=false
 hasSeenCreditsThisSession=false
 settingsMute=false
 
+if(/Android|webOS|iPhone|iPad|iPod|BlackBerry/i.test(navigator.userAgent)||(/Android|webOS|iPhone|iPad|iPod|BlackBerry/i.test(navigator.platform))){
+	screen.orientation.lock('landscape')
+}
+
 $(document).ready(()=>{
 	loadGame()
 	a=localStorage.getItem("lastLogTime")
@@ -263,8 +267,17 @@ function purchaseMasterChef(){
 }
 
 function piesToNumber(value){
+	// Eighteen for Quintillion
+	return Math.abs(Number(value))>=1.0e+15
+    ?(Math.abs(Number(value))/1.0e+15).toFixed(2)+"Q"
+	// Fifteen Zeroes for Quadrillion
+    :Math.abs(Number(value))>=1.0e+15
+    ?(Math.abs(Number(value))/1.0e+15).toFixed(2)+"q"
+	// Twelve Zeroes for Trillions
+	:Math.abs(Number(value))>=1.0e+12
+    ?(Math.abs(Number(value))/1.0e+12).toFixed(2)+"t"
     // Nine Zeroes for Billions
-    return Math.abs(Number(value))>=1.0e+9
+    :Math.abs(Number(value))>=1.0e+9
     ?(Math.abs(Number(value))/1.0e+9).toFixed(2)+"B"
     // Six Zeroes for Millions 
     :Math.abs(Number(value))>=1.0e+6
