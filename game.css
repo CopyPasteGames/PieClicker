@@ -41,7 +41,8 @@ body{
 	height:3%;
 	text-align:center;
 	background-color:var(--bgTheme);
-	font-size:20px;
+	font-size:2.5vh;
+	overflow:hidden;
 }
 
 #pieGRate{
@@ -52,7 +53,8 @@ body{
 	height:3%;
 	text-align:center;
 	background-color:var(--bgTheme);
-	font-size:20px;
+	font-size:2.5vh;
+	overflow:hidden;
 }
 
 #pieRightD{
@@ -91,7 +93,8 @@ body{
 	height:4%;
 	text-align:center;
 	background-color:var(--bgTheme);
-	font-size:22px;
+	font-size:3vh;
+	overflow:hidden;
 }
 
 .pieUpgrade{
@@ -125,7 +128,8 @@ body{
 	height:4%;
 	text-align:center;
 	background-color:var(--bgTheme);
-	font-size:22px;
+	font-size:3vh;
+	overflow:hidden;
 }
 
 .otherMenuOption{
@@ -142,7 +146,7 @@ body{
 	left:0%;
 	width:100%;
 	text-align:center;
-	font-size:35px;
+	font-size:2vw;
 }
 
 #creditsOverlay{

@@ -7,14 +7,18 @@ pieClickUpgradePrice=500
 pieClickOvenPrice=15
 pieUpgradeTier=0
 pieRotationDeg=0
+assistantChefAmount=0
+assistantChefMultiplier=1
 assistantChefPrice=10
+masterChefPrice=100000
+masterChefUnlocked=false
 hasSeenCreditsThisSession=false
 settingsMute=false
 
 $(document).ready(()=>{
 	loadGame()
 	a=localStorage.getItem("lastLogTime")
-	if(a!=null||a!=undefined){
+	if(a!=null&&a!=undefined&&a!=NaN){
 		a=Date.parse(a)
 		b=Date.parse(new Date())
 		pies=pies+piesPerSecond*(b-a)/1000
@@ -59,25 +63,30 @@ function saveGame(){
 	localStorage.setItem("pieClickOvenPrice",pieClickOvenPrice)
 	localStorage.setItem("assistantChefPrice",assistantChefPrice)
 	localStorage.setItem("lastLogTime",new Date())
-	localStorage.setItem("IsGameSaved?","1")
+	localStorage.setItem("assistantChefAmount",assistantChefAmount)
+	localStorage.setItem("assistantChefMultiplier",assistantChefMultiplier)
+	localStorage.setItem("masterChefPrice",masterChefPrice)
+	localStorage.setItem("masterChefUnlocked",masterChefUnlocked)
 }
 
 function loadGame(){
-	if(localStorage.getItem("IsGameSaved?")*1==1){
-		pies=localStorage.getItem("pies")*1
-		piesPerClick=localStorage.getItem("piesPerClick")*1
-		piesPerSecond=localStorage.getItem("piesPerSecond")*1
-		pieUpgradeTier=localStorage.getItem("pieUpgradeTier")*1
-		pieClickMultiplier=localStorage.getItem("pieClickMultiplier")*1
-		pieClickUpgradePrice=localStorage.getItem("pieClickUpgradePrice")*1
-		pieClickOvenPrice=localStorage.getItem("pieClickOvenPrice")*1
-		assistantChefPrice=localStorage.getItem("assistantChefPrice")*1
-	}
+	if(lsExists("pies"))pies=localStorage.getItem("pies")*1
+	if(lsExists("piesPerClick"))piesPerClick=localStorage.getItem("piesPerClick")*1
+	if(lsExists("piesPerSecond"))piesPerSecond=localStorage.getItem("piesPerSecond")*1
+	if(lsExists("pieUpgradeTier"))pieUpgradeTier=localStorage.getItem("pieUpgradeTier")*1
+	if(lsExists("pieClickMultiplier"))pieClickMultiplier=localStorage.getItem("pieClickMultiplier")*1
+	if(lsExists("pieClickUpgradePrice"))pieClickUpgradePrice=localStorage.getItem("pieClickUpgradePrice")*1
+	if(lsExists("pieClickOvenPrice"))pieClickOvenPrice=localStorage.getItem("pieClickOvenPrice")*1
+	if(lsExists("assistantChefPrice"))assistantChefPrice=localStorage.getItem("assistantChefPrice")*1
+	if(lsExists("assistantChefAmount"))assistantChefAmount=localStorage.getItem("assistantChefAmount")*1
+	if(lsExists("assistantChefMultiplier"))assistantChefMultiplier=localStorage.getItem("assistantChefMultiplier")*1
+	if(lsExists("masterChefPrice"))masterChefPrice=localStorage.getItem("masterChefPrice")*1
+	if(lsExists("masterChefUnlocked"))masterChefUnlocked=localStorage.getItem("masterChefUnlocked").StringToBool()
 }
 
 function refreshGame(){
 	$("#pieCountReal").html("Pies: "+piesToNumber(pies))
-	$("#pieGRateReal").html("Pies/Sec: "+piesToNumber(piesPerSecond))
+	$("#pieGRateReal").html("Pies/Sec: "+piesToNumber((assistantChefAmount*assistantChefMultiplier)+piesPerSecond))
 	/* pieUpgradeTier Mapping:
 	0 - Normal Pie   |  Pumpkin Pie Upgrade
 	1 - Pumpkin Pie  |  Apple Pie Upgrade
@@ -100,6 +109,8 @@ function refreshGame(){
 	}else if(pieUpgradeTier==4){
 		$("#InitialUpgrade").css({"display":"none"})
 		$("#pieBtn").attr("src","./assets/PieOreoCheesecake.png")
+	}if(masterChefUnlocked){
+		$("#MasterChefContainer").css({"display":"none"})
 	}
 	if(canAfford(pieClickOvenPrice))$("#OvenUpgradeContainer").css({"filter":"brightness(1)"})
 	else $("#OvenUpgradeContainer").css({"filter":"brightness(0.5)"})
@@ -107,6 +118,8 @@ function refreshGame(){
 	else $("#InitialUpgradeContainer").css({"filter":"brightness(0.5)"})
 	if(canAfford(assistantChefPrice))$("#AssistantChefContainer").css({"filter":"brightness(1)"})
 	else $("#AssistantChefContainer").css({"filter":"brightness(0.5)"})
+	if(canAfford(masterChefPrice))$("#MasterChefContainer").css({"filter":"brightness(1)"})
+	else $("#MasterChefContainer").css({"filter":"brightness(0.5)"})
 }
 
 function startClickUpgrade(){
@@ -199,7 +212,8 @@ function debugMenu(){
 Pie.ClickMult?: "+pieClickMultiplier+"\nPie.UpTier?: "+pieUpgradeTier+"\nPie.AnimID?: "+pieClickAnimationId+"\n\
 Settings.Mute?: "+settingsMute+"\nCredits.Seen?: "+hasSeenCreditsThisSession+"\nGame.Saved?: "+(localStorage.getItem("IsGameSaved?")*1?'true':'false')+"\n\
 Pie.ClickUpPrice?: "+pieClickUpgradePrice+"\nPie.OvenPrice?: "+pieClickOvenPrice+"\nPie.CanAffordOven?: "+canAfford(pieClickOvenPrice)+"\n\
-Pie.CanAffordUpgrade?: "+canAfford(pieClickUpgradePrice))
+Pie.CanAffordUpgrade?: "+canAfford(pieClickUpgradePrice)+"\nPie.MasterChefPrice?: "+masterChefPrice+"Pie.MasterChefUnlocked?: "+masterChefUnlocked+"\n\
+Pie.AssistantChefMult?: "+assistantChefMultiplier+"Pie.AssistantChefAmount?: "+assistantChefAmount)
 }
 
 async function messageGame(message){
@@ -228,12 +242,23 @@ function purchaseOven(){
 
 function purchaseChef(){
 	if(canAfford(assistantChefPrice)){
-		piesPerSecond=piesPerSecond+1
+		assistantChefAmount=assistantChefAmount+1
 		charge(assistantChefPrice)
 		assistantChefPrice=Math.round(assistantChefPrice*1.25)
 		refreshGame()
 	}else{
 		messageGame("You Can\'t Afford This (Price: "+piesToNumber(assistantChefPrice)+")")
+	}
+}
+
+function purchaseMasterChef(){
+	if(canAfford(masterChefPrice)){
+		assistantChefMultiplier=2
+		charge(masterChefPrice)
+		masterChefUnlocked=true
+		refreshGame()
+	}else{
+		messageGame("You Can\'t Afford This (Price: "+piesToNumber(masterChefPrice)+")")
 	}
 }
 
@@ -251,8 +276,19 @@ function piesToNumber(value){
 }
 
 function tickGame(){
-	pies=pies+piesPerSecond
+	pies=pies+(assistantChefAmount*assistantChefMultiplier)+piesPerSecond
 	saveGame()
 	refreshGame()
 	setTimeout(()=>{tickGame()},1000)
+}
+
+function lsExists(key){
+	x=localStorage.getItem(key)
+	if(x==null||x==undefined||x==NaN)return false
+	else return true
+}
+
+String.prototype.StringToBool=function(){
+	if(this=='true')return true
+	else return false
 }
