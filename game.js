@@ -196,7 +196,7 @@ async function PleasePlayTheCredits(){
 	await sleep(750)
 	$("#creditsOverlay").fadeOut(1000)
 	settingsMute=false
-	await sleep(100)
+	await sleep(250)
 	if(hasSeenCreditsThisSession==false){
 		x=getRndInteger(250,1000)
 		messageGame("Thanks For Watching The Credits (+"+x+" Pies)")
