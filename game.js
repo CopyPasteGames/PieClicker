@@ -10,8 +10,10 @@ pieRotationDeg=0
 assistantChefAmount=0
 assistantChefMultiplier=1
 assistantChefPrice=10
-masterChefPrice=100000
+masterChefPrice=10000
 masterChefUnlocked=false
+rollingPinsPrice=250
+revampKitchenPrice=10000
 hasSeenCreditsThisSession=false
 settingsMute=false
 
@@ -23,8 +25,9 @@ $(document).ready(()=>{
 		b=Date.parse(new Date())
 		c=((assistantChefAmount*assistantChefMultiplier)+piesPerSecond)*((b-a)/1000)
 		pies=pies+c
-		messageGame("Made "+c+" Pies While Gone")
+		messageGame("Made "+piesToNumber(c)+" Pies While Gone")
 	}
+	$('[data-toggle="tooltip"]').tooltip()
 	tickGame()
 })
 
@@ -36,14 +39,15 @@ $("#pie").click((e)=>{
 	$("#pie").stop(true,false)
 	$("#pie").css({"width":"90%","left":"5%","top":"15%","transform":"rotate("+pieRotationDeg+"deg)"})
 	pieClickAnimationId=pieClickAnimationId+1
-	$("body").append('<div id="pieInd'+pieClickAnimationId+'" hidden style="pointer-events:none;"><b>+'+piesPerClick*pieClickMultiplier+'</b></div>')
-	$("#pieInd" + pieClickAnimationId).css("top",(e.pageY+getRndInteger(-10,10))+"px")
-	$("#pieInd" + pieClickAnimationId).css("left",(e.pageX+getRndInteger(-10,10))+"px")
-	$("#pieInd" + pieClickAnimationId).css("position","absolute")
-	$("#pieInd" + pieClickAnimationId).css("font-size","22.5px")
-	$("#pieInd" + pieClickAnimationId).css("color","white")
-	$("#pieInd" + pieClickAnimationId).css("animation","GoUp 2s forwards linear")
-	$("#pieInd" + pieClickAnimationId).show()
+	$("body").append('<div id="pieInd'+pieClickAnimationId+'" style="pointer-events:none;">+'+piesPerClick*pieClickMultiplier+'</div>')
+	$("#pieInd"+pieClickAnimationId).css("top",(e.pageY+getRndInteger(-10,10))+"px")
+	$("#pieInd"+pieClickAnimationId).css("left",(e.pageX+getRndInteger(-10,10))+"px")
+	$("#pieInd"+pieClickAnimationId).css("position","absolute")
+	$("#pieInd"+pieClickAnimationId).css("color","white")
+	$("#pieInd"+pieClickAnimationId).css("font-weight","700")
+	$("#pieInd"+pieClickAnimationId).css("font-size","25px")
+	$("#pieInd"+pieClickAnimationId).css("animation","GoUp 2s forwards linear")
+	$("#pieInd"+pieClickAnimationId).show()
 	pies=pies+piesPerClick*pieClickMultiplier
 	refreshGame()
 	$("#pie").animate({"width":"95%","left":"2.5%","top":"14%"},40)
@@ -51,6 +55,8 @@ $("#pie").click((e)=>{
 	removeElem("#pieInd"+pieClickAnimationId)
 })
 
+function round(number){return Math.round(number)}
+document.addEventListener("contextmenu",(e)=>{e.preventDefault()})
 function removeElem(animID){setTimeout(()=>{$(animID).remove()},2250)}
 function getRndInteger(min,max){return Math.floor(Math.random()*(max-min+1))+min}
 
@@ -68,6 +74,8 @@ function saveGame(){
 	localStorage.setItem("assistantChefMultiplier",assistantChefMultiplier)
 	localStorage.setItem("masterChefPrice",masterChefPrice)
 	localStorage.setItem("masterChefUnlocked",masterChefUnlocked)
+	localStorage.setItem("rollingPinsPrice",rollingPinsPrice)
+	localStorage.setItem("revampKitchenPrice",revampKitchenPrice)
 }
 
 function loadGame(){
@@ -83,6 +91,8 @@ function loadGame(){
 	if(lsExists("assistantChefMultiplier"))assistantChefMultiplier=localStorage.getItem("assistantChefMultiplier")*1
 	if(lsExists("masterChefPrice"))masterChefPrice=localStorage.getItem("masterChefPrice")*1
 	if(lsExists("masterChefUnlocked"))masterChefUnlocked=localStorage.getItem("masterChefUnlocked").StringToBool()
+	if(lsExists("rollingPinsPrice"))rollingPinsPrice=localStorage.getItem("rollingPinsPrice")*1
+	if(lsExists("revampKitchenPrice"))revampKitchenPrice=localStorage.getItem("revampKitchenPrice")*1
 }
 
 function refreshGame(){
@@ -121,12 +131,16 @@ function refreshGame(){
 	else $("#AssistantChefContainer").css({"filter":"brightness(0.5)"})
 	if(canAfford(masterChefPrice))$("#MasterChefContainer").css({"filter":"brightness(1)"})
 	else $("#MasterChefContainer").css({"filter":"brightness(0.5)"})
+	if(canAfford(rollingPinsPrice))$("#RollingPinsContainer").css({"filter":"brightness(1)"})
+	else $("#RollingPinsContainer").css({"filter":"brightness(0.5)"})
+	if(canAfford(revampKitchenPrice))$("#RevampKitchenContainer").css({"filter":"brightness(1)"})
+	else $("#RevampKitchenContainer").css({"filter":"brightness(0.5)"})
 }
 
-function startClickUpgrade(){
+function startClickUpgrade(elem){
 	if(canAfford(pieClickUpgradePrice)){
 		charge(pieClickUpgradePrice)
-		pieClickUpgradePrice=Math.round(pieClickUpgradePrice*5)
+		pieClickUpgradePrice=round(pieClickUpgradePrice*5)
 		pieUpgradeTier=pieUpgradeTier+1
 		if(pieUpgradeTier==1){
 			pieClickMultiplier=2
@@ -138,6 +152,7 @@ function startClickUpgrade(){
 			pieClickMultiplier=7
 		}
 		refreshGame()
+		clickFireworks($(elem),50)
 	}else{
 		messageGame("You Can\'t Afford This (Price: "+piesToNumber(pieClickUpgradePrice)+")")
 	}
@@ -168,7 +183,7 @@ async function PleasePlayTheCredits(){
 	$("#creditsTitle").fadeOut(500)
 	await sleep(500)
 	$("#creditsName").html("Caleb Rhinehart")
-	$("#creditsTitle").html("Concept Builder")
+	$("#creditsTitle").html("Creative Director")
 	$("#creditsName").fadeIn(500)
 	$("#creditsTitle").fadeIn(500)
 	await sleep(3000)
@@ -176,7 +191,15 @@ async function PleasePlayTheCredits(){
 	$("#creditsTitle").fadeOut(500)
 	await sleep(500)
 	$("#creditsName").html("Kylea Reed")
-	$("#creditsTitle").html("Concept Builder")
+	$("#creditsTitle").html("Project Manager")
+	$("#creditsName").fadeIn(500)
+	$("#creditsTitle").fadeIn(500)
+	await sleep(3000)
+	$("#creditsName").fadeOut(500)
+	$("#creditsTitle").fadeOut(500)
+	await sleep(500)
+	$("#creditsName").html("Lucient Chapin")
+	$("#creditsTitle").html("Test Player")
 	$("#creditsName").fadeIn(500)
 	$("#creditsTitle").fadeIn(500)
 	await sleep(3000)
@@ -209,20 +232,16 @@ function canAfford(itemPrice){
 }
 
 function debugMenu(){
-	alert("[Debug Variable Menu]\n\nPie.Count?: "+pies+"\nPie.PerSec?: "+piesPerSecond+"\nPie.PerClick?: "+piesPerClick+"\n\
-Pie.ClickMult?: "+pieClickMultiplier+"\nPie.UpTier?: "+pieUpgradeTier+"\nPie.AnimID?: "+pieClickAnimationId+"\n\
-Settings.Mute?: "+settingsMute+"\nCredits.Seen?: "+hasSeenCreditsThisSession+"\nGame.Saved?: "+(localStorage.getItem("IsGameSaved?")*1?'true':'false')+"\n\
-Pie.ClickUpPrice?: "+pieClickUpgradePrice+"\nPie.OvenPrice?: "+pieClickOvenPrice+"\nPie.CanAffordOven?: "+canAfford(pieClickOvenPrice)+"\n\
-Pie.CanAffordUpgrade?: "+canAfford(pieClickUpgradePrice)+"\nPie.MasterChefPrice?: "+masterChefPrice+"Pie.MasterChefUnlocked?: "+masterChefUnlocked+"\n\
-Pie.AssistantChefMult?: "+assistantChefMultiplier+"Pie.AssistantChefAmount?: "+assistantChefAmount)
+	alert("Get Trolled")
 }
 
 async function messageGame(message){
-	$("#messageBar").stop(true,true)
+	$("#messageBar").stop(true,false)
+	$("#messageBar").css({"display":"none"})
 	$("#messageBarText").html(message)
-	$("#messageBar").fadeIn(250)
+	$("#messageBar").fadeIn(100)
 	await sleep(1500)
-	$("#messageBar").fadeOut(250)
+	$("#messageBar").fadeOut(100)
 }
 
 function charge(amount){
@@ -230,30 +249,33 @@ function charge(amount){
 	refreshGame()
 }
 
-function purchaseOven(){
+function purchaseOven(elem){
 	if(canAfford(pieClickOvenPrice)){
+		clickFireworks($(elem),50)
 		piesPerClick=piesPerClick+1
 		charge(pieClickOvenPrice)
-		pieClickOvenPrice=Math.round(pieClickOvenPrice*1.25)
+		pieClickOvenPrice=round(pieClickOvenPrice*1.15)
 		refreshGame()
 	}else{
 		messageGame("You Can\'t Afford This (Price: "+piesToNumber(pieClickOvenPrice)+")")
 	}
 }
 
-function purchaseChef(){
+function purchaseChef(elem){
 	if(canAfford(assistantChefPrice)){
+		clickFireworks($(elem),50)
 		assistantChefAmount=assistantChefAmount+1
 		charge(assistantChefPrice)
-		assistantChefPrice=Math.round(assistantChefPrice*1.25)
+		assistantChefPrice=round(assistantChefPrice*1.15)
 		refreshGame()
 	}else{
 		messageGame("You Can\'t Afford This (Price: "+piesToNumber(assistantChefPrice)+")")
 	}
 }
 
-function purchaseMasterChef(){
+function purchaseMasterChef(elem){
 	if(canAfford(masterChefPrice)){
+		clickFireworks($(elem),50)
 		assistantChefMultiplier=2
 		charge(masterChefPrice)
 		masterChefUnlocked=true
@@ -263,23 +285,54 @@ function purchaseMasterChef(){
 	}
 }
 
+function purchaseUpgradeRollingPins(elem){
+	if(canAfford(rollingPinsPrice)){
+		clickFireworks($(elem),50)
+		piesPerSecond=piesPerSecond+25
+		charge(rollingPinsPrice)
+		rollingPinsPrice=round(rollingPinsPrice*1.5)
+		refreshGame()
+	}else{
+		messageGame("You Can\'t Afford This (Price: "+piesToNumber(rollingPinsPrice)+")")
+	}
+}
+
+function purchaseRevampKitchen(elem){
+	if(canAfford(revampKitchenPrice)){
+		clickFireworks($(elem),50)
+		piesPerSecond=piesPerSecond+round(piesPerSecond*0.1)
+		piesPerClick=piesPerClick+round(piesPerClick*0.1)
+		charge(revampKitchenPrice)
+		revampKitchenPrice=round(revampKitchenPrice*2.5)
+		refreshGame()
+	}else{
+		messageGame("You Can\'t Afford This (Price: "+piesToNumber(revampKitchenPrice)+")")
+	}
+}
+
 function piesToNumber(value){
-	// Eighteen for Quintillion
-	return Math.abs(Number(value))>=1.0e+15
-    ?(Math.abs(Number(value))/1.0e+15).toFixed(2)+"Q"
-	// Fifteen Zeroes for Quadrillion
+	// 21 Zeroes for Septillion
+	return Math.abs(Number(value))>=1.0e+24
+    ?(Math.abs(Number(value))/1.0e+24).toFixed(2)+"S"
+	// 21 Zeroes for Sextillion
+	:Math.abs(Number(value))>=1.0e+21
+    ?(Math.abs(Number(value))/1.0e+21).toFixed(2)+"s"
+	// 18 Zeroes for Quintillion
+	:Math.abs(Number(value))>=1.0e+18
+    ?(Math.abs(Number(value))/1.0e+18).toFixed(2)+"Q"
+	// 15 Zeroes for Quadrillion
     :Math.abs(Number(value))>=1.0e+15
     ?(Math.abs(Number(value))/1.0e+15).toFixed(2)+"q"
-	// Twelve Zeroes for Trillions
+	// 12 Zeroes for Trillions
 	:Math.abs(Number(value))>=1.0e+12
     ?(Math.abs(Number(value))/1.0e+12).toFixed(2)+"t"
-    // Nine Zeroes for Billions
+    // 9 Zeroes for Billions
     :Math.abs(Number(value))>=1.0e+9
     ?(Math.abs(Number(value))/1.0e+9).toFixed(2)+"B"
-    // Six Zeroes for Millions 
+    // 6 Zeroes for Millions 
     :Math.abs(Number(value))>=1.0e+6
     ?(Math.abs(Number(value))/1.0e+6).toFixed(2)+"M"
-    // Three Zeroes for Thousands
+    // 3 Zeroes for Thousands
     :Math.abs(Number(value))>=1.0e+3
     ?(Math.abs(Number(value))/1.0e+3).toFixed(2)+"K"
     :Math.abs(Number(value))

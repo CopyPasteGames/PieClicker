@@ -98,6 +98,8 @@ body{
 }
 
 .pieUpgrade{
+	padding-bottom:15px;
+	position:relative;
 	cursor:pointer;
 	width:90%;
 	height:auto;
@@ -152,6 +154,7 @@ body{
 #creditsOverlay{
 	display:block;
 	position:absolute;
+	z-index:999999999;
 	top:0px;
 	left:0px;
 	width:100%;
@@ -195,6 +198,7 @@ body{
 	0%{
 	  	opacity:1;
 	}100%{
+		font-size:18px;
 		top:15%;
 		opacity:0;
 	}
@@ -203,6 +207,7 @@ body{
 #messageBar{
 	display:none;
 	position:absolute;
+	z-index:99999;
 	top:80%;
 	left:25%;
 	width:50%;
@@ -237,6 +242,7 @@ body{
 }
 
 .uis_half{
+	padding-left:12.5px;
 	width:50%;
 	word-wrap:break-word;
 }

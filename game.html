@@ -8,6 +8,7 @@
 		<meta name="viewport" content="width=device-width, initial-scale=1.0">
 		<title>Pie Clicker | CopyPaste Games</title>
 		<link rel="icon" href="./assets/Pie.png">
+		<link rel="stylesheet" href="./bootstrap.css">
 		<link rel="stylesheet" href="./game.css">
 		<script src="./jquery.js"></script>
 	</head>
@@ -37,20 +38,27 @@
 					Upgrades
 				</div>
 			</div>
-			<div class="slightPadding" style="overflow-y:scroll;">
+			<div class="slightPadding" style="overflow-y:scroll;" id="upgradesContainer">
 				<br>
-				<div class="pieUpgrade" onclick="startClickUpgrade()" id="InitialUpgradeContainer">
+				<div class="pieUpgrade" onclick="startClickUpgrade(this)" id="InitialUpgradeContainer">
 					<img src="./assets/UpgradeButtonPumpkinPie.png" style="width:100%;height:100%;" draggable="false" id="InitialUpgrade">
 				</div>
-				<div class="pieUpgrade" onclick="purchaseOven()" id="OvenUpgradeContainer">
+				<div class="pieUpgrade" onclick="purchaseOven(this)" id="OvenUpgradeContainer">
 					<img src="./assets/UpgradeButtonOven.png" style="width:100%;height:100%;" draggable="false" id="OvenUpgrade">
 				</div>
-				<div class="pieUpgrade" onclick="purchaseChef()" id="AssistantChefContainer">
+				<div class="pieUpgrade" onclick="purchaseChef(this)" id="AssistantChefContainer">
 					<img src="./assets/UpgradeButtonAssistantChef.png" style="width:100%;height:100%;" draggable="false" id="AssistantChef">
 				</div>
-				<div class="pieUpgrade" onclick="purchaseMasterChef()" id="MasterChefContainer">
+				<div class="pieUpgrade" onclick="purchaseMasterChef(this)" id="MasterChefContainer">
 					<img src="./assets/UpgradeButtonMasterChef.png" style="width:100%;height:100%;" draggable="false" id="MasterChef">
 				</div>
+				<div class="pieUpgrade" onclick="purchaseUpgradeRollingPins(this)" id="RollingPinsContainer">
+					<img src="./assets/UpgradeButtonRollingPin.png" style="width:100%;height:100%;" draggable="false" id="RollingPins">
+				</div>
+				<div class="pieUpgrade" onclick="purchaseRevampKitchen(this)" id="RevampKitchenContainer">
+					<img src="./assets/UpgradeButtonRevampKitchen.png" style="width:100%;height:100%;" draggable="false" id="RevampKitchen">
+				</div>
+				<br>
 			</div>
 		</div>
 		<div id="pieRightF"></div>
@@ -137,6 +145,16 @@
 								<td>Q</td>
 								<td>10^18</td>
 							</tr>
+							<tr>
+								<td>Sextillion</td>
+								<td>s</td>
+								<td>10^21</td>
+							</tr>
+							<tr>
+								<td>Septillion</td>
+								<td>S</td>
+								<td>10^24</td>
+							</tr>
 						</tbody>
 					</table>
 					If you have more pies then this, how?
@@ -145,9 +163,15 @@
 				<div class="uis_half">
 					Have fun.
 				</div>
-				<h3>Patch Notes</h3>
+				<h3>Patch Notes [2.22.22]</h3>
 				<div class="uis_half">
-					-Mobile will now be forced to use landscape mode<br>
+					-Master Chef now costs 10,000 [Previously 100,000]<br>
+					-Added "Better Rolling Pins"<br>
+					-Added "Revamp Kitchen" Upgrade<br>
+					-Will now show particles when a purchase is made
+				</div>
+				<h3>Patch Notes [Older]</h3>
+				<div class="uis_half">
 					-Added useful info menu<br>
 					-Moved patch notes to useful info menu<br>
 					-Fixed style issue with text on smaller screens<br>
@@ -161,12 +185,14 @@
 				</div>
 				<br>
 				<br>
-				<br>
 			</div>
 			<div id="uis_exit" onclick="$('#usefulInfoScreen').fadeOut(500)">
 				<img src="./assets/x-circle-fill.svg" style="width:100%;height:100%;" draggable="false">
 			</div>
 		</div>
+		<script src="./bootstrap.js"></script>
+		<script src="./fireworks.js"></script>
+		<script src="./anim.js"></script>
 		<script src="./game.js"></script>
 	</body>
 </html>
