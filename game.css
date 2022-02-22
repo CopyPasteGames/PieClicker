@@ -207,7 +207,7 @@ body{
 	left:25%;
 	width:50%;
 	height:5%;
-	font-size:25px;
+	font-size:2.1vh;
 	background-color:var(--bgTheme);
 	border-radius:8px;
 }

@@ -15,24 +15,21 @@ masterChefUnlocked=false
 hasSeenCreditsThisSession=false
 settingsMute=false
 
-if(/Android|webOS|iPhone|iPad|iPod|BlackBerry/i.test(navigator.userAgent)||(/Android|webOS|iPhone|iPad|iPod|BlackBerry/i.test(navigator.platform))){
-	screen.orientation.lock('landscape')
-}
-
 $(document).ready(()=>{
 	loadGame()
 	a=localStorage.getItem("lastLogTime")
 	if(a!=null&&a!=undefined&&a!=NaN){
 		a=Date.parse(a)
 		b=Date.parse(new Date())
-		pies=pies+((assistantChefAmount*assistantChefMultiplier)+piesPerSecond)*((b-a)/1000)
+		c=((assistantChefAmount*assistantChefMultiplier)+piesPerSecond)*((b-a)/1000)
+		pies=pies+c
+		messageGame("Made "+c+" Pies While Gone")
 	}
 	tickGame()
 })
 
 $(window).bind("load",()=>{
 	$("#creditsOverlay").fadeOut(750)
-	messageGame("!!THIS GAME IS STILL UNDER DEVELOPMENT!!")
 })
 
 $("#pie").click((e)=>{
