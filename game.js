@@ -14,8 +14,10 @@ masterChefPrice=10000
 masterChefUnlocked=false
 rollingPinsPrice=250
 revampKitchenPrice=10000
+nukePiePrice=10000000000000
 hasSeenCreditsThisSession=false
 settingsMute=false
+ticksUntilMSGFades=0
 
 $(document).ready(()=>{
 	loadGame()
@@ -25,7 +27,13 @@ $(document).ready(()=>{
 		b=Date.parse(new Date())
 		c=((assistantChefAmount*assistantChefMultiplier)+piesPerSecond)*((b-a)/1000)
 		pies=pies+c
-		messageGame("Made "+piesToNumber(c)+" Pies While Gone")
+		if(isNaN(pies)||pies==undefined||pies==null){
+			messageGame("Error Detected. Resetting Game In 5 Seconds")
+			ticksUntilMSGFades=2
+			resetGameInMS(5000)
+		}else{
+			messageGame("Made "+piesToNumber(c)+" Pies While Gone")
+		}
 	}
 	$('[data-toggle="tooltip"]').tooltip()
 	tickGame()
@@ -58,6 +66,7 @@ $("#pie").click((e)=>{
 function round(number){return Math.round(number)}
 document.addEventListener("contextmenu",(e)=>{e.preventDefault()})
 function removeElem(animID){setTimeout(()=>{$(animID).remove()},2250)}
+function sleep(ms){return new Promise(resolve=>setTimeout(resolve,ms))}
 function getRndInteger(min,max){return Math.floor(Math.random()*(max-min+1))+min}
 
 function saveGame(){
@@ -76,6 +85,7 @@ function saveGame(){
 	localStorage.setItem("masterChefUnlocked",masterChefUnlocked)
 	localStorage.setItem("rollingPinsPrice",rollingPinsPrice)
 	localStorage.setItem("revampKitchenPrice",revampKitchenPrice)
+	localStorage.setItem("nukePiePrice",nukePiePrice)
 }
 
 function loadGame(){
@@ -93,6 +103,7 @@ function loadGame(){
 	if(lsExists("masterChefUnlocked"))masterChefUnlocked=localStorage.getItem("masterChefUnlocked").StringToBool()
 	if(lsExists("rollingPinsPrice"))rollingPinsPrice=localStorage.getItem("rollingPinsPrice")*1
 	if(lsExists("revampKitchenPrice"))revampKitchenPrice=localStorage.getItem("revampKitchenPrice")*1
+	if(lsExists("nukePiePrice"))nukePiePrice=localStorage.getItem("nukePiePrice")*1
 }
 
 function refreshGame(){
@@ -135,6 +146,8 @@ function refreshGame(){
 	else $("#RollingPinsContainer").css({"filter":"brightness(0.5)"})
 	if(canAfford(revampKitchenPrice))$("#RevampKitchenContainer").css({"filter":"brightness(1)"})
 	else $("#RevampKitchenContainer").css({"filter":"brightness(0.5)"})
+	if(canAfford(nukePiePrice))$("#NukePieContainer").css({"filter":"brightness(1)"})
+	else $("#NukePieContainer").css({"filter":"brightness(0.5)"})
 }
 
 function startClickUpgrade(elem){
@@ -143,23 +156,21 @@ function startClickUpgrade(elem){
 		pieClickUpgradePrice=round(pieClickUpgradePrice*5)
 		pieUpgradeTier=pieUpgradeTier+1
 		if(pieUpgradeTier==1){
+			clickFireworks($(elem),50)
 			pieClickMultiplier=2
 		}else if(pieUpgradeTier==2){
+			clickFireworks($(elem),50)
 			pieClickMultiplier=3
 		}else if(pieUpgradeTier==3){
+			clickFireworks($(elem),50)
 			pieClickMultiplier=5
 		}else if(pieUpgradeTier==4){
 			pieClickMultiplier=7
 		}
 		refreshGame()
-		clickFireworks($(elem),50)
 	}else{
 		messageGame("You Can\'t Afford This (Price: "+piesToNumber(pieClickUpgradePrice)+")")
 	}
-}
-
-function sleep(ms){
-	return new Promise(resolve=>setTimeout(resolve,ms))
 }
 
 async function PleasePlayTheCredits(){
@@ -236,12 +247,10 @@ function debugMenu(){
 }
 
 async function messageGame(message){
-	$("#messageBar").stop(true,false)
-	$("#messageBar").css({"display":"none"})
+	ticksUntilMSGFades=ticksUntilMSGFades+2
+	$("#messageBar").stop(true,true)
 	$("#messageBarText").html(message)
 	$("#messageBar").fadeIn(100)
-	await sleep(1500)
-	$("#messageBar").fadeOut(100)
 }
 
 function charge(amount){
@@ -275,7 +284,6 @@ function purchaseChef(elem){
 
 function purchaseMasterChef(elem){
 	if(canAfford(masterChefPrice)){
-		clickFireworks($(elem),50)
 		assistantChefMultiplier=2
 		charge(masterChefPrice)
 		masterChefUnlocked=true
@@ -310,6 +318,18 @@ function purchaseRevampKitchen(elem){
 	}
 }
 
+function nuclearPieReactor(elem){
+	if(canAfford(nukePiePrice)){
+		clickFireworks($(elem),50)
+		piesPerSecond=round(piesPerSecond*100)
+		charge(nukePiePrice)
+		nukePiePrice=round(nukePiePrice*5)
+		refreshGame()
+	}else{
+		messageGame("You Can\'t Afford This (Price: "+piesToNumber(nukePiePrice)+")")
+	}
+}
+
 function piesToNumber(value){
 	// 21 Zeroes for Septillion
 	return Math.abs(Number(value))>=1.0e+24
@@ -340,9 +360,20 @@ function piesToNumber(value){
 
 function tickGame(){
 	pies=pies+(assistantChefAmount*assistantChefMultiplier)+piesPerSecond
+	if(getRndInteger(1,150)==1){goldenPie()}
 	saveGame()
 	refreshGame()
+	ticksUntilMSGFades=ticksUntilMSGFades-1
+	if(ticksUntilMSGFades<0)ticksUntilMSGFades=0
+	if(ticksUntilMSGFades>=2)ticksUntilMSGFades=1
+	if(ticksUntilMSGFades==0)$("#messageBar").fadeOut(100)
 	setTimeout(()=>{tickGame()},1000)
+}
+
+async function resetGameInMS(ms){
+	await sleep(ms)
+	localStorage.clear()
+	window.location.reload()
 }
 
 function lsExists(key){
@@ -354,4 +385,37 @@ function lsExists(key){
 String.prototype.StringToBool=function(){
 	if(this=='true')return true
 	else return false
+}
+
+async function goldenPie(){
+	if(!$('#goldenPie').length){
+		$('#goldenPie').remove()
+		a=$(document).width()-$(document).height()*0.05
+		b=$(document).height()-$(document).height()*0.05
+		c=0
+		x=getRndInteger(0,a)
+		y=getRndInteger(0,b)
+		z=`<div id="goldenPie" style="position:fixed;left:${x}px;top:${y}px;height:5%;width:auto;display:none;" onclick="goldenPieFunc()">
+			<img src="./assets/GoldenPie.png" style="width:100%;height:100%;">
+		</div>`
+		$('body').append(z)
+		for(i=0;i<501;i++){
+			if(i==0)$('#goldenPie').fadeIn(500)
+			$('#goldenPie').css({"transform":"rotate("+c+"deg)"})
+			await sleep(10)
+			c=c+1
+			if(i==350)$('#goldenPie').fadeOut(1000)
+		}
+		await sleep(500)
+		$('#goldenPie').remove()
+	}
+}
+
+async function goldenPieFunc(){
+	$('#goldenPie').fadeOut(100)
+	await sleep(100)
+	$('#goldenPie').remove()
+	w=getRndInteger(round(pies/4),round(pies/2))
+	pies=pies+w
+	messageGame("Lucky! +"+piesToNumber(w)+" pies!")
 }
