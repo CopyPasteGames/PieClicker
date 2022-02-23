@@ -6,6 +6,8 @@ pieClickMultiplier=1
 pieClickUpgradePrice=500
 pieClickOvenPrice=15
 pieUpgradeTier=0
+chefUpgradeTier=0
+chefUpgradePrice=5000
 pieRotationDeg=0
 assistantChefAmount=0
 assistantChefMultiplier=1
@@ -14,10 +16,12 @@ masterChefPrice=10000
 masterChefUnlocked=false
 rollingPinsPrice=250
 revampKitchenPrice=10000
-nukePiePrice=10000000000000
+kitchenBackgroundImage=0
+nukePiePrice=100000000000000
 hasSeenCreditsThisSession=false
 settingsMute=false
 ticksUntilMSGFades=0
+doSaveGame=true
 
 $(document).ready(()=>{
 	loadGame()
@@ -47,7 +51,7 @@ $("#pie").click((e)=>{
 	$("#pie").stop(true,false)
 	$("#pie").css({"width":"90%","left":"5%","top":"15%","transform":"rotate("+pieRotationDeg+"deg)"})
 	pieClickAnimationId=pieClickAnimationId+1
-	$("body").append('<div id="pieInd'+pieClickAnimationId+'" style="pointer-events:none;">+'+piesPerClick*pieClickMultiplier+'</div>')
+	$("body").append('<div id="pieInd'+pieClickAnimationId+'" style="pointer-events:none;">+'+piesToNumber(piesPerClick*pieClickMultiplier)+'</div>')
 	$("#pieInd"+pieClickAnimationId).css("top",(e.pageY+getRndInteger(-10,10))+"px")
 	$("#pieInd"+pieClickAnimationId).css("left",(e.pageX+getRndInteger(-10,10))+"px")
 	$("#pieInd"+pieClickAnimationId).css("position","absolute")
@@ -86,6 +90,9 @@ function saveGame(){
 	localStorage.setItem("rollingPinsPrice",rollingPinsPrice)
 	localStorage.setItem("revampKitchenPrice",revampKitchenPrice)
 	localStorage.setItem("nukePiePrice",nukePiePrice)
+	localStorage.setItem("chefUpgradeTier",chefUpgradeTier)
+	localStorage.setItem("chefUpgradePrice",chefUpgradePrice)
+	localStorage.setItem("kitchenBackgroundImage",kitchenBackgroundImage)
 }
 
 function loadGame(){
@@ -104,17 +111,20 @@ function loadGame(){
 	if(lsExists("rollingPinsPrice"))rollingPinsPrice=localStorage.getItem("rollingPinsPrice")*1
 	if(lsExists("revampKitchenPrice"))revampKitchenPrice=localStorage.getItem("revampKitchenPrice")*1
 	if(lsExists("nukePiePrice"))nukePiePrice=localStorage.getItem("nukePiePrice")*1
+	if(lsExists("chefUpgradeTier"))chefUpgradeTier=localStorage.getItem("chefUpgradeTier")*1
+	if(lsExists("chefUpgradePrice"))chefUpgradePrice=localStorage.getItem("chefUpgradePrice")*1
+	if(lsExists("kitchenBackgroundImage"))kitchenBackgroundImage=localStorage.getItem("kitchenBackgroundImage")*1
 }
 
 function refreshGame(){
 	$("#pieCountReal").html("Pies: "+piesToNumber(pies))
 	$("#pieGRateReal").html("Pies/Sec: "+piesToNumber((assistantChefAmount*assistantChefMultiplier)+piesPerSecond))
 	/* pieUpgradeTier Mapping:
-	0 - Normal Pie   |  Pumpkin Pie Upgrade
-	1 - Pumpkin Pie  |  Apple Pie Upgrade
-	2 - Apple Pie    |  Cheesecake Upgrade
-	3 - Cheesecake   |  Oreo Pie?
-	4 - Oero Pie     |  No Upgrade
+	0 = Normal Pie   |  Pumpkin Pie Upgrade
+	1 = Pumpkin Pie  |  Apple Pie Upgrade
+	2 = Apple Pie    |  Cheesecake Upgrade
+	3 = Cheesecake   |  Oreo Pie?
+	4 = Oero Pie     |  No Upgrade
 	*/
 	if(pieUpgradeTier==0){
 		$("#InitialUpgrade").attr("src","./assets/UpgradeButtonPumpkinPie.png")
@@ -129,18 +139,58 @@ function refreshGame(){
 		$("#InitialUpgrade").attr("src","./assets/UpgradeButtonOreoCheesecake.png")
 		$("#pieBtn").attr("src","./assets/PieCheesecake.png")
 	}else if(pieUpgradeTier==4){
-		$("#InitialUpgrade").css({"display":"none"})
+		$("#InitialUpgrade").attr("src","./assets/UpgradeButtonLemonMeringuePie.png")
 		$("#pieBtn").attr("src","./assets/PieOreoCheesecake.png")
-	}if(masterChefUnlocked){
+	}else if(pieUpgradeTier==5){
+		$("#InitialUpgrade").attr("src","./assets/UpgradeButtonKeyLimePie.png")
+		$("#pieBtn").attr("src","./assets/PieLemonMeringue.png")
+	}else if(pieUpgradeTier==6){
+		$("#InitialUpgrade").attr("src","./assets/UpgradeButtonChocolateCreamPie.png")
+		$("#pieBtn").attr("src","./assets/PieKeyLime.png")
+	}else if(pieUpgradeTier==7){
+		$("#InitialUpgradeContainer").css({"display":"none"})
+		$("#pieBtn").attr("src","./assets/PieChocolateCream.png")
+	}
+	/* Chef Tier Mapping
+	0 = No Chef Upgrade
+	1 = Apprentice Chef Upgrade
+	2 = Advanced Chef Upgrade
+	3 = Expert Chef Upgrade
+	4 = Master Chef Upgrade
+	5 = Grand Master Chef Upgrade
+	*/
+	if(chefUpgradeTier==0){
+		$("#MasterChef").attr("src","./assets/UpgradeButtonApprenticeChef.png")
+	}else if(chefUpgradeTier==1){
+		$("#MasterChef").attr("src","./assets/UpgradeButtonAdvancedChef.png")
+	}else if(chefUpgradeTier==2){
+		$("#MasterChef").attr("src","./assets/UpgradeButtonExpertChef.png")
+	}else if(chefUpgradeTier==3){
+		$("#MasterChef").attr("src","./assets/UpgradeButtonMasterChef.png")
+	}else if(chefUpgradeTier==4){
+		$("#MasterChef").attr("src","./assets/UpgradeButtonGrandmasterChef.png")
+	}else if(chefUpgradeTier==5){
 		$("#MasterChefContainer").css({"display":"none"})
+	}
+	/* Background Image Mapping
+	0 = Blue Background
+	1 = Pink Background
+	2 = White Background
+	*/
+	if(kitchenBackgroundImage==0){
+		$('#pieChild').attr("src","./assets/KitchenBackgroundBlue.png")
+	}else if(kitchenBackgroundImage==1){
+		$('#pieChild').attr("src","./assets/KitchenBackgroundPink.png")
+	}else if(kitchenBackgroundImage==2){
+		$('#pieChild').attr("src","./assets/KitchenBackgroundWhite.png")
 	}
 	if(canAfford(pieClickOvenPrice))$("#OvenUpgradeContainer").css({"filter":"brightness(1)"})
 	else $("#OvenUpgradeContainer").css({"filter":"brightness(0.5)"})
-	if(canAfford(pieClickUpgradePrice)&&pieUpgradeTier!=4)$("#InitialUpgradeContainer").css({"filter":"brightness(1)"})
+	if(canAfford(pieClickUpgradePrice))$("#InitialUpgradeContainer").css({"filter":"brightness(1)"})
 	else $("#InitialUpgradeContainer").css({"filter":"brightness(0.5)"})
 	if(canAfford(assistantChefPrice))$("#AssistantChefContainer").css({"filter":"brightness(1)"})
 	else $("#AssistantChefContainer").css({"filter":"brightness(0.5)"})
-	if(canAfford(masterChefPrice))$("#MasterChefContainer").css({"filter":"brightness(1)"})
+	if(canAfford(chefUpgradePrice))$("#MasterChefContainer").css({"filter":"brightness(1)"})
 	else $("#MasterChefContainer").css({"filter":"brightness(0.5)"})
 	if(canAfford(rollingPinsPrice))$("#RollingPinsContainer").css({"filter":"brightness(1)"})
 	else $("#RollingPinsContainer").css({"filter":"brightness(0.5)"})
@@ -165,11 +215,53 @@ function startClickUpgrade(elem){
 			clickFireworks($(elem),50)
 			pieClickMultiplier=5
 		}else if(pieUpgradeTier==4){
+			clickFireworks($(elem),50)
 			pieClickMultiplier=7
+		}else if(pieUpgradeTier==5){
+			clickFireworks($(elem),50)
+			pieClickMultiplier=10
+		}else if(pieUpgradeTier==6){
+			clickFireworks($(elem),50)
+			pieClickMultiplier=15
+		}else if(pieUpgradeTier==7){
+			pieClickMultiplier=25
 		}
 		refreshGame()
 	}else{
 		messageGame("You Can\'t Afford This (Price: "+piesToNumber(pieClickUpgradePrice)+")")
+	}
+}
+
+function purchaseMasterChef(elem){
+	/*
+	Apprentice Chef
+	Advanced Chef
+	Expert Chef
+	Master Chef
+	Grandmaster Chef
+	*/
+	if(canAfford(chefUpgradePrice)){
+		charge(chefUpgradePrice)
+		chefUpgradePrice=round(chefUpgradePrice*5)
+		chefUpgradeTier=chefUpgradeTier+1
+		if(chefUpgradeTier==1){
+			clickFireworks($(elem),50)
+			assistantChefMultiplier=2
+		}else if(chefUpgradeTier==2){
+			clickFireworks($(elem),50)
+			assistantChefMultiplier=3
+		}else if(chefUpgradeTier==3){
+			clickFireworks($(elem),50)
+			assistantChefMultiplier=4
+		}else if(chefUpgradeTier==4){
+			clickFireworks($(elem),50)
+			assistantChefMultiplier=5
+		}else if(chefUpgradeTier==5){
+			assistantChefMultiplier=8
+		}
+		refreshGame()
+	}else{
+		messageGame("You Can\'t Afford This (Price: "+piesToNumber(chefUpgradePrice)+")")
 	}
 }
 
@@ -247,7 +339,7 @@ function debugMenu(){
 }
 
 async function messageGame(message){
-	ticksUntilMSGFades=ticksUntilMSGFades+2
+	ticksUntilMSGFades=ticksUntilMSGFades+3
 	$("#messageBar").stop(true,true)
 	$("#messageBarText").html(message)
 	$("#messageBar").fadeIn(100)
@@ -275,21 +367,10 @@ function purchaseChef(elem){
 		clickFireworks($(elem),50)
 		assistantChefAmount=assistantChefAmount+1
 		charge(assistantChefPrice)
-		assistantChefPrice=round(assistantChefPrice*1.15)
+		assistantChefPrice=round(assistantChefPrice*1.2)
 		refreshGame()
 	}else{
 		messageGame("You Can\'t Afford This (Price: "+piesToNumber(assistantChefPrice)+")")
-	}
-}
-
-function purchaseMasterChef(elem){
-	if(canAfford(masterChefPrice)){
-		assistantChefMultiplier=2
-		charge(masterChefPrice)
-		masterChefUnlocked=true
-		refreshGame()
-	}else{
-		messageGame("You Can\'t Afford This (Price: "+piesToNumber(masterChefPrice)+")")
 	}
 }
 
@@ -298,7 +379,7 @@ function purchaseUpgradeRollingPins(elem){
 		clickFireworks($(elem),50)
 		piesPerSecond=piesPerSecond+25
 		charge(rollingPinsPrice)
-		rollingPinsPrice=round(rollingPinsPrice*1.5)
+		rollingPinsPrice=round(rollingPinsPrice*2)
 		refreshGame()
 	}else{
 		messageGame("You Can\'t Afford This (Price: "+piesToNumber(rollingPinsPrice)+")")
@@ -312,6 +393,13 @@ function purchaseRevampKitchen(elem){
 		piesPerClick=piesPerClick+round(piesPerClick*0.1)
 		charge(revampKitchenPrice)
 		revampKitchenPrice=round(revampKitchenPrice*2.5)
+		kitchenBackgroundIMOld=kitchenBackgroundImage
+		kitchenBackgroundImage=getRndInteger(0,2)
+		if(kitchenBackgroundImage==kitchenBackgroundIMOld){
+			if(kitchenBackgroundImage==2||kitchenBackgroundImage==0){
+				kitchenBackgroundImage=1
+			}else if(kitchenBackgroundImage==1){kitchenBackgroundImage=2}
+		}
 		refreshGame()
 	}else{
 		messageGame("You Can\'t Afford This (Price: "+piesToNumber(revampKitchenPrice)+")")
@@ -323,7 +411,7 @@ function nuclearPieReactor(elem){
 		clickFireworks($(elem),50)
 		piesPerSecond=round(piesPerSecond*100)
 		charge(nukePiePrice)
-		nukePiePrice=round(nukePiePrice*5)
+		nukePiePrice=round(nukePiePrice*100000)
 		refreshGame()
 	}else{
 		messageGame("You Can\'t Afford This (Price: "+piesToNumber(nukePiePrice)+")")
@@ -331,41 +419,59 @@ function nuclearPieReactor(elem){
 }
 
 function piesToNumber(value){
-	// 21 Zeroes for Septillion
-	return Math.abs(Number(value))>=1.0e+24
-    ?(Math.abs(Number(value))/1.0e+24).toFixed(2)+"S"
+	// 42 Zeros for Tredecillion
+	return Math.abs(Number(value))>=1.0e+42
+    ?(Math.abs(Number(value))/1.0e+42).toFixed(1)+"T"
+	// 39 Zeros for Duodecillion
+	:Math.abs(Number(value))>=1.0e+39
+    ?(Math.abs(Number(value))/1.0e+39).toFixed(1)+"D"
+	// 36 Zeros for Undecillion
+	:Math.abs(Number(value))>=1.0e+36
+    ?(Math.abs(Number(value))/1.0e+36).toFixed(1)+"U"
+	// 33 Zeros for Decillion
+	:Math.abs(Number(value))>=1.0e+33
+    ?(Math.abs(Number(value))/1.0e+33).toFixed(1)+"d"
+	// 30 Zeros for Nonillion
+	:Math.abs(Number(value))>=1.0e+30
+    ?(Math.abs(Number(value))/1.0e+30).toFixed(1)+"n"
+	// 27 Zeros for Octillion
+	:Math.abs(Number(value))>=1.0e+27
+    ?(Math.abs(Number(value))/1.0e+27).toFixed(1)+"o"
+	// 24 Zeroes for Septillion
+	:Math.abs(Number(value))>=1.0e+24
+    ?(Math.abs(Number(value))/1.0e+24).toFixed(1)+"S"
 	// 21 Zeroes for Sextillion
 	:Math.abs(Number(value))>=1.0e+21
-    ?(Math.abs(Number(value))/1.0e+21).toFixed(2)+"s"
+    ?(Math.abs(Number(value))/1.0e+21).toFixed(1)+"s"
 	// 18 Zeroes for Quintillion
 	:Math.abs(Number(value))>=1.0e+18
-    ?(Math.abs(Number(value))/1.0e+18).toFixed(2)+"Q"
+    ?(Math.abs(Number(value))/1.0e+18).toFixed(1)+"Q"
 	// 15 Zeroes for Quadrillion
     :Math.abs(Number(value))>=1.0e+15
-    ?(Math.abs(Number(value))/1.0e+15).toFixed(2)+"q"
+    ?(Math.abs(Number(value))/1.0e+15).toFixed(1)+"q"
 	// 12 Zeroes for Trillions
 	:Math.abs(Number(value))>=1.0e+12
-    ?(Math.abs(Number(value))/1.0e+12).toFixed(2)+"t"
+    ?(Math.abs(Number(value))/1.0e+12).toFixed(1)+"t"
     // 9 Zeroes for Billions
     :Math.abs(Number(value))>=1.0e+9
-    ?(Math.abs(Number(value))/1.0e+9).toFixed(2)+"B"
+    ?(Math.abs(Number(value))/1.0e+9).toFixed(1)+"B"
     // 6 Zeroes for Millions 
     :Math.abs(Number(value))>=1.0e+6
-    ?(Math.abs(Number(value))/1.0e+6).toFixed(2)+"M"
+    ?(Math.abs(Number(value))/1.0e+6).toFixed(1)+"M"
     // 3 Zeroes for Thousands
     :Math.abs(Number(value))>=1.0e+3
-    ?(Math.abs(Number(value))/1.0e+3).toFixed(2)+"K"
+    ?(Math.abs(Number(value))/1.0e+3).toFixed(1)+"K"
     :Math.abs(Number(value))
 }
 
 function tickGame(){
 	pies=pies+(assistantChefAmount*assistantChefMultiplier)+piesPerSecond
 	if(getRndInteger(1,150)==1){goldenPie()}
-	saveGame()
+	if(doSaveGame)saveGame()
 	refreshGame()
 	ticksUntilMSGFades=ticksUntilMSGFades-1
 	if(ticksUntilMSGFades<0)ticksUntilMSGFades=0
-	if(ticksUntilMSGFades>=2)ticksUntilMSGFades=1
+	if(ticksUntilMSGFades>6)ticksUntilMSGFades=1
 	if(ticksUntilMSGFades==0)$("#messageBar").fadeOut(100)
 	setTimeout(()=>{tickGame()},1000)
 }
@@ -395,7 +501,7 @@ async function goldenPie(){
 		c=0
 		x=getRndInteger(0,a)
 		y=getRndInteger(0,b)
-		z=`<div id="goldenPie" style="position:fixed;left:${x}px;top:${y}px;height:5%;width:auto;display:none;" onclick="goldenPieFunc()">
+		z=`<div id="goldenPie" style="position:fixed;left:${x}px;top:${y}px;height:5%;width:auto;display:none;cursor:pointer;" onclick="goldenPieFunc()">
 			<img src="./assets/GoldenPie.png" style="width:100%;height:100%;">
 		</div>`
 		$('body').append(z)
@@ -418,4 +524,20 @@ async function goldenPieFunc(){
 	w=getRndInteger(round(pies/4),round(pies/2))
 	pies=pies+w
 	messageGame("Lucky! +"+piesToNumber(w)+" pies!")
+}
+
+function devMode(){
+	doSaveGame=false
+	alert("Dev Mode Enabled\n\nWill not save progress. Reload to disable dev mode.")
+	pies=10**30
+	piesPerClick=10**10
+	piesPerSecond=10**10
+	pieUpgradeTier=0
+	chefUpgradeTier=0
+	kitchenBackgroundImage=0
+	hasSeenCreditsThisSession=false
+	refreshGame()
+	messageGame("Dev Mode Enabled")
+	$('#MasterChefContainer').css({'display':'block'})
+	$('#InitialUpgradeContainer').css({'display':'block'})
 }

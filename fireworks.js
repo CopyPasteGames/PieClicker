@@ -16,7 +16,7 @@ function clickFireworks(parent,zIndex){
     let canvasEl=$(`#FireWorksDisplayBtn${fireworkId}`).get(0)
 	fireworkId=fireworkId+1
     let ctx=canvasEl.getContext('2d')
-    let numberOfParticles=20
+    let numberOfParticles=25
     let colors=['#fc496dff','#fff','#03a9f4']
 
     let setParticleDirection=function(p){

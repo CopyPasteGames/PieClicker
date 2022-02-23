@@ -15,7 +15,7 @@
 	<body>
 		<div id="pieClicker">
 			<div id="pieBackground">
-				<img src="./assets/background.png" style="width:100%;height:100%;" draggable="false">
+				<img src="./assets/KitchenBackgroundBlue.png" style="width:100%;height:100%;" draggable="false" id="pieChild">
 			</div>
 			<div id="pieCount">
 				<div class="centerText" id="pieCountReal">
@@ -50,7 +50,7 @@
 					<img src="./assets/UpgradeButtonAssistantChef.png" style="width:100%;height:100%;" draggable="false" id="AssistantChef">
 				</div>
 				<div class="pieUpgrade" onclick="purchaseMasterChef(this)" id="MasterChefContainer">
-					<img src="./assets/UpgradeButtonMasterChef.png" style="width:100%;height:100%;" draggable="false" id="MasterChef">
+					<img src="./assets/UpgradeButtonApprenticeChef.png" style="width:100%;height:100%;" draggable="false" id="MasterChef">
 				</div>
 				<div class="pieUpgrade" onclick="purchaseUpgradeRollingPins(this)" id="RollingPinsContainer">
 					<img src="./assets/UpgradeButtonRollingPin.png" style="width:100%;height:100%;" draggable="false" id="RollingPins">
@@ -158,6 +158,36 @@
 								<td>S</td>
 								<td>10^24</td>
 							</tr>
+							<tr>
+								<td>Octillion</td>
+								<td>o</td>
+								<td>10^27</td>
+							</tr>
+							<tr>
+								<td>Nonillion</td>
+								<td>n</td>
+								<td>10^30</td>
+							</tr>
+							<tr>
+								<td>Decillion</td>
+								<td>d</td>
+								<td>10^33</td>
+							</tr>
+							<tr>
+								<td>Undecillion</td>
+								<td>U</td>
+								<td>10^36</td>
+							</tr>
+							<tr>
+								<td>Duodecillion</td>
+								<td>D</td>
+								<td>10^39</td>
+							</tr>
+							<tr>
+								<td>Tredecillion</td>
+								<td>T</td>
+								<td>10^42</td>
+							</tr>
 						</tbody>
 					</table>
 					If you have more pies then this, how?
@@ -165,6 +195,30 @@
 				<h3>Goal of the Game</h3>
 				<div class="uis_half">
 					Have fun.
+				</div>
+				<h3>Patch Notes [2.23.22]</h3>
+				<div class="uis_half">
+					-Revamp Kitchen now changes Kitchen Texture<br>
+					-3 New kitchen textures<br>
+					-Added new number units<br>
+					-Retextured "Revamp Kitchen" Upgrade<br>
+					-Retextured "Upgrade Oven" Item<br>
+					-Retextured "Master Chef" Item<br>
+					-Retextured "Assistant Chef" Item<br>
+					-Added "Lemon Meringue Pie"<br>
+					-Added "Key Lime Pie"<br>
+					-Added "Chocolate Cream Pie"
+					-Added "Grandmaster Chef" Upgrade<br>
+					-Added "Expert Chef" Upgrade<br>
+					-Added "Apprentice Chef"<br>
+					-Added "Advanced Chef"<br>
+					-Removed original kitchen background<br>
+					-Particle count increased [20 -> 25]<br>
+					-Message Bar will now stay visible for longer<br>
+					-Rolling Pin price multiplier increased [1.5 -> 2]<br>
+					-Pie Nuke price multiplier increased [5 -> 100,000]<br>
+					-Fixed bug with Golden Pie styles<br>
+					-Added "Dev Mode" function
 				</div>
 				<h3>Patch Notes [2.22.22]</h3>
 				<div class="uis_half">
@@ -202,13 +256,5 @@
 		<script src="./fireworks.js"></script>
 		<script src="./anim.js"></script>
 		<script src="./game.js"></script>
-		<!--I'm sorry I added this, I wanted to see if this is actually that popular-->
-		<script async src="https://www.googletagmanager.com/gtag/js?id=G-EW2T6G5DLH"></script>
-		<script>
-			window.dataLayer=window.dataLayer||[]
-			function gtag(){dataLayer.push(arguments)}
-			gtag('js',new Date())
-			gtag('config','G-EW2T6G5DLH')
-		</script>
 	</body>
 </html>
