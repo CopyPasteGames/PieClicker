@@ -210,6 +210,7 @@ function refreshGame(){
 	}else if(kitchenBackgroundImage==2&&$("#pieChild").attr("src")!="./assets/KitchenBackgroundWhite.png"){
 		$('#pieChild').attr("src","./assets/KitchenBackgroundWhite.png")
 	}
+	// This is just to make the brightness change if you can afford something
 	if(canAfford(pieClickOvenPrice))$("#OvenUpgradeContainer").css({"filter":"brightness(1)"})
 	else $("#OvenUpgradeContainer").css({"filter":"brightness(0.5)"})
 	if(canAfford(pieClickUpgradePrice))$("#InitialUpgradeContainer").css({"filter":"brightness(1)"})
@@ -269,23 +270,30 @@ function purchaseMasterChef(elem){
 	*/
 	if(canAfford(chefUpgradePrice)){
 		charge(chefUpgradePrice)
-		chefUpgradePrice=round(chefUpgradePrice*3)
 		chefUpgradeTier=chefUpgradeTier+1
 		if(chefUpgradeTier==1){
+			chefUpgradePrice=round(chefUpgradePrice*3)
 			assistantChefMultiplier=2
 		}else if(chefUpgradeTier==2){
+			chefUpgradePrice=round(chefUpgradePrice*3)
 			assistantChefMultiplier=3
 		}else if(chefUpgradeTier==3){
+			chefUpgradePrice=round(chefUpgradePrice*3)
 			assistantChefMultiplier=4
 		}else if(chefUpgradeTier==4){
+			chefUpgradePrice=round(chefUpgradePrice*3)
 			assistantChefMultiplier=5
 		}else if(chefUpgradeTier==5){
+			chefUpgradePrice=round(chefUpgradePrice*5)
 			assistantChefMultiplier=8
 		}else if(chefUpgradeTier==6){
+			chefUpgradePrice=round(chefUpgradePrice*5)
 			assistantChefMultiplier=15
 		}else if(chefUpgradeTier==7){
+			chefUpgradePrice=round(chefUpgradePrice*5)
 			assistantChefMultiplier=20
 		}else if(chefUpgradeTier==8){
+			chefUpgradePrice=round(chefUpgradePrice*5)
 			assistantChefMultiplier=30
 		}else if(chefUpgradeTier==9){
 			assistantChefMultiplier=50
