@@ -36,15 +36,22 @@ $(document).ready(()=>{
 			ticksUntilMSGFades=2
 			resetGameInMS(5000)
 		}else{
-			messageGame("Made "+piesToNumber(c)+" Pies While Gone")
+			waitThenMessageGame("Made "+piesToNumber(c)+" Pies While Gone",1000)
 		}
 	}
 	$('[data-toggle="tooltip"]').tooltip()
 	tickGame()
 })
 
+async function waitThenMessageGame(message,ms){
+	await sleep(ms)
+	messageGame(message)
+}
+
 $(window).bind("load",()=>{
-	$("#creditsOverlay").fadeOut(750)
+	$('#copyPasteLogo').delay(200).fadeIn(250)
+	$('#copyPasteLogo').delay(775).fadeOut(250)
+	$("#introScreen").delay(1500).fadeOut(750)
 })
 
 $("#pie").click((e)=>{
@@ -120,11 +127,15 @@ function refreshGame(){
 	$("#pieCountReal").html("Pies: "+piesToNumber(pies))
 	$("#pieGRateReal").html("Pies/Sec: "+piesToNumber((assistantChefAmount*assistantChefMultiplier)+piesPerSecond))
 	/* pieUpgradeTier Mapping:
-	0 = Normal Pie   |  Pumpkin Pie Upgrade
-	1 = Pumpkin Pie  |  Apple Pie Upgrade
-	2 = Apple Pie    |  Cheesecake Upgrade
-	3 = Cheesecake   |  Oreo Pie?
-	4 = Oero Pie     |  No Upgrade
+	0 = Normal Pie      |  Pumpkin Pie Upgrade
+	1 = Pumpkin Pie     |  Apple Pie Upgrade
+	2 = Apple Pie       |  Cheesecake Upgrade
+	3 = Cheesecake      |  Oreo Pie Upgrade
+	4 = Oero Pie        |  Lemon Meringue Upgrade
+	5 = Lemon Meringue  |  Key Lime Upgrade
+	6 = Key Lime        |  Chocolate Cream Upgrade
+	7 = Chocolate Cream |  Strawberry Pie Upgrade
+	8 = Strawberry Pie  |  No Upgrade
 	*/
 	if(pieUpgradeTier==0){
 		$("#InitialUpgrade").attr("src","./assets/UpgradeButtonPumpkinPie.png")
@@ -148,8 +159,11 @@ function refreshGame(){
 		$("#InitialUpgrade").attr("src","./assets/UpgradeButtonChocolateCreamPie.png")
 		$("#pieBtn").attr("src","./assets/PieKeyLime.png")
 	}else if(pieUpgradeTier==7){
-		$("#InitialUpgradeContainer").css({"display":"none"})
+		$("#InitialUpgrade").attr("src","./assets/UpgradeButtonStrawberryPie.png")
 		$("#pieBtn").attr("src","./assets/PieChocolateCream.png")
+	}else if(pieUpgradeTier==8){
+		$("#InitialUpgradeContainer").css({"display":"none"})
+		$("#pieBtn").attr("src","./assets/PieStrawberry.png")
 	}
 	/* Chef Tier Mapping
 	0 = No Chef Upgrade
@@ -158,6 +172,10 @@ function refreshGame(){
 	3 = Expert Chef Upgrade
 	4 = Master Chef Upgrade
 	5 = Grand Master Chef Upgrade
+	6 = GM Chef I
+	7 = GM Chef II
+	8 = GM Chef III
+	9 = GM Chef IV
 	*/
 	if(chefUpgradeTier==0){
 		$("#MasterChef").attr("src","./assets/UpgradeButtonApprenticeChef.png")
@@ -170,6 +188,14 @@ function refreshGame(){
 	}else if(chefUpgradeTier==4){
 		$("#MasterChef").attr("src","./assets/UpgradeButtonGrandmasterChef.png")
 	}else if(chefUpgradeTier==5){
+		$("#MasterChef").attr("src","./assets/UpgradeButtonGMChefPlatinumI.png")
+	}else if(chefUpgradeTier==6){
+		$("#MasterChef").attr("src","./assets/UpgradeButtonGMChefPlatinumII.png")
+	}else if(chefUpgradeTier==7){
+		$("#MasterChef").attr("src","./assets/UpgradeButtonGMChefPlatinumIII.png")
+	}else if(chefUpgradeTier==8){
+		$("#MasterChef").attr("src","./assets/UpgradeButtonGMChefPlatinumIV.png")
+	}else if(chefUpgradeTier==9){
 		$("#MasterChefContainer").css({"display":"none"})
 	}
 	/* Background Image Mapping
@@ -225,6 +251,8 @@ function startClickUpgrade(elem){
 			pieClickMultiplier=15
 		}else if(pieUpgradeTier==7){
 			pieClickMultiplier=25
+		}else if(pieUpgradeTier==8){
+			pieClickMultiplier=35
 		}
 		refreshGame()
 	}else{
@@ -239,10 +267,14 @@ function purchaseMasterChef(elem){
 	Expert Chef
 	Master Chef
 	Grandmaster Chef
+	GM Chef I
+	GM Chef II
+	GM Chef III
+	GM Chef IV
 	*/
 	if(canAfford(chefUpgradePrice)){
 		charge(chefUpgradePrice)
-		chefUpgradePrice=round(chefUpgradePrice*5)
+		chefUpgradePrice=round(chefUpgradePrice*3)
 		chefUpgradeTier=chefUpgradeTier+1
 		if(chefUpgradeTier==1){
 			clickFireworks($(elem),50)
@@ -258,6 +290,14 @@ function purchaseMasterChef(elem){
 			assistantChefMultiplier=5
 		}else if(chefUpgradeTier==5){
 			assistantChefMultiplier=8
+		}else if(chefUpgradeTier==6){
+			assistantChefMultiplier=15
+		}else if(chefUpgradeTier==7){
+			assistantChefMultiplier=20
+		}else if(chefUpgradeTier==8){
+			assistantChefMultiplier=30
+		}else if(chefUpgradeTier==9){
+			assistantChefMultiplier=50
 		}
 		refreshGame()
 	}else{
@@ -273,7 +313,7 @@ async function PleasePlayTheCredits(){
 	$("#creditsTitle").html("Lead Programmer")
 	$("#creditsName").fadeIn(500)
 	$("#creditsTitle").fadeIn(500)
-	await sleep(3000)
+	await sleep(2000)
 	$("#creditsName").fadeOut(500)
 	$("#creditsTitle").fadeOut(500)
 	await sleep(500)
@@ -281,7 +321,15 @@ async function PleasePlayTheCredits(){
 	$("#creditsTitle").html("Graphic Designer")
 	$("#creditsName").fadeIn(500)
 	$("#creditsTitle").fadeIn(500)
-	await sleep(3000)
+	await sleep(2000)
+	$("#creditsName").fadeOut(500)
+	$("#creditsTitle").fadeOut(500)
+	await sleep(500)
+	$("#creditsName").html("Ian Paris-Wright")
+	$("#creditsTitle").html("Music Artist")
+	$("#creditsName").fadeIn(500)
+	$("#creditsTitle").fadeIn(500)
+	await sleep(2000)
 	$("#creditsName").fadeOut(500)
 	$("#creditsTitle").fadeOut(500)
 	await sleep(500)
@@ -289,7 +337,7 @@ async function PleasePlayTheCredits(){
 	$("#creditsTitle").html("Creative Director")
 	$("#creditsName").fadeIn(500)
 	$("#creditsTitle").fadeIn(500)
-	await sleep(3000)
+	await sleep(2000)
 	$("#creditsName").fadeOut(500)
 	$("#creditsTitle").fadeOut(500)
 	await sleep(500)
@@ -297,7 +345,7 @@ async function PleasePlayTheCredits(){
 	$("#creditsTitle").html("Project Manager")
 	$("#creditsName").fadeIn(500)
 	$("#creditsTitle").fadeIn(500)
-	await sleep(3000)
+	await sleep(2000)
 	$("#creditsName").fadeOut(500)
 	$("#creditsTitle").fadeOut(500)
 	await sleep(500)
@@ -305,7 +353,7 @@ async function PleasePlayTheCredits(){
 	$("#creditsTitle").html("Test Player")
 	$("#creditsName").fadeIn(500)
 	$("#creditsTitle").fadeIn(500)
-	await sleep(3000)
+	await sleep(2000)
 	$("#creditsName").fadeOut(500)
 	$("#creditsTitle").fadeOut(500)
 	await sleep(500)
@@ -313,15 +361,15 @@ async function PleasePlayTheCredits(){
 	$("#creditsTitle").html("Copyright &copy; 2022")
 	$("#creditsName").fadeIn(500)
 	$("#creditsTitle").fadeIn(500)
-	await sleep(3000)
+	await sleep(2000)
 	$("#creditsName").fadeOut(500)
 	$("#creditsTitle").fadeOut(500)
 	await sleep(750)
 	$("#creditsOverlay").fadeOut(1000)
 	settingsMute=false
-	await sleep(250)
+	await sleep(300)
 	if(hasSeenCreditsThisSession==false){
-		x=getRndInteger(250,1000)
+		x=getRndInteger(round(pies/4),round(pies/8))
 		messageGame("Thanks For Watching The Credits (+"+x+" Pies)")
 		pies=pies+x
 	}
@@ -494,14 +542,15 @@ String.prototype.StringToBool=function(){
 }
 
 async function goldenPie(){
-	if(!$('#goldenPie').length){
+	if(!$('#goldenPie').length&&pies>=50){
 		$('#goldenPie').remove()
 		a=$(document).width()-$(document).height()*0.05
 		b=$(document).height()-$(document).height()*0.05
 		c=0
+		d=getRndInteger(4,8)
 		x=getRndInteger(0,a)
 		y=getRndInteger(0,b)
-		z=`<div id="goldenPie" style="position:fixed;left:${x}px;top:${y}px;height:5%;width:auto;display:none;cursor:pointer;" onclick="goldenPieFunc()">
+		z=`<div id="goldenPie" style="position:fixed;left:${x}px;top:${y}px;height:${d}%;width:auto;display:none;cursor:pointer;" onclick="goldenPieFunc()">
 			<img src="./assets/GoldenPie.png" style="width:100%;height:100%;">
 		</div>`
 		$('body').append(z)
@@ -540,4 +589,17 @@ function devMode(){
 	messageGame("Dev Mode Enabled")
 	$('#MasterChefContainer').css({'display':'block'})
 	$('#InitialUpgradeContainer').css({'display':'block'})
+}
+
+function confirmationBox(text,btn1,btn2,btn1func,btn2func){
+	$('#pm_text').html(text)
+	$('#pm_btn1_real').html(btn1)
+	$('#pm_btn2_real').html(btn2)
+	$('#pm_btn1').attr("onclick",btn1func)
+	$('#pm_btn2').attr("onclick",btn2func)
+	$('#popupMenu').fadeIn(500)
+}
+
+function resetGame(){
+	confirmationBox("Reset Game?","Yes","No","localStorage.clear();window.location.reload()","$('#popupMenu').fadeOut(500)")
 }

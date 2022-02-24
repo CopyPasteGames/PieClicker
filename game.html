@@ -6,7 +6,7 @@
 		<meta name="keywords" content="Pie, Clicker, kgsensei, CopyPaste Games, Clicker Games">
 		<meta name="author" content="kgsensei & CopyPaste Games">
 		<meta name="viewport" content="width=device-width, initial-scale=1.0">
-		<title>Pie Clicker | CopyPaste Games</title>
+		<title>PieClicker | CopyPaste Games</title>
 		<link rel="icon" href="./assets/Pie.png">
 		<link rel="stylesheet" href="./bootstrap.css">
 		<link rel="stylesheet" href="./game.css">
@@ -77,13 +77,17 @@
 					<img src="./assets/Button.png" style="width:100%;height:100%;" draggable="false">
 					<div class="btnText">Credits</div>
 				</div>
-				<div class="otherMenuOption" onclick="localStorage.clear();window.location.reload()">
+				<div class="otherMenuOption" onclick='resetGame()'>
 					<img src="./assets/Button.png" style="width:100%;height:100%;" draggable="false">
 					<div class="btnText">Reset</div>
 				</div>
 				<div class="otherMenuOption" onclick="$('#usefulInfoScreen').fadeIn(500)">
 					<img src="./assets/Button.png" style="width:100%;height:100%;" draggable="false">
 					<div class="btnText">Useful Info</div>
+				</div>
+				<div class="otherMenuOption" onclick="messageGame('Coming Soon')">
+					<img src="./assets/Button.png" style="width:100%;height:100%;filter:brightness(0.5);" draggable="false">
+					<div class="btnText">Settings</div>
 				</div>
 			</div>
 		</div>
@@ -208,6 +212,7 @@
 					-Added "Lemon Meringue Pie"<br>
 					-Added "Key Lime Pie"<br>
 					-Added "Chocolate Cream Pie"<br>
+					-Added "Strawberry Pie"<br>
 					-Added "Grandmaster Chef" Upgrade<br>
 					-Added "Expert Chef" Upgrade<br>
 					-Added "Apprentice Chef"<br>
@@ -218,7 +223,17 @@
 					-Rolling Pin price multiplier increased [1.5 -> 2]<br>
 					-Pie Nuke price multiplier increased [5 -> 100,000]<br>
 					-Fixed bug with Golden Pie styles<br>
-					-Added "Dev Mode" function
+					-Added "Dev Mode" function<br>
+					-Number preview will now only show 1 decimal<br>
+					-Added loading animation sequence<br>
+					-Credits will now move faster [3s -> 2s]<br>
+					-Resetting game will now ask for confirmation<br>
+					-Credits will now give a more dynamic reward<br>
+					-Added "GM Chef Platinum I"<br>
+					-Added "GM Chef Platinum II"<br>
+					-Added "GM Chef Platinum III"<br>
+					-Added "GM Chef Platinum IV"<br>
+					-Golden Pies will now vary in size
 				</div>
 				<h3>Patch Notes [2.22.22]</h3>
 				<div class="uis_half">
@@ -250,6 +265,26 @@
 			</div>
 			<div id="uis_exit" onclick="$('#usefulInfoScreen').fadeOut(500)">
 				<img src="./assets/x-circle-fill.svg" style="width:100%;height:100%;" draggable="false">
+			</div>
+		</div>
+		<div id="introScreen">
+			<div id="is_centerV">
+				<div id="is_centerH">
+					<img src="./assets/CopyPasteGames.png" style="height:100%;width:auto;display:none;" draggable="false" id="copyPasteLogo">
+				</div>
+			</div>
+		</div>
+		<div id="popupMenu">
+			<div id="pm_text">Text</div>
+			<div id="pm_btn1" onclick="null">
+				<div class="centerText" id="pm_btn1_real">
+					Btn1
+				</div>
+			</div>
+			<div id="pm_btn2" onclick="null">
+				<div class="centerText" id="pm_btn2_real">
+					Btn2
+				</div>
 			</div>
 		</div>
 		<script src="./bootstrap.js"></script>
