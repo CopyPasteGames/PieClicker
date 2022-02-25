@@ -1,27 +1,28 @@
-pies=0
-piesPerClick=1
-piesPerSecond=0
-pieClickAnimationId=0
-pieClickMultiplier=1
-pieClickUpgradePrice=500
-pieClickOvenPrice=15
-pieUpgradeTier=0
-chefUpgradeTier=0
-chefUpgradePrice=5000
-pieRotationDeg=0
-assistantChefAmount=0
-assistantChefMultiplier=1
-assistantChefPrice=10
-masterChefPrice=10000
-masterChefUnlocked=false
-rollingPinsPrice=250
-revampKitchenPrice=10000
-kitchenBackgroundImage=0
-nukePiePrice=100000000000000
-hasSeenCreditsThisSession=false
-settingsMute=false
-ticksUntilMSGFades=0
-doSaveGame=true
+pies                      = 0
+piesPerClick              = 1
+piesPerSecond             = 0
+pieClickAnimationId       = 0
+pieClickMultiplier        = 1
+pieClickUpgradePrice      = 500
+pieClickOvenPrice         = 15
+pieUpgradeTier            = 0
+chefUpgradeTier           = 0
+chefUpgradePrice          = 5000
+pieRotationDeg            = 0
+assistantChefAmount       = 0
+assistantChefMultiplier   = 1
+assistantChefPrice        = 10
+hangFlyersPrice           = 2500
+masterChefPrice           = 10000
+masterChefUnlocked        = false
+rollingPinsPrice          = 250
+revampKitchenPrice        = 10000
+kitchenBackgroundImage    = 0
+nukePiePrice              = 1000000000000
+hasSeenCreditsThisSession = false
+settingsMute              = false
+ticksUntilMSGFades        = 0
+doSaveGame                = true
 
 $(document).ready(()=>{
 	loadGame()
@@ -198,6 +199,11 @@ function refreshGame(){
 	}else if(chefUpgradeTier==9){
 		$("#MasterChefContainer").css({"display":"none"})
 	}
+	if(chefUpgradeTier>=3){
+		$("#UpgradeFlyersContainer").css({"display":"block"})
+	}else{
+		$("#UpgradeFlyersContainer").css({"display":"none"})
+	}
 	/* Background Image Mapping
 	0 = Blue Background
 	1 = Pink Background
@@ -225,6 +231,8 @@ function refreshGame(){
 	else $("#RevampKitchenContainer").css({"filter":"brightness(0.5)"})
 	if(canAfford(nukePiePrice))$("#NukePieContainer").css({"filter":"brightness(1)"})
 	else $("#NukePieContainer").css({"filter":"brightness(0.5)"})
+	if(canAfford(hangFlyersPrice))$("#UpgradeFlyersContainer").css({"filter":"brightness(1)"})
+	else $("#UpgradeFlyersContainer").css({"filter":"brightness(0.5)"})
 }
 
 function startClickUpgrade(elem){
@@ -333,6 +341,14 @@ async function PleasePlayTheCredits(){
 	$("#creditsName").fadeOut(500)
 	$("#creditsTitle").fadeOut(500)
 	await sleep(500)
+	$("#creditsName").html("Lucient Chapin")
+	$("#creditsTitle").html("Creative Director")
+	$("#creditsName").fadeIn(500)
+	$("#creditsTitle").fadeIn(500)
+	await sleep(2000)
+	$("#creditsName").fadeOut(500)
+	$("#creditsTitle").fadeOut(500)
+	await sleep(500)
 	$("#creditsName").html("Caleb Rhinehart")
 	$("#creditsTitle").html("Creative Director")
 	$("#creditsName").fadeIn(500)
@@ -343,14 +359,6 @@ async function PleasePlayTheCredits(){
 	await sleep(500)
 	$("#creditsName").html("Kylea Reed")
 	$("#creditsTitle").html("Project Manager")
-	$("#creditsName").fadeIn(500)
-	$("#creditsTitle").fadeIn(500)
-	await sleep(2000)
-	$("#creditsName").fadeOut(500)
-	$("#creditsTitle").fadeOut(500)
-	await sleep(500)
-	$("#creditsName").html("Lucient Chapin")
-	$("#creditsTitle").html("Test Player")
 	$("#creditsName").fadeIn(500)
 	$("#creditsTitle").fadeIn(500)
 	await sleep(2000)
@@ -368,9 +376,9 @@ async function PleasePlayTheCredits(){
 	$("#creditsOverlay").fadeOut(1000)
 	settingsMute=false
 	await sleep(300)
-	if(hasSeenCreditsThisSession==false){
-		x=getRndInteger(round(pies/4),round(pies/8))
-		messageGame("Thanks For Watching The Credits (+"+x+" Pies)")
+	if(!hasSeenCreditsThisSession&&pies>=500){
+		x=getRndInteger(round(pies/8),round(pies/10))
+		messageGame("Thanks For Watching The Credits (+"+piesToNumber(x)+" Pies)")
 		pies=pies+x
 	}
 	hasSeenCreditsThisSession=true
@@ -382,12 +390,8 @@ function canAfford(itemPrice){
 	else return false
 }
 
-function debugMenu(){
-	alert("Get Trolled")
-}
-
 async function messageGame(message){
-	ticksUntilMSGFades=ticksUntilMSGFades+3
+	ticksUntilMSGFades=ticksUntilMSGFades+2
 	$("#messageBar").stop(true,true)
 	$("#messageBarText").html(message)
 	$("#messageBar").fadeIn(100)
@@ -439,6 +443,7 @@ function purchaseRevampKitchen(elem){
 		clickFireworks($(elem),50)
 		piesPerSecond=piesPerSecond+round(piesPerSecond*0.1)
 		piesPerClick=piesPerClick+round(piesPerClick*0.1)
+		assistantChefAmount=assistantChefAmount+round(assistantChefAmount*0.1)
 		charge(revampKitchenPrice)
 		revampKitchenPrice=round(revampKitchenPrice*2.5)
 		kitchenBackgroundIMOld=kitchenBackgroundImage
@@ -459,10 +464,24 @@ function nuclearPieReactor(elem){
 		clickFireworks($(elem),50)
 		piesPerSecond=round(piesPerSecond*100)
 		charge(nukePiePrice)
-		nukePiePrice=round(nukePiePrice*100000)
+		nukePiePrice=round(nukePiePrice*100)
 		refreshGame()
 	}else{
 		messageGame("You Can\'t Afford This (Price: "+piesToNumber(nukePiePrice)+")")
+	}
+}
+
+function purchaseUpgradeFlyers(elem){
+	if(canAfford(hangFlyersPrice)){
+		clickFireworks($(elem),50)
+		charge(hangFlyersPrice)
+		hangFlyersPrice=round(hangFlyersPrice*2.5)
+		amountGained=getRndInteger(5,15)
+		assistantChefAmount=assistantChefAmount+amountGained
+		messageGame("You got +"+amountGained+" new assistant chefs!")
+		refreshGame()
+	}else{
+		messageGame("You Can\'t Afford This (Price: "+piesToNumber(hangFlyersPrice)+")")
 	}
 }
 
@@ -544,10 +563,10 @@ String.prototype.StringToBool=function(){
 async function goldenPie(){
 	if(!$('#goldenPie').length&&pies>=50){
 		$('#goldenPie').remove()
-		a=$(document).width()-$(document).height()*0.05
-		b=$(document).height()-$(document).height()*0.05
+		a=$(document).width()-$(document).width()*0.1
+		b=$(document).height()-$(document).height()*0.1
 		c=0
-		d=getRndInteger(4,8)
+		d=getRndInteger(3,10)
 		x=getRndInteger(0,a)
 		y=getRndInteger(0,b)
 		z=`<div id="goldenPie" style="position:fixed;left:${x}px;top:${y}px;height:${d}%;width:auto;display:none;cursor:pointer;" onclick="goldenPieFunc()">
@@ -577,7 +596,7 @@ async function goldenPieFunc(){
 
 function devMode(){
 	doSaveGame=false
-	alert("Dev Mode Enabled\n\nWill not save progress. Reload to disable dev mode.")
+	alert("*Dev Mode Enabled*\n\nWill not save progress.\nsReload to disable dev mode.")
 	pies=10**30
 	piesPerClick=10**10
 	piesPerSecond=10**10

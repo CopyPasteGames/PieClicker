@@ -260,7 +260,15 @@ table,thead,td{
 	border-collapse:collapse;
 }
 
-#uis_exit{
+.tableNoBorder{
+	padding-left:10px;
+	padding-right:10px;
+	padding-bottom:5px;
+	border-style:none;
+	border-collapse:collapse;
+}
+
+.uis_exit{
 	cursor:pointer;
 	position:absolute;
 	left:96%;
@@ -489,4 +497,19 @@ table,thead,td{
 	border-radius:5px;
 	background-color:rgba(0,0,0,0.5);
 	cursor:pointer;
+}
+
+#settingsMenu{
+	display:none;
+	position:absolute;
+	width:80%;
+	left:10%;
+	height:90%;
+	top:5%;
+	border-style:solid;
+    border-radius:7px;
+    border-color:black;
+    border-width:3.5px;
+    background-color:var(--bgTheme);
+    font-size:1vw;
 }
