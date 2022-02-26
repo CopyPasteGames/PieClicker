@@ -98,6 +98,7 @@ function round(number){return Math.round(number)}
 document.addEventListener("contextmenu",(e)=>{e.preventDefault()})
 function removeElem(animID){setTimeout(()=>{$(animID).remove()},2250)}
 function sleep(ms){return new Promise(resolve=>setTimeout(resolve,ms))}
+function CLog(msg){console.log("[game.js "+new Date().getTime()+"] "+msg)}
 function getRndInteger(min,max){return Math.floor(Math.random()*(max-min+1))+min}
 
 function saveGame(){
@@ -689,7 +690,8 @@ window.addEventListener("focus",()=>{Anticheat.pageFocused=1})
 window.addEventListener("storage",(e)=>{Anticheat.storageEditA=1;localStorage.setItem(e.key,e.value)})
 window.addEventListener("resize",()=>{if(initalPageWidth!=$(document).width()){Anticheat.isOGWidth=0}else{Anticheat.isOGWidth=1}})
 
-function Anticheat(){}
+function Anticheat(){CLog("Anticheat Started")}
+
 Anticheat.prototype={
 	clicks       : 0,
 	samePosition : 0,
@@ -733,4 +735,5 @@ Anticheat.prototype={
 		this.clicks=0
 	}
 }
+
 Anticheat=new Anticheat()
