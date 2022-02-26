@@ -723,13 +723,13 @@ Anticheat.prototype={
 		if(this.oldaverage-5<=this.average&&this.average<=this.oldaverage+5){
 			this.matchingAvIR=this.matchingAvIR+1
 		}else{this.matchingAvIR=0}
-		if(this.matchingAvIR>15&&this.oldaverage!=0)this.susCount=this.susCount+2
-		if(this.clicks>=20)this.susCount=this.susCount+1
-		if(this.samePosition>=250)this.susCount=this.susCount+1
-		if(this.samePosition>=500)this.susCount=this.susCount+1
-		if(this.isOGWidth!=1)this.susCount=this.susCount+1
-		if(this.storageEditA==1)this.susCount=this.susCount+1
-		if(piesPerSecond>=9**99)this.susCount=this.susCount+1
+		if(this.matchingAvIR>15&&this.oldaverage!=0)this.susCount=this.susCount+2;CLog("Anticheat - Autoclicker Average Detected")
+		if(this.clicks>=20)this.susCount=this.susCount+1;CLog("Anticheat - Autoclicker Speed Detected")
+		if(this.samePosition>=250)this.susCount=this.susCount+1;CLog("Anticheat - Same Click Position (250)")
+		if(this.samePosition>=500)this.susCount=this.susCount+1;CLog("Anticheat - Same Click Position (500)")
+		if(this.isOGWidth!=1)this.susCount=this.susCount+1;CLog("Anticheat - Page Width Changed")
+		if(this.storageEditA==1)this.susCount=this.susCount+1;CLog("Anticheat - Storage Editing")
+		if(piesPerSecond>=9**99)this.susCount=this.susCount+1;CLog("Anticheat - Large Pies/Sec Count")
 		if(this.susCount>=2)this.banHammer()
 		this.oldaverage=this.average
 		this.clicks=0
