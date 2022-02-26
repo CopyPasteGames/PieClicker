@@ -41,13 +41,7 @@ $(document).ready(()=>{
 		b=Date.parse(new Date())
 		c=((assistantChefAmount*assistantChefMultiplier)+piesPerSecond)*((b-a)/1000)
 		pies=pies+c
-		if(isNaN(pies)||pies==undefined||pies==null){
-			messageGame("Error Detected. Resetting Game In 5 Seconds")
-			ticksUntilMSGFades=2
-			resetGameInMS(5000)
-		}else{
-			waitThenMessageGame("Made "+piesToNumber(c)+" Pies While Gone",1000)
-		}
+		waitThenMessageGame("Made "+piesToNumber(c)+" Pies While Gone",1000)
 	}
 	$('[data-toggle="tooltip"]').tooltip()
 	tickGame()
@@ -723,13 +717,13 @@ Anticheat.prototype={
 		if(this.oldaverage-5<=this.average&&this.average<=this.oldaverage+5){
 			this.matchingAvIR=this.matchingAvIR+1
 		}else{this.matchingAvIR=0}
-		if(this.matchingAvIR>15&&this.oldaverage!=0)this.susCount=this.susCount+2;CLog("Anticheat - Autoclicker Average Detected")
-		if(this.clicks>=20)this.susCount=this.susCount+1;CLog("Anticheat - Autoclicker Speed Detected")
-		if(this.samePosition>=250)this.susCount=this.susCount+1;CLog("Anticheat - Same Click Position (250)")
-		if(this.samePosition>=500)this.susCount=this.susCount+1;CLog("Anticheat - Same Click Position (500)")
-		if(this.isOGWidth!=1)this.susCount=this.susCount+1;CLog("Anticheat - Page Width Changed")
-		if(this.storageEditA==1)this.susCount=this.susCount+1;CLog("Anticheat - Storage Editing")
-		if(piesPerSecond>=9**99)this.susCount=this.susCount+1;CLog("Anticheat - Large Pies/Sec Count")
+		if(this.matchingAvIR>15&&this.oldaverage!=0){this.susCount=this.susCount+2;CLog("Anticheat - Autoclicker Average Detected")}
+		if(this.clicks>=20)							{this.susCount=this.susCount+1;CLog("Anticheat - Autoclicker Speed Detected")}
+		if(this.samePosition>=250)					{this.susCount=this.susCount+1;CLog("Anticheat - Same Click Position (250)")}
+		if(this.samePosition>=500)					{this.susCount=this.susCount+1;CLog("Anticheat - Same Click Position (500)")}
+		if(this.isOGWidth!=1)						{this.susCount=this.susCount+1;CLog("Anticheat - Page Width Changed")}
+		if(this.storageEditA==1)					{this.susCount=this.susCount+1;CLog("Anticheat - Storage Editing")}
+		if(piesPerSecond>=9**99)					{this.susCount=this.susCount+1;CLog("Anticheat - Large Pies/Sec Count")}
 		if(this.susCount>=2)this.banHammer()
 		this.oldaverage=this.average
 		this.clicks=0
