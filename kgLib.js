@@ -48,3 +48,7 @@ String.prototype.isEmpty=function(){
     if(string.replaceAll(/ /g,'')=='')return true
     else return false
 }
+
+Array.prototype.append=function(data){
+	this.push(data)
+}

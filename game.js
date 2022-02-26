@@ -26,6 +26,7 @@ doSaveGame                 = true
 oldPiex                    = -1
 oldPiey                    = -1
 initalPageWidth            = $(document).width()
+last20clickTimestamps      = []
 /*     Settings Variables     */
 settingsMute               = false
 settingsClickAnimations    = true
@@ -65,11 +66,14 @@ $(window).bind("load",()=>{
 
 $("#pie").click((e)=>{
 	$("#pie").stop(true,false)
+	Anticheat.hasClicked=true
 	Anticheat.clicks=Anticheat.clicks+1
 	if(oldPiex==e.pageX&&oldPiey==e.pageY){Anticheat.samePosition=Anticheat.samePosition+1}
 	else{Anticheat.samePosition=0}
 	oldPiex=e.pageX
 	oldPiey=e.pageY
+	last20clickTimestamps.append(Date.now())
+	if(last20clickTimestamps.length>20)last20clickTimestamps.shift()
 	if(settingsClickAnimations){
 		$("#pie").css({"width":"90%","left":"5%","top":"15%","transform":"rotate("+pieRotationDeg+"deg)"})
 		pieClickAnimationId=pieClickAnimationId+1
@@ -683,7 +687,7 @@ function resetGame(){
 window.addEventListener("blur",()=>{Anticheat.pageFocused=0})
 window.addEventListener("focus",()=>{Anticheat.pageFocused=1})
 window.addEventListener("storage",(e)=>{Anticheat.storageEditA=1;localStorage.setItem(e.key,e.value)})
-document.addEventListener("resize",()=>{if(initalPageWidth!=$(document).width()){Anticheat.isOGWidth=0}else{Anticheat.isOGWidth=1}})
+window.addEventListener("resize",()=>{if(initalPageWidth!=$(document).width()){Anticheat.isOGWidth=0}else{Anticheat.isOGWidth=1}})
 
 function Anticheat(){}
 Anticheat.prototype={
@@ -693,18 +697,39 @@ Anticheat.prototype={
 	pageFocused  : 1,
 	isOGWidth    : 1,
 	storageEditA : 0,
+	oldaverage   : 0,
+	average      : 0,
+	matchingAvIR : 0,
+	hasClicked   : false,
+	diffData     : [],
 	banHammer    : function(){
-		$('#introScreen').fadeIn(100)
+		$('#copyPasteLogo').attr('src','./assets/antiCheatLogo.png')
+		$('#copyPasteLogo').fadeIn(225)
+		$('#is_centerV').css({"top":"20%"})
+		$('#cheatingText').fadeIn(250)
+		$('#introScreen').fadeIn(200)
 	},
 	tick         : function(){
 		this.susCount=0
+		this.diffData=(last20clickTimestamps.map((n,i,last20clickTimestamps)=>i?n-last20clickTimestamps[i-1]:0-n))
+		this.diffData.shift()
+		this.average=0
+		for(i=0;i<this.diffData.length;i++){
+			this.average=this.average+this.diffData[i]
+		}
+		this.average=this.average/19
+		if(this.oldaverage-5<=this.average&&this.average<=this.oldaverage+5){
+			this.matchingAvIR=this.matchingAvIR+1
+		}else{this.matchingAvIR=0}
+		if(this.matchingAvIR>15&&this.oldaverage!=0)this.susCount=this.susCount+2
 		if(this.clicks>=20)this.susCount=this.susCount+1
-		if(this.samePosition>=50)this.susCount=this.susCount+1
+		if(this.samePosition>=250)this.susCount=this.susCount+1
 		if(this.samePosition>=500)this.susCount=this.susCount+1
 		if(this.isOGWidth!=1)this.susCount=this.susCount+1
 		if(this.storageEditA==1)this.susCount=this.susCount+1
 		if(piesPerSecond>=9**99)this.susCount=this.susCount+1
 		if(this.susCount>=2)this.banHammer()
+		this.oldaverage=this.average
 		this.clicks=0
 	}
 }

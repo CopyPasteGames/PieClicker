@@ -5,6 +5,7 @@
 		<meta name="description" content="PieClicker, A game by CopyPaste Games">
 		<meta name="keywords" content="Pie, Clicker, kgsensei, CopyPaste Games, Clicker Games">
 		<meta name="author" content="kgsensei & CopyPaste Games">
+		<meta http-equiv="refresh" content="14400">
 		<meta name="viewport" content="width=device-width, initial-scale=1.0">
 		<title>PieClicker | CopyPaste Games</title>
 		<link rel="icon" href="./assets/Pie.png">
@@ -213,7 +214,7 @@
 					-Started work on settings function<br>
 					-Changed game font theme [Sans Serif -> Century Gothic]<br>
 					-Started using 'kgLib.js' for text processing<br>
-					-Added basic Anticheat
+					-Added semi-advanced Anticheat
 				</div>
 				<h3>Patch Notes [2.24.22]</h3>
 				<div class="uis_half">
@@ -380,6 +381,14 @@
 			<div class="uis_exit" onclick="$('#settingsMenu').fadeOut(500)">
 				<img src="./assets/x-circle-fill.svg" style="width:100%;height:100%;" draggable="false">
 			</div>
+		</div>
+		<div id="cheatingText">
+			<b><i>-Anticheat Activated-</i></b>
+			<p>
+				Cheating was detected on your account. This could be an auto clicker or just some suspicious behavior.
+				Depending on what was detected we may have reduced your number of Pies, Pies/Sec and/or Pies/Click as
+				punishment. Sorry for the inconvenience.
+			</p>
 		</div>
 		<script src="./bootstrap.js"></script>
 		<script src="./fireworks.js"></script>

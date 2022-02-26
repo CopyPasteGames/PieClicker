@@ -523,3 +523,15 @@ table,thead,td{
 	width:15%;
 	height:auto;
 }
+
+#cheatingText{
+	position:absolute;
+	z-index:999999999;
+	top:45%;
+	width:60%;
+	height:20%;
+	left:20%;
+	text-align:center;
+	display:none;
+	font-size:3vh;
+}
