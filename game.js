@@ -704,6 +704,8 @@ Anticheat.prototype={
 		$('#copyPasteLogo').attr('src','./assets/antiCheatLogo.png')
 		$('#copyPasteLogo').fadeIn(225)
 		$('#is_centerV').css({"top":"20%"})
+		$('#pieClicker').remove()
+		$('#pieUpgrades').remove()
 		$('#cheatingText').fadeIn(250)
 		$('#introScreen').fadeIn(200)
 	},
@@ -719,17 +721,45 @@ Anticheat.prototype={
 		if(this.oldaverage-5<=this.average&&this.average<=this.oldaverage+5){
 			this.matchingAvIR=this.matchingAvIR+1
 		}else{this.matchingAvIR=0}
-		if(this.matchingAvIR>=15&&isClickedRecent!=0)	{this.susCount=this.susCount+2}
+		if(this.matchingAvIR>=15&&isClickedRecent!=0)	{this.susCount=this.susCount+2;this.banLevel3()}
 		if(this.clicks>=20)								{this.susCount=this.susCount+1}
 		if(this.samePosition>=250)						{this.susCount=this.susCount+1}
 		if(this.samePosition>=500)						{this.susCount=this.susCount+1}
 		if(this.isOGWidth!=1)							{this.susCount=this.susCount+1}
 		if(this.storageEditA==1)						{this.susCount=this.susCount+1}
 		if(piesPerSecond>=9**99)						{this.susCount=this.susCount+1}
-		if(this.susCount>=2)this.banHammer()
+		if(this.susCount>=2)							{this.banHammer();this.banLevel1()}
 		this.oldaverage=this.average
 		if(isClickedRecent!=0)isClickedRecent=isClickedRecent-1
 		this.clicks=0
+	},
+	banLevel1    : function(){
+		doSaveGame=false
+		pies=round(pies/2)
+		rollingPinsPrice=round(rollingPinsPrice*1.25)
+		assistantChefPrice=round(assistantChefPrice*1.25)
+		saveGame()
+	},
+	banLevel2    : function(){
+		doSaveGame=false
+		pies=round(pies/4)
+		piesPerSecond=round(piesPerSecond/2)
+		rollingPinsPrice=round(rollingPinsPrice*1.5)
+		assistantChefPrice=round(assistantChefPrice*1.5)
+		nukePiePrice=round(nukePiePrice*1.5)
+		saveGame()
+	},
+	banLevel3    : function(){
+		doSaveGame=false
+		pies=round(pies/8)
+		piesPerSecond=round(piesPerSecond/4)
+		piesPerClick=round(piesPerClick/2)
+		rollingPinsPrice=round(rollingPinsPrice*2)
+		assistantChefPrice=round(assistantChefPrice*2)
+		nukePiePrice=round(nukePiePrice*2)
+		chefUpgradePrice=round(chefUpgradePrice*2)
+		pieClickUpgradePrice=round(pieClickUpgradePrice*2)
+		saveGame()
 	}
 }
 
