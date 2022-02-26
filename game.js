@@ -117,6 +117,7 @@ function saveGame(){
 	localStorage.setItem("chefUpgradeTier",chefUpgradeTier)
 	localStorage.setItem("chefUpgradePrice",chefUpgradePrice)
 	localStorage.setItem("kitchenBackgroundImage",kitchenBackgroundImage)
+	localStorage.setItem("hangFlyersPrice",hangFlyersPrice)
 	// Settings Are Saved Below
 	localStorage.setItem("settingsMute",settingsMute)
 	localStorage.setItem("settingsClickAnimations",settingsClickAnimations)
@@ -143,6 +144,7 @@ function loadGame(){
 	if(lsExists("chefUpgradeTier"))chefUpgradeTier=localStorage.getItem("chefUpgradeTier")*1
 	if(lsExists("chefUpgradePrice"))chefUpgradePrice=localStorage.getItem("chefUpgradePrice")*1
 	if(lsExists("kitchenBackgroundImage"))kitchenBackgroundImage=localStorage.getItem("kitchenBackgroundImage")*1
+	if(lsExists("hangFlyersPrice"))hangFlyersPrice=localStorage.getItem("hangFlyersPrice")*1
 	// Settings Are Loaded Below
 	if(lsExists("settingsMute"))settingsMute=localStorage.getItem("settingsMute").stringToBool()
 	if(lsExists("settingsClickAnimations"))settingsClickAnimations=localStorage.getItem("settingsClickAnimations").stringToBool()
