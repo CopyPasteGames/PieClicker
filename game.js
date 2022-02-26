@@ -683,7 +683,7 @@ function resetGame(){
 
 window.addEventListener("blur",()=>{Anticheat.pageFocused=0})
 window.addEventListener("focus",()=>{Anticheat.pageFocused=1})
-window.addEventListener("storage",(e)=>{Anticheat.storageEditA=1;localStorage.setItem(e.key,e.value)})
+window.addEventListener("storage",()=>{Anticheat.storageEditA=1})
 window.addEventListener("resize",()=>{if(initalPageWidth!=$(document).width()){Anticheat.isOGWidth=0}else{Anticheat.isOGWidth=1}})
 
 function Anticheat(){CLog("Anticheat Started")}
