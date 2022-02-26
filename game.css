@@ -4,9 +4,14 @@
 	--tooltipbg:rgb(25,25,25);
 }
 
+@font-face{
+	font-family:CenturyGothic;
+	src:url("./assets/CenturyGothic.ttf");
+}
+
 body{
 	background-color:black;
-	font-family:sans-serif;
+	font-family:CenturyGothic;
 	overflow-x:hidden;
 	padding:0px;
 	margin:0px;
@@ -512,4 +517,9 @@ table,thead,td{
     border-width:3.5px;
     background-color:var(--bgTheme);
     font-size:1vw;
+}
+
+.settingsBtn{
+	width:15%;
+	height:auto;
 }
