@@ -721,14 +721,14 @@ Anticheat.prototype={
 		if(this.oldaverage-5<=this.average&&this.average<=this.oldaverage+5){
 			this.matchingAvIR=this.matchingAvIR+1
 		}else{this.matchingAvIR=0}
-		if(this.matchingAvIR>=15&&isClickedRecent!=0)	{this.susCount=this.susCount+2;this.banLevel3()}
-		if(this.clicks>=20)								{this.susCount=this.susCount+1}
-		if(this.samePosition>=250)						{this.susCount=this.susCount+1}
-		if(this.samePosition>=500)						{this.susCount=this.susCount+1}
-		if(this.isOGWidth!=1)							{this.susCount=this.susCount+1}
-		if(this.storageEditA==1)						{this.susCount=this.susCount+1}
-		if(piesPerSecond>=9**99)						{this.susCount=this.susCount+1}
-		if(this.susCount>=2)							{this.banHammer();this.banLevel1()}
+		if(this.matchingAvIR>=15&&isClickedRecent!=0)	{this.susCount=this.susCount+2;$('#acR').text('0x001')}
+		if(this.clicks>=20)								{this.susCount=this.susCount+1;$('#acR').text('0xA42')}
+		if(this.samePosition>=250)						{this.susCount=this.susCount+1;$('#acR').text('1x65G')}
+		if(this.samePosition>=500)						{this.susCount=this.susCount+1;$('#acR').text('5x997')}
+		if(this.isOGWidth!=1)							{this.susCount=this.susCount+1;$('#acR').text('0xB27')}
+		if(this.storageEditA==1)						{this.susCount=this.susCount+1;$('#acR').text('0xD3B')}
+		if(piesPerSecond>=9**99)						{this.susCount=this.susCount+1;$('#acR').text('0x590')}
+		if(this.susCount>=2)							{this.banHammer()}
 		this.oldaverage=this.average
 		if(isClickedRecent!=0)isClickedRecent=isClickedRecent-1
 		this.clicks=0
@@ -760,6 +760,16 @@ Anticheat.prototype={
 		chefUpgradePrice=round(chefUpgradePrice*2)
 		pieClickUpgradePrice=round(pieClickUpgradePrice*2)
 		saveGame()
+	},
+	refundMySuff : function(){
+		pies=round(pies*8)
+		piesPerSecond=round(piesPerSecond*4)
+		piesPerClick=round(piesPerClick*2)
+		rollingPinsPrice=round(rollingPinsPrice/2)
+		assistantChefPrice=round(assistantChefPrice/2)
+		nukePiePrice=round(nukePiePrice/2)
+		chefUpgradePrice=round(chefUpgradePrice/2)
+		pieClickUpgradePrice=round(pieClickUpgradePrice/2)
 	}
 }
 
