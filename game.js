@@ -61,7 +61,7 @@ $(window).bind("load",()=>{
 
 $("#pie").click((e)=>{
 	$("#pie").stop(true,false)
-	Anticheat.hasClicked=true
+	/*Anticheat.hasClicked=true
 	Anticheat.clicks=Anticheat.clicks+1
 	if(isClickedRecent<=3)isClickedRecent=isClickedRecent+1
 	if(oldPiex==e.pageX&&oldPiey==e.pageY){Anticheat.samePosition=Anticheat.samePosition+1}
@@ -69,7 +69,7 @@ $("#pie").click((e)=>{
 	oldPiex=e.pageX
 	oldPiey=e.pageY
 	last20clickTimestamps.append(Date.now())
-	if(last20clickTimestamps.length>20)last20clickTimestamps.shift()
+	if(last20clickTimestamps.length>20)last20clickTimestamps.shift()*/
 	if(settingsClickAnimations){
 		$("#pie").css({"width":"90%","left":"5%","top":"15%","transform":"rotate("+pieRotationDeg+"deg)"})
 		pieClickAnimationId=pieClickAnimationId+1
@@ -604,7 +604,7 @@ function tickGame(){
 	if(ticksUntilMSGFades<0)ticksUntilMSGFades=0
 	if(ticksUntilMSGFades>6)ticksUntilMSGFades=1
 	if(ticksUntilMSGFades==0)$("#messageBar").fadeOut(100)
-	Anticheat.tick()
+	//Anticheat.tick()
 	setTimeout(()=>{tickGame()},1000)
 }
 
@@ -771,4 +771,4 @@ Anticheat.prototype={
 	}
 }
 
-Anticheat=new Anticheat()
+//Anticheat=new Anticheat()
