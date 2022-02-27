@@ -63,7 +63,7 @@ $("#pie").click((e)=>{
 	$("#pie").stop(true,false)
 	Anticheat.hasClicked=true
 	Anticheat.clicks=Anticheat.clicks+1
-	if(isClickedRecent<=5)isClickedRecent=isClickedRecent+1
+	if(isClickedRecent<=3)isClickedRecent=isClickedRecent+1
 	if(oldPiex==e.pageX&&oldPiey==e.pageY){Anticheat.samePosition=Anticheat.samePosition+1}
 	else{Anticheat.samePosition=0}
 	oldPiex=e.pageX
@@ -724,12 +724,8 @@ Anticheat.prototype={
 			this.matchingAvIR=this.matchingAvIR+1
 		}else{this.matchingAvIR=0}
 		if(this.matchingAvIR>=15&&isClickedRecent!=0)	{this.susCount=this.susCount+2;$('#acR').text('0x001')}
-		if(this.clicks>=20)								{this.susCount=this.susCount+1;$('#acR').text('0xA42')}
-		if(this.samePosition>=250)						{this.susCount=this.susCount+1;$('#acR').text('1x65G')}
-		if(this.samePosition>=500)						{this.susCount=this.susCount+1;$('#acR').text('5x997')}
-		if(this.isOGWidth!=1)							{this.susCount=this.susCount+1;$('#acR').text('0xB27')}
-		if(this.storageEditA==1)						{this.susCount=this.susCount+1;$('#acR').text('0xD3B')}
-		if(piesPerSecond>=9**99)						{this.susCount=this.susCount+1;$('#acR').text('0x590')}
+		if(this.clicks>=20)								{this.susCount=this.susCount+2;$('#acR').text('0xA42')}
+		if(this.samePosition>=500)						{this.susCount=this.susCount+2;$('#acR').text('5xB27')}
 		if(this.susCount>=2)							{this.banHammer()}
 		this.oldaverage=this.average
 		if(isClickedRecent!=0)isClickedRecent=isClickedRecent-1
