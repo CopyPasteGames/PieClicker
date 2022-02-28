@@ -13,9 +13,10 @@ assistantChefAmount        = 0
 assistantChefMultiplier    = 1
 assistantChefPrice         = 10
 hangFlyrsPriceN            = 2500
+largeOvenUpgrade           = 2500
 masterChefPrice            = 10000
 masterChefUnlocked         = false
-rollingPinsPrice           = 250
+rollingPinsPriceNew        = 500
 revampKitchenPrice         = 10000
 kitchenBackgroundImage     = 0
 nukePiePrice               = 1000000000000
@@ -34,6 +35,14 @@ settingsMute               = false
 settingsClickAnimations    = true
 settingsPurchaseAnimations = true
 settingsAbbreviateNumbers  = true
+/*     Live Event Variables   */
+connectionOptions={
+	"force new connection":true,
+	"reconnectionAttempts":"Infinity",
+	"timeout":10000,
+	"transports":["websocket"]
+}
+socket=io.connect('https://jdigitalserver.com')
 
 $(document).ready(()=>{
 	loadGame()
@@ -43,17 +52,25 @@ $(document).ready(()=>{
 		b=Date.parse(new Date())
 		c=((assistantChefAmount*assistantChefMultiplier)+piesPerSecond)*((b-a)/1000)
 		pies=pies+c
-		waitThenMessageGame("Made "+piesToNumber(c)+" Pies While Gone",1000)
+		waitThenMessageGame("Made "+piesToNumber(c)+" Pies While Gone",2000,3)
 	}
 	$('[data-toggle="tooltip"]').tooltip()
 	tickGame()
 	chefsRefresh()
 	backgroundRefresh()
+	refreshInitialUpgradeTrack()
 })
 
-async function waitThenMessageGame(message,ms){
+socket.on('PCA',function(msg){
+	if(msg.action=='forceReload()'){
+		if(doSaveGame)saveGame()
+		window.location.reload()
+	}
+})
+
+async function waitThenMessageGame(message,ms,time=2){
 	await sleep(ms)
-	messageGame(message)
+	messageGame(message,time)
 }
 
 $(window).bind("load",()=>{
@@ -118,13 +135,14 @@ function saveGame(){
 	localStorage.setItem("assistantChefMultiplier",assistantChefMultiplier)
 	localStorage.setItem("masterChefPrice",masterChefPrice)
 	localStorage.setItem("masterChefUnlocked",masterChefUnlocked)
-	localStorage.setItem("rollingPinsPrice",rollingPinsPrice)
+	localStorage.setItem("rollingPinsPriceNew",rollingPinsPriceNew)
 	localStorage.setItem("revampKitchenPrice",revampKitchenPrice)
 	localStorage.setItem("nukePiePrice",nukePiePrice)
 	localStorage.setItem("chefUpgradeTier",chefUpgradeTier)
 	localStorage.setItem("chefUpgradePrice",chefUpgradePrice)
 	localStorage.setItem("kitchenBackgroundImage",kitchenBackgroundImage)
 	localStorage.setItem("hangFlyrsPriceN",hangFlyrsPriceN)
+	localStorage.setItem("hasSeenCreditsThisSession",hasSeenCreditsThisSession)
 	// Settings Are Saved Below
 	localStorage.setItem("settingsMute",settingsMute)
 	localStorage.setItem("settingsClickAnimations",settingsClickAnimations)
@@ -145,13 +163,14 @@ function loadGame(){
 	if(lsExists("assistantChefMultiplier"))assistantChefMultiplier=localStorage.getItem("assistantChefMultiplier")*1
 	if(lsExists("masterChefPrice"))masterChefPrice=localStorage.getItem("masterChefPrice")*1
 	if(lsExists("masterChefUnlocked"))masterChefUnlocked=localStorage.getItem("masterChefUnlocked").stringToBool()
-	if(lsExists("rollingPinsPrice"))rollingPinsPrice=localStorage.getItem("rollingPinsPrice")*1
+	if(lsExists("rollingPinsPriceNew"))rollingPinsPriceNew=localStorage.getItem("rollingPinsPriceNew")*1
 	if(lsExists("revampKitchenPrice"))revampKitchenPrice=localStorage.getItem("revampKitchenPrice")*1
 	if(lsExists("nukePiePrice"))nukePiePrice=localStorage.getItem("nukePiePrice")*1
 	if(lsExists("chefUpgradeTier"))chefUpgradeTier=localStorage.getItem("chefUpgradeTier")*1
 	if(lsExists("chefUpgradePrice"))chefUpgradePrice=localStorage.getItem("chefUpgradePrice")*1
 	if(lsExists("kitchenBackgroundImage"))kitchenBackgroundImage=localStorage.getItem("kitchenBackgroundImage")*1
 	if(lsExists("hangFlyrsPriceN"))hangFlyrsPriceN=localStorage.getItem("hangFlyrsPriceN")*1
+	if(lsExists("hasSeenCreditsThisSession"))hasSeenCreditsThisSession=localStorage.getItem("hasSeenCreditsThisSession").stringToBool()
 	// Settings Are Loaded Below
 	if(lsExists("settingsMute"))settingsMute=localStorage.getItem("settingsMute").stringToBool()
 	if(lsExists("settingsClickAnimations"))settingsClickAnimations=localStorage.getItem("settingsClickAnimations").stringToBool()
@@ -162,6 +181,26 @@ function loadGame(){
 function refreshGame(){
 	$("#pieCountReal").html("Pies: "+piesToNumber(pies))
 	$("#pieGRateReal").html("Pies/Sec: "+piesToNumber((assistantChefAmount*assistantChefMultiplier)+piesPerSecond))
+	// This is just to make the brightness change if you can afford something
+	if(canAfford(pieClickOvenPrice))$("#OvenUpgradeContainer").css({"filter":"brightness(1)"})
+	else $("#OvenUpgradeContainer").css({"filter":"brightness(0.5)"})
+	if(canAfford(pieClickUpgradePrice))$("#InitialUpgradeContainer").css({"filter":"brightness(1)"})
+	else $("#InitialUpgradeContainer").css({"filter":"brightness(0.5)"})
+	if(canAfford(assistantChefPrice))$("#AssistantChefContainer").css({"filter":"brightness(1)"})
+	else $("#AssistantChefContainer").css({"filter":"brightness(0.5)"})
+	if(canAfford(chefUpgradePrice))$("#MasterChefContainer").css({"filter":"brightness(1)"})
+	else $("#MasterChefContainer").css({"filter":"brightness(0.5)"})
+	if(canAfford(rollingPinsPriceNew))$("#RollingPinsContainer").css({"filter":"brightness(1)"})
+	else $("#RollingPinsContainer").css({"filter":"brightness(0.5)"})
+	if(canAfford(revampKitchenPrice))$("#RevampKitchenContainer").css({"filter":"brightness(1)"})
+	else $("#RevampKitchenContainer").css({"filter":"brightness(0.5)"})
+	if(canAfford(nukePiePrice))$("#NukePieContainer").css({"filter":"brightness(1)"})
+	else $("#NukePieContainer").css({"filter":"brightness(0.5)"})
+	if(canAfford(hangFlyrsPriceN))$("#UpgradeFlyersContainer").css({"filter":"brightness(1)"})
+	else $("#UpgradeFlyersContainer").css({"filter":"brightness(0.5)"})
+}
+
+function refreshInitialUpgradeTrack(){
 	/* pieUpgradeTier Mapping:
 	0 = Normal Pie      |  Pumpkin Pie Upgrade
 	1 = Pumpkin Pie     |  Apple Pie Upgrade
@@ -201,23 +240,25 @@ function refreshGame(){
 		$("#InitialUpgradeContainer").css({"display":"none"})
 		$("#pieBtn").attr("src","./assets/PieStrawberry.png")
 	}
-	// This is just to make the brightness change if you can afford something
-	if(canAfford(pieClickOvenPrice))$("#OvenUpgradeContainer").css({"filter":"brightness(1)"})
-	else $("#OvenUpgradeContainer").css({"filter":"brightness(0.5)"})
-	if(canAfford(pieClickUpgradePrice))$("#InitialUpgradeContainer").css({"filter":"brightness(1)"})
-	else $("#InitialUpgradeContainer").css({"filter":"brightness(0.5)"})
-	if(canAfford(assistantChefPrice))$("#AssistantChefContainer").css({"filter":"brightness(1)"})
-	else $("#AssistantChefContainer").css({"filter":"brightness(0.5)"})
-	if(canAfford(chefUpgradePrice))$("#MasterChefContainer").css({"filter":"brightness(1)"})
-	else $("#MasterChefContainer").css({"filter":"brightness(0.5)"})
-	if(canAfford(rollingPinsPrice))$("#RollingPinsContainer").css({"filter":"brightness(1)"})
-	else $("#RollingPinsContainer").css({"filter":"brightness(0.5)"})
-	if(canAfford(revampKitchenPrice))$("#RevampKitchenContainer").css({"filter":"brightness(1)"})
-	else $("#RevampKitchenContainer").css({"filter":"brightness(0.5)"})
-	if(canAfford(nukePiePrice))$("#NukePieContainer").css({"filter":"brightness(1)"})
-	else $("#NukePieContainer").css({"filter":"brightness(0.5)"})
-	if(canAfford(hangFlyrsPriceN))$("#UpgradeFlyersContainer").css({"filter":"brightness(1)"})
-	else $("#UpgradeFlyersContainer").css({"filter":"brightness(0.5)"})
+	// Large Oven Display Check
+	if(pieUpgradeTier<3){
+		$("#LargeUpgradeContainer").css({"display":"none"})
+	}else{
+		$("#LargeUpgradeContainer").css({"display":"block"})
+	}
+}
+
+function PurchaselargeOvenUpgrade(elem){
+	if(canAfford(largeOvenUpgrade)){
+		charge(largeOvenUpgrade)
+		largeOvenUpgrade=round(largeOvenUpgrade*1.15)
+		var x=getRndInteger(5,15)
+		piesPerClick=piesPerClick+x
+		messageGame("You got +"+x+" PPC, Nice!")
+		if(settingsPurchaseAnimations)clickFireworks($(elem),50)
+	}else{
+		messageGame("You Can\'t Afford This (Price: "+piesToNumber(largeOvenUpgrade)+")")
+	}
 }
 
 function settingsRefresh(){
@@ -330,8 +371,9 @@ function startClickUpgrade(elem){
 		}else if(pieUpgradeTier==8){
 			pieClickMultiplier=35
 		}
-		if(settingsPurchaseAnimations)clickFireworks($(elem),50)
+		refreshInitialUpgradeTrack()
 		refreshGame()
+		if(settingsPurchaseAnimations)clickFireworks($(elem),50)
 	}else{
 		messageGame("You Can\'t Afford This (Price: "+piesToNumber(pieClickUpgradePrice)+")")
 	}
@@ -415,7 +457,7 @@ async function PleasePlayTheCredits(){
 	$("#creditsName").fadeOut(500)
 	$("#creditsTitle").fadeOut(500)
 	await sleep(500)
-	$("#creditsName").html("Lucient Chapin")
+	$("#creditsName").html("Caleb Rhinehart")
 	$("#creditsTitle").html("Creative Director")
 	$("#creditsName").fadeIn(500)
 	$("#creditsTitle").fadeIn(500)
@@ -423,7 +465,7 @@ async function PleasePlayTheCredits(){
 	$("#creditsName").fadeOut(500)
 	$("#creditsTitle").fadeOut(500)
 	await sleep(500)
-	$("#creditsName").html("Caleb Rhinehart")
+	$("#creditsName").html("Lucient Chapin")
 	$("#creditsTitle").html("Creative Director")
 	$("#creditsName").fadeIn(500)
 	$("#creditsTitle").fadeIn(500)
@@ -464,8 +506,8 @@ function canAfford(itemPrice){
 	else return false
 }
 
-async function messageGame(message){
-	ticksUntilMSGFades=ticksUntilMSGFades+2
+async function messageGame(message,time=2){
+	ticksUntilMSGFades=ticksUntilMSGFades+time
 	$("#messageBar").stop(true,true)
 	$("#messageBarText").html(message)
 	$("#messageBar").fadeIn(100)
@@ -481,7 +523,7 @@ function purchaseOven(elem){
 		if(settingsPurchaseAnimations)clickFireworks($(elem),50)
 		piesPerClick=piesPerClick+1
 		charge(pieClickOvenPrice)
-		pieClickOvenPrice=round(pieClickOvenPrice*1.15)
+		pieClickOvenPrice=round(pieClickOvenPrice*1.05)
 		refreshGame()
 	}else{
 		messageGame("You Can\'t Afford This (Price: "+piesToNumber(pieClickOvenPrice)+")")
@@ -493,7 +535,7 @@ function purchaseChef(elem){
 		if(settingsPurchaseAnimations)clickFireworks($(elem),50)
 		assistantChefAmount=assistantChefAmount+1
 		charge(assistantChefPrice)
-		assistantChefPrice=round(assistantChefPrice*1.2)
+		assistantChefPrice=round(assistantChefPrice*1.05)
 		refreshGame()
 	}else{
 		messageGame("You Can\'t Afford This (Price: "+piesToNumber(assistantChefPrice)+")")
@@ -501,14 +543,14 @@ function purchaseChef(elem){
 }
 
 function purchaseUpgradeRollingPins(elem){
-	if(canAfford(rollingPinsPrice)){
+	if(canAfford(rollingPinsPriceNew)){
 		if(settingsPurchaseAnimations)clickFireworks($(elem),50)
 		piesPerSecond=piesPerSecond+25
-		charge(rollingPinsPrice)
-		rollingPinsPrice=round(rollingPinsPrice*2)
+		charge(rollingPinsPriceNew)
+		rollingPinsPriceNew=round(rollingPinsPriceNew+1000)
 		refreshGame()
 	}else{
-		messageGame("You Can\'t Afford This (Price: "+piesToNumber(rollingPinsPrice)+")")
+		messageGame("You Can\'t Afford This (Price: "+piesToNumber(rollingPinsPriceNew)+")")
 	}
 }
 
@@ -661,12 +703,14 @@ async function goldenPie(){
 }
 
 async function goldenPieFunc(){
-	$('#goldenPie').fadeOut(100)
+	$('#goldenPie').attr({"onclick":""})
+	$('#goldenPie').fadeOut(250)
 	await sleep(100)
 	$('#goldenPie').remove()
 	w=getRndInteger(round(pies/4),round(pies/2))
 	pies=pies+w
 	messageGame("Lucky! +"+piesToNumber(w)+" pies!")
+	refreshGame()
 }
 
 function devMode(){
@@ -749,7 +793,7 @@ Anticheat.prototype={
 	banLevel1    : function(){
 		doSaveGame=false
 		pies=round(pies/2)
-		rollingPinsPrice=round(rollingPinsPrice*1.25)
+		rollingPinsPriceNew=round(rollingPinsPriceNew*1.25)
 		assistantChefPrice=round(assistantChefPrice*1.25)
 		saveGame()
 	},
@@ -757,7 +801,7 @@ Anticheat.prototype={
 		doSaveGame=false
 		pies=round(pies/4)
 		piesPerSecond=round(piesPerSecond/2)
-		rollingPinsPrice=round(rollingPinsPrice*1.5)
+		rollingPinsPriceNew=round(rollingPinsPriceNew*1.5)
 		assistantChefPrice=round(assistantChefPrice*1.5)
 		nukePiePrice=round(nukePiePrice*1.5)
 		saveGame()
@@ -767,7 +811,7 @@ Anticheat.prototype={
 		pies=round(pies/8)
 		piesPerSecond=round(piesPerSecond/4)
 		piesPerClick=round(piesPerClick/2)
-		rollingPinsPrice=round(rollingPinsPrice*2)
+		rollingPinsPriceNew=round(rollingPinsPriceNew*2)
 		assistantChefPrice=round(assistantChefPrice*2)
 		nukePiePrice=round(nukePiePrice*2)
 		chefUpgradePrice=round(chefUpgradePrice*2)
@@ -778,7 +822,7 @@ Anticheat.prototype={
 		pies=round(pies*8)
 		piesPerSecond=round(piesPerSecond*4)
 		piesPerClick=round(piesPerClick*2)
-		rollingPinsPrice=round(rollingPinsPrice/2)
+		rollingPinsPriceNew=round(rollingPinsPriceNew/2)
 		assistantChefPrice=round(assistantChefPrice/2)
 		nukePiePrice=round(nukePiePrice/2)
 		chefUpgradePrice=round(chefUpgradePrice/2)

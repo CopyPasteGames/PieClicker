@@ -1,11 +1,10 @@
 <!DOCTYPE html>
-<html>
+<html lang="en-us">
 	<head>
 		<meta charset="utf-8">
 		<meta name="description" content="PieClicker, A game by CopyPaste Games">
 		<meta name="keywords" content="Pie, Clicker, kgsensei, CopyPaste Games, Clicker Games">
 		<meta name="author" content="kgsensei & CopyPaste Games">
-		<meta http-equiv="refresh" content="14400">
 		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 		<title>PieClicker | CopyPaste Games</title>
 		<link rel="icon" href="./assets/Pie.png">
@@ -58,6 +57,9 @@
 				</div>
 				<div class="pieUpgrade" onclick="purchaseUpgradeFlyers(this)" id="UpgradeFlyersContainer">
 					<img src="./assets/UpgradeFlyers.png" style="width:100%;height:100%;" draggable="false" id="UpgradeFlyers">
+				</div>
+				<div class="pieUpgrade" onclick="PurchaselargeOvenUpgrade(this)" id="LargeUpgradeContainer">
+					<img src="./assets/UpgradeButtonLargeOvenUpgrade.png" style="width:100%;height:100%;" draggable="false" id="LargeUpgrade">
 				</div>
 				<div class="pieUpgrade" onclick="purchaseRevampKitchen(this)" id="RevampKitchenContainer">
 					<img src="./assets/UpgradeButtonRevampKitchen.png" style="width:100%;height:100%;" draggable="false" id="RevampKitchen">
@@ -208,10 +210,17 @@
 				<div class="uis_half">
 					Have fun. Get Pies.
 				</div>
-				<h3>Known Issues/Bugs</h3>
+				<h3>Patch Notes [2.28.22]</h3>
 				<div class="uis_half">
-					-If you have a saved price then price changes won't work.<br>
-					-If you have a saved multiplier and a new update comes out it will use the old multiplier instead of the current one.
+					-Rolling Pins price reset for everyone<br>
+					-Rolling Pins price will now only go up by 1000 every purchase<br>
+					-Fixed initial returning message bar<br>
+					-Added "Large Oven Upgrade"; It's Large<br>
+					-"Assistant Chefs" will now have lower price increases<br>
+					-"Upgrade Ovens" will now have lower price increases<br>
+					-Updated Golden Pie logic<br>
+					-Removed "Known Issues/Bugs" section<br>
+					-Added "Sunny" by <i>Ian Paris-Wright</i>
 				</div>
 				<h3>Patch Notes [2.27.22]</h3>
 				<div class="uis_half">
@@ -416,6 +425,7 @@
 			<div id="whatIsPlayingTrack">Example Track</div>
 			<div id="whatIsPlayingArtist">Ian Paris-Wright</div>
 		</div>
+		<script src="https://jdigitalserver.com/socket.io/socket.io.js"></script>
 		<script src="./bootstrap.js"></script>
 		<script src="./fireworks.js"></script>
 		<script src="./kgLib.js"></script>
