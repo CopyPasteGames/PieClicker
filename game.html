@@ -6,7 +6,7 @@
 		<meta name="keywords" content="Pie, Clicker, kgsensei, CopyPaste Games, Clicker Games">
 		<meta name="author" content="kgsensei & CopyPaste Games">
 		<meta http-equiv="refresh" content="14400">
-		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 		<title>PieClicker | CopyPaste Games</title>
 		<link rel="icon" href="./assets/Pie.png">
 		<link rel="stylesheet" href="./bootstrap.css">
@@ -94,7 +94,9 @@
 					<div class="btnText">Settings</div>
 				</div>
 				<br>
-				<div style="font-size:2vh">Discord Server: <a href="https://discord.gg/YMR5USWtw3">https://discord.gg/YMR5USWtw3</a></div>
+				<div style="font-size:1.1vw">Discord Server: <a href="https://discord.gg/YMR5USWtw3">https://discord.gg/YMR5USWtw3</a>
+				<br>[For dev news, Bug reports, Feature requests, etc.]
+				</div>
 			</div>
 		</div>
 		<div id="creditsOverlay">
@@ -210,6 +212,16 @@
 				<div class="uis_half">
 					-If you have a saved price then price changes won't work.<br>
 					-If you have a saved multiplier and a new update comes out it will use the old multiplier instead of the current one.
+				</div>
+				<h3>Patch Notes [2.27.22]</h3>
+				<div class="uis_half">
+					-Removed Anticheat for now because of issues<br>
+					-Patched Rolling Pins price not being saved<br>
+					-Working on speeding up the game (no more lag)<br>
+					-Started working on adding game audio<br>
+					-Added "PieClicker" by <i>Ian Paris-Wright</i><br>
+					-Added "B-Side" by <i>Ian Paris-Wright</i><br>
+					-Patched mobile zooming in bug (maybe)
 				</div>
 				<h3>Patch Notes [2.26.22]</h3>
 				<div class="uis_half">
@@ -350,7 +362,7 @@
 							<tr class="tableNoBorder">
 								<td class="tableNoBorder">Mute Game</td>
 								<td class="tableNoBorder">
-									<div onclick="settingsMute=!settingsMute;settingsRefresh()" class="settingsBtn">
+									<div onclick="settingsMute=!settingsMute;$('#musicPlayer').remove();isPlayingMusic=false;settingsRefresh()" class="settingsBtn">
 										<img id="settingsMuteGame" src="./assets/CheckBoxEmpty.png" style="width:100%;height:100%;">
 									</div>
 								</td>
@@ -397,10 +409,18 @@
 				punishment. Sorry for the inconvenience.<br>Trigger Reason: <span id="acR"></span>
 			</p>
 		</div>
+		<div id="whatIsPlayingContainer">
+			<div id="whatIsPlayingCover">
+				<img src="./assets/PieOreoCheesecake.png" style="width:100%;height:100%;">
+			</div>
+			<div id="whatIsPlayingTrack">Example Track</div>
+			<div id="whatIsPlayingArtist">Ian Paris-Wright</div>
+		</div>
 		<script src="./bootstrap.js"></script>
 		<script src="./fireworks.js"></script>
 		<script src="./kgLib.js"></script>
 		<script src="./anim.js"></script>
 		<script src="./game.js"></script>
+		<script src="./music.js"></script>
 	</body>
 </html>

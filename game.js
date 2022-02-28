@@ -12,7 +12,7 @@ pieRotationDeg             = 0
 assistantChefAmount        = 0
 assistantChefMultiplier    = 1
 assistantChefPrice         = 10
-hangFlyersPrice            = 2500
+hangFlyrsPriceN            = 2500
 masterChefPrice            = 10000
 masterChefUnlocked         = false
 rollingPinsPrice           = 250
@@ -22,6 +22,7 @@ nukePiePrice               = 1000000000000
 hasSeenCreditsThisSession  = false
 ticksUntilMSGFades         = 0
 doSaveGame                 = true
+hasPageInteracted          = false
 /*     Anticheat Variables    */
 oldPiex                    = -1
 oldPiey                    = -1
@@ -46,6 +47,8 @@ $(document).ready(()=>{
 	}
 	$('[data-toggle="tooltip"]').tooltip()
 	tickGame()
+	chefsRefresh()
+	backgroundRefresh()
 })
 
 async function waitThenMessageGame(message,ms){
@@ -86,6 +89,10 @@ $("#pie").click((e)=>{
 		$("#pie").animate({"width":"90%","left":"5%","top":"15%"},100)
 		removeElem("#pieInd"+pieClickAnimationId)
 	}
+	if(!hasPageInteracted){
+		hasPageInteracted=true
+		musicTick()
+	}
 	pies=pies+piesPerClick*pieClickMultiplier
 	refreshGame()
 })
@@ -117,7 +124,7 @@ function saveGame(){
 	localStorage.setItem("chefUpgradeTier",chefUpgradeTier)
 	localStorage.setItem("chefUpgradePrice",chefUpgradePrice)
 	localStorage.setItem("kitchenBackgroundImage",kitchenBackgroundImage)
-	localStorage.setItem("hangFlyersPrice",hangFlyersPrice)
+	localStorage.setItem("hangFlyrsPriceN",hangFlyrsPriceN)
 	// Settings Are Saved Below
 	localStorage.setItem("settingsMute",settingsMute)
 	localStorage.setItem("settingsClickAnimations",settingsClickAnimations)
@@ -144,7 +151,7 @@ function loadGame(){
 	if(lsExists("chefUpgradeTier"))chefUpgradeTier=localStorage.getItem("chefUpgradeTier")*1
 	if(lsExists("chefUpgradePrice"))chefUpgradePrice=localStorage.getItem("chefUpgradePrice")*1
 	if(lsExists("kitchenBackgroundImage"))kitchenBackgroundImage=localStorage.getItem("kitchenBackgroundImage")*1
-	if(lsExists("hangFlyersPrice"))hangFlyersPrice=localStorage.getItem("hangFlyersPrice")*1
+	if(lsExists("hangFlyrsPriceN"))hangFlyrsPriceN=localStorage.getItem("hangFlyrsPriceN")*1
 	// Settings Are Loaded Below
 	if(lsExists("settingsMute"))settingsMute=localStorage.getItem("settingsMute").stringToBool()
 	if(lsExists("settingsClickAnimations"))settingsClickAnimations=localStorage.getItem("settingsClickAnimations").stringToBool()
@@ -194,6 +201,58 @@ function refreshGame(){
 		$("#InitialUpgradeContainer").css({"display":"none"})
 		$("#pieBtn").attr("src","./assets/PieStrawberry.png")
 	}
+	// This is just to make the brightness change if you can afford something
+	if(canAfford(pieClickOvenPrice))$("#OvenUpgradeContainer").css({"filter":"brightness(1)"})
+	else $("#OvenUpgradeContainer").css({"filter":"brightness(0.5)"})
+	if(canAfford(pieClickUpgradePrice))$("#InitialUpgradeContainer").css({"filter":"brightness(1)"})
+	else $("#InitialUpgradeContainer").css({"filter":"brightness(0.5)"})
+	if(canAfford(assistantChefPrice))$("#AssistantChefContainer").css({"filter":"brightness(1)"})
+	else $("#AssistantChefContainer").css({"filter":"brightness(0.5)"})
+	if(canAfford(chefUpgradePrice))$("#MasterChefContainer").css({"filter":"brightness(1)"})
+	else $("#MasterChefContainer").css({"filter":"brightness(0.5)"})
+	if(canAfford(rollingPinsPrice))$("#RollingPinsContainer").css({"filter":"brightness(1)"})
+	else $("#RollingPinsContainer").css({"filter":"brightness(0.5)"})
+	if(canAfford(revampKitchenPrice))$("#RevampKitchenContainer").css({"filter":"brightness(1)"})
+	else $("#RevampKitchenContainer").css({"filter":"brightness(0.5)"})
+	if(canAfford(nukePiePrice))$("#NukePieContainer").css({"filter":"brightness(1)"})
+	else $("#NukePieContainer").css({"filter":"brightness(0.5)"})
+	if(canAfford(hangFlyrsPriceN))$("#UpgradeFlyersContainer").css({"filter":"brightness(1)"})
+	else $("#UpgradeFlyersContainer").css({"filter":"brightness(0.5)"})
+}
+
+function settingsRefresh(){
+	/*
+	#settingsMuteGame
+	#settingsDoClickAnimations
+	#settingsDoPurchaseAnimations
+	#settingAbbreviateNumbers
+	*/
+	if(settingsMute){
+		$("#settingsMuteGame").attr("src","./assets/CheckBoxChecked.png")
+	}else{
+		$("#settingsMuteGame").attr("src","./assets/CheckBoxEmpty.png")
+	}
+	if(settingsClickAnimations){
+		$("#settingsDoClickAnimations").attr("src","./assets/CheckBoxChecked.png")
+	}
+	else{
+		$("#settingsDoClickAnimations").attr("src","./assets/CheckBoxEmpty.png")
+	}
+	if(settingsPurchaseAnimations){
+		$("#settingsDoPurchaseAnimations").attr("src","./assets/CheckBoxChecked.png")
+	}else{
+		$("#settingsDoPurchaseAnimations").attr("src","./assets/CheckBoxEmpty.png")
+	}
+	if(settingsAbbreviateNumbers){
+		$("#settingAbbreviateNumbers").attr("src","./assets/CheckBoxChecked.png")
+	}
+	else{
+		$("#settingAbbreviateNumbers").attr("src","./assets/CheckBoxEmpty.png")
+	}
+	if(doSaveGame)saveGame()
+}
+
+function chefsRefresh(){
 	/* Chef Tier Mapping
 	0 = No Chef Upgrade
 	1 = Apprentice Chef Upgrade
@@ -232,6 +291,9 @@ function refreshGame(){
 	}else{
 		$("#UpgradeFlyersContainer").css({"display":"none"})
 	}
+}
+
+function backgroundRefresh(){
 	/* Background Image Mapping
 	0 = Blue Background
 	1 = Pink Background
@@ -244,55 +306,6 @@ function refreshGame(){
 	}else if(kitchenBackgroundImage==2&&$("#pieChild").attr("src")!="./assets/KitchenBackgroundWhite.png"){
 		$('#pieChild').attr("src","./assets/KitchenBackgroundWhite.png")
 	}
-	// This is just to make the brightness change if you can afford something
-	if(canAfford(pieClickOvenPrice))$("#OvenUpgradeContainer").css({"filter":"brightness(1)"})
-	else $("#OvenUpgradeContainer").css({"filter":"brightness(0.5)"})
-	if(canAfford(pieClickUpgradePrice))$("#InitialUpgradeContainer").css({"filter":"brightness(1)"})
-	else $("#InitialUpgradeContainer").css({"filter":"brightness(0.5)"})
-	if(canAfford(assistantChefPrice))$("#AssistantChefContainer").css({"filter":"brightness(1)"})
-	else $("#AssistantChefContainer").css({"filter":"brightness(0.5)"})
-	if(canAfford(chefUpgradePrice))$("#MasterChefContainer").css({"filter":"brightness(1)"})
-	else $("#MasterChefContainer").css({"filter":"brightness(0.5)"})
-	if(canAfford(rollingPinsPrice))$("#RollingPinsContainer").css({"filter":"brightness(1)"})
-	else $("#RollingPinsContainer").css({"filter":"brightness(0.5)"})
-	if(canAfford(revampKitchenPrice))$("#RevampKitchenContainer").css({"filter":"brightness(1)"})
-	else $("#RevampKitchenContainer").css({"filter":"brightness(0.5)"})
-	if(canAfford(nukePiePrice))$("#NukePieContainer").css({"filter":"brightness(1)"})
-	else $("#NukePieContainer").css({"filter":"brightness(0.5)"})
-	if(canAfford(hangFlyersPrice))$("#UpgradeFlyersContainer").css({"filter":"brightness(1)"})
-	else $("#UpgradeFlyersContainer").css({"filter":"brightness(0.5)"})
-}
-
-function settingsRefresh(){
-	/*
-	#settingsMuteGame
-	#settingsDoClickAnimations
-	#settingsDoPurchaseAnimations
-	#settingAbbreviateNumbers
-	*/
-	if(settingsMute){
-		$("#settingsMuteGame").attr("src","./assets/CheckBoxChecked.png")
-	}else{
-		$("#settingsMuteGame").attr("src","./assets/CheckBoxEmpty.png")
-	}
-	if(settingsClickAnimations){
-		$("#settingsDoClickAnimations").attr("src","./assets/CheckBoxChecked.png")
-	}
-	else{
-		$("#settingsDoClickAnimations").attr("src","./assets/CheckBoxEmpty.png")
-	}
-	if(settingsPurchaseAnimations){
-		$("#settingsDoPurchaseAnimations").attr("src","./assets/CheckBoxChecked.png")
-	}else{
-		$("#settingsDoPurchaseAnimations").attr("src","./assets/CheckBoxEmpty.png")
-	}
-	if(settingsAbbreviateNumbers){
-		$("#settingAbbreviateNumbers").attr("src","./assets/CheckBoxChecked.png")
-	}
-	else{
-		$("#settingAbbreviateNumbers").attr("src","./assets/CheckBoxEmpty.png")
-	}
-	if(doSaveGame)saveGame()
 }
 
 function startClickUpgrade(elem){
@@ -367,6 +380,7 @@ function purchaseMasterChef(elem){
 			assistantChefMultiplier=50
 		}
 		if(settingsPurchaseAnimations)clickFireworks($(elem),50)
+		chefsRefresh()
 		refreshGame()
 	}else{
 		messageGame("You Can\'t Afford This (Price: "+piesToNumber(chefUpgradePrice)+")")
@@ -514,6 +528,7 @@ function purchaseRevampKitchen(elem){
 			}else if(kitchenBackgroundImage==1){kitchenBackgroundImage=2}
 		}
 		refreshGame()
+		backgroundRefresh()
 	}else{
 		messageGame("You Can\'t Afford This (Price: "+piesToNumber(revampKitchenPrice)+")")
 	}
@@ -532,16 +547,16 @@ function nuclearPieReactor(elem){
 }
 
 function purchaseUpgradeFlyers(elem){
-	if(canAfford(hangFlyersPrice)){
+	if(canAfford(hangFlyrsPriceN)){
 		if(settingsPurchaseAnimations)clickFireworks($(elem),50)
-		charge(hangFlyersPrice)
-		hangFlyersPrice=round(hangFlyersPrice*2.5)
+		charge(hangFlyrsPriceN)
+		hangFlyrsPriceN=round(hangFlyrsPriceN*2.5)
 		amountGained=getRndInteger(5,15)
 		assistantChefAmount=assistantChefAmount+amountGained
 		messageGame("You got +"+amountGained+" new assistant chefs!")
 		refreshGame()
 	}else{
-		messageGame("You Can\'t Afford This (Price: "+piesToNumber(hangFlyersPrice)+")")
+		messageGame("You Can\'t Afford This (Price: "+piesToNumber(hangFlyrsPriceN)+")")
 	}
 }
 
@@ -626,7 +641,7 @@ async function goldenPie(){
 		a=$(document).width()-$(document).width()*0.1
 		b=$(document).height()-$(document).height()*0.1
 		c=0
-		d=getRndInteger(3,10)
+		d=getRndInteger(4,8)
 		x=getRndInteger(0,a)
 		y=getRndInteger(0,b)
 		z=`<div id="goldenPie" style="position:fixed;left:${x}px;top:${y}px;height:${d}%;width:auto;display:none;cursor:pointer;" onclick="goldenPieFunc()">
@@ -636,8 +651,8 @@ async function goldenPie(){
 		for(i=0;i<501;i++){
 			if(i==0)$('#goldenPie').fadeIn(500)
 			$('#goldenPie').css({"transform":"rotate("+c+"deg)"})
-			await sleep(10)
-			c=c+1
+			await sleep(15)
+			c=c+0.75
 			if(i==350)$('#goldenPie').fadeOut(1000)
 		}
 		await sleep(500)
@@ -725,7 +740,7 @@ Anticheat.prototype={
 		}else{this.matchingAvIR=0}
 		if(this.matchingAvIR>=15&&isClickedRecent!=0)	{this.susCount=this.susCount+2;$('#acR').text('0x001')}
 		if(this.clicks>=20)								{this.susCount=this.susCount+2;$('#acR').text('0xA42')}
-		if(this.samePosition>=500)						{this.susCount=this.susCount+2;$('#acR').text('5xB27')}
+		//if(this.samePosition>=500)						{this.susCount=this.susCount+2;$('#acR').text('5xB27')}
 		if(this.susCount>=2)							{this.banHammer()}
 		this.oldaverage=this.average
 		if(isClickedRecent!=0)isClickedRecent=isClickedRecent-1
