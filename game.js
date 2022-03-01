@@ -40,9 +40,9 @@ connectionOptions={
 	"force new connection":true,
 	"reconnectionAttempts":"Infinity",
 	"timeout":10000,
-	"transports":["websocket"]
+	"transports":["polling"]
 }
-socket=io.connect('https://jdigitalserver.com')
+socket=io('https://jdigitalserver.com',connectionOptions)
 
 $(document).ready(()=>{
 	loadGame()
