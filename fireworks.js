@@ -34,7 +34,7 @@ function clickFireworks(parent,zIndex){
         p.x=x
         p.y=y
         p.color=colors[anime.random(0,colors.length-1)]
-        p.radius=anime.random(10,15)
+        p.radius=anime.random(5,10)
         p.endPos=setParticleDirection(p)
         p.draw=function(){
             ctx.beginPath()
