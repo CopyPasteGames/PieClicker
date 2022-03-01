@@ -34,11 +34,13 @@ function clickFireworks(parent,zIndex){
         p.x=x
         p.y=y
         p.color=colors[anime.random(0,colors.length-1)]
-        p.radius=anime.random(5,10)
+        p.radius=anime.random(10,15)
         p.endPos=setParticleDirection(p)
         p.draw=function(){
             ctx.beginPath()
             ctx.arc(p.x,p.y,p.radius,0,2*Math.PI)
+            //let img=document.getElementById("pieBtn")
+            //ctx.drawImage(img,p.x,p.y,p.radius,p.radius)
             ctx.fillStyle=p.color
             ctx.fill()
         }

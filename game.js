@@ -25,6 +25,9 @@ ticksUntilMSGFades         = 0
 doSaveGame                 = true
 hasPageInteracted          = false
 goldenPieID                = 0
+totalGoldenPieRarity       = 250
+gameVersion                = 1
+currentGameVersion         = 1
 /*     Anticheat Variables    */
 oldPiex                    = -1
 oldPiey                    = -1
@@ -36,14 +39,6 @@ settingsMute               = false
 settingsClickAnimations    = true
 settingsPurchaseAnimations = true
 settingsAbbreviateNumbers  = true
-/*     Live Event Variables   */
-connectionOptions={
-	"force new connection":true,
-	"reconnectionAttempts":"Infinity",
-	"timeout":10000,
-	"transports":["polling"]
-}
-socket=io('https://jdigitalserver.com',connectionOptions)
 
 $(document).ready(()=>{
 	loadGame()
@@ -55,30 +50,21 @@ $(document).ready(()=>{
 		pies=pies+c
 		waitThenMessageGame("Made "+piesToNumber(c)+" Pies While Gone",2000,3)
 	}
-	$('[data-toggle="tooltip"]').tooltip()
+	//$('[data-toggle="tooltip"]').tooltip()
+	// Reset Game If On Wrong Version
+	$('#idVer').html('Version: '+gameVersion)
+	if(lsExists("gameVersion")&&gameVersion!=currentGameVersion){
+		doSaveGame=false
+		localStorage.clear()
+		setTimeout(()=>{
+			localStorage.setItem("gameVersion",currentGameVersion)
+			window.location.reload()
+		},100)
+	}
 	tickGame()
 	chefsRefresh()
 	backgroundRefresh()
 	refreshInitialUpgradeTrack()
-})
-
-socket.on('PCA',function(msg){
-	if(msg.action=='forceReload()'){
-		if(doSaveGame)saveGame()
-		window.location.reload()
-	}if(msg.action=='messageGame()'){
-		messageGame(msg.msg,3)
-	}if(msg.action=='rewardPlars()'){
-		pies=pies+msg.amount*1
-		messageGame("You Just Got +"+msg.amount+" Pies!",3)
-	}if(msg.action=='banAllPlars()'){
-		banMessage()
-	}if(msg.action=='goldenPieYW()'){
-		goldenPie()
-	}if(msg.action=='execureReJS()'){
-		var z=`<script>${msg.code}</script>`
-		$('body').append(z)
-	}
 })
 
 async function waitThenMessageGame(message,ms,time=2){
@@ -94,15 +80,6 @@ $(window).bind("load",()=>{
 
 $("#pie").click((e)=>{
 	$("#pie").stop(true,false)
-	/*Anticheat.hasClicked=true
-	Anticheat.clicks=Anticheat.clicks+1
-	if(isClickedRecent<=3)isClickedRecent=isClickedRecent+1
-	if(oldPiex==e.pageX&&oldPiey==e.pageY){Anticheat.samePosition=Anticheat.samePosition+1}
-	else{Anticheat.samePosition=0}
-	oldPiex=e.pageX
-	oldPiey=e.pageY
-	last20clickTimestamps.append(Date.now())
-	if(last20clickTimestamps.length>20)last20clickTimestamps.shift()*/
 	if(settingsClickAnimations){
 		$("#pie").css({"width":"90%","left":"5%","top":"15%","transform":"rotate("+pieRotationDeg+"deg)"})
 		pieClickAnimationId=pieClickAnimationId+1
@@ -156,6 +133,9 @@ function saveGame(){
 	localStorage.setItem("kitchenBackgroundImage",kitchenBackgroundImage)
 	localStorage.setItem("hangFlyrsPriceN",hangFlyrsPriceN)
 	localStorage.setItem("hasSeenCreditsThisSession",hasSeenCreditsThisSession)
+	localStorage.setItem("largeOvenUpgrade",largeOvenUpgrade)
+	localStorage.setItem("totalGoldenPieRarity",totalGoldenPieRarity)
+	localStorage.setItem("gameVersion",gameVersion)
 	// Settings Are Saved Below
 	localStorage.setItem("settingsMute",settingsMute)
 	localStorage.setItem("settingsClickAnimations",settingsClickAnimations)
@@ -184,6 +164,9 @@ function loadGame(){
 	if(lsExists("kitchenBackgroundImage"))kitchenBackgroundImage=localStorage.getItem("kitchenBackgroundImage")*1
 	if(lsExists("hangFlyrsPriceN"))hangFlyrsPriceN=localStorage.getItem("hangFlyrsPriceN")*1
 	if(lsExists("hasSeenCreditsThisSession"))hasSeenCreditsThisSession=localStorage.getItem("hasSeenCreditsThisSession").stringToBool()
+	if(lsExists("largeOvenUpgrade"))largeOvenUpgrade=localStorage.getItem("largeOvenUpgrade")*1
+	if(lsExists("totalGoldenPieRarity"))totalGoldenPieRarity=localStorage.getItem("totalGoldenPieRarity")*1
+	if(lsExists("gameVersion"))gameVersion=localStorage.getItem("gameVersion")*1
 	// Settings Are Loaded Below
 	if(lsExists("settingsMute"))settingsMute=localStorage.getItem("settingsMute").stringToBool()
 	if(lsExists("settingsClickAnimations"))settingsClickAnimations=localStorage.getItem("settingsClickAnimations").stringToBool()
@@ -211,6 +194,8 @@ function refreshGame(){
 	else $("#NukePieContainer").css({"filter":"brightness(0.5)"})
 	if(canAfford(hangFlyrsPriceN))$("#UpgradeFlyersContainer").css({"filter":"brightness(1)"})
 	else $("#UpgradeFlyersContainer").css({"filter":"brightness(0.5)"})
+	if(canAfford(largeOvenUpgrade))$("#LargeUpgradeContainer").css({"filter":"brightness(1)"})
+	else $("#LargeUpgradeContainer").css({"filter":"brightness(0.5)"})
 }
 
 function refreshInitialUpgradeTrack(){
@@ -264,7 +249,7 @@ function refreshInitialUpgradeTrack(){
 function PurchaselargeOvenUpgrade(elem){
 	if(canAfford(largeOvenUpgrade)){
 		charge(largeOvenUpgrade)
-		largeOvenUpgrade=round(largeOvenUpgrade*1.15)
+		largeOvenUpgrade=round(largeOvenUpgrade*1.1)
 		var x=getRndInteger(5,15)
 		piesPerClick=piesPerClick+x
 		messageGame("You got +"+x+" PPC, Nice!")
@@ -536,7 +521,7 @@ function purchaseOven(elem){
 		if(settingsPurchaseAnimations)clickFireworks($(elem),50)
 		piesPerClick=piesPerClick+1
 		charge(pieClickOvenPrice)
-		pieClickOvenPrice=round(pieClickOvenPrice*1.05)
+		pieClickOvenPrice=round(pieClickOvenPrice*1.025)
 		refreshGame()
 	}else{
 		messageGame("You Can\'t Afford This (Price: "+piesToNumber(pieClickOvenPrice)+")")
@@ -548,7 +533,7 @@ function purchaseChef(elem){
 		if(settingsPurchaseAnimations)clickFireworks($(elem),50)
 		assistantChefAmount=assistantChefAmount+1
 		charge(assistantChefPrice)
-		assistantChefPrice=round(assistantChefPrice*1.05)
+		assistantChefPrice=round(assistantChefPrice*1.025)
 		refreshGame()
 	}else{
 		messageGame("You Can\'t Afford This (Price: "+piesToNumber(assistantChefPrice)+")")
@@ -560,7 +545,7 @@ function purchaseUpgradeRollingPins(elem){
 		if(settingsPurchaseAnimations)clickFireworks($(elem),50)
 		piesPerSecond=piesPerSecond+25
 		charge(rollingPinsPriceNew)
-		rollingPinsPriceNew=round(rollingPinsPriceNew+1000)
+		rollingPinsPriceNew=round(rollingPinsPriceNew+1.025)
 		refreshGame()
 	}else{
 		messageGame("You Can\'t Afford This (Price: "+piesToNumber(rollingPinsPriceNew)+")")
@@ -667,14 +652,13 @@ function piesToNumber(value){
 
 function tickGame(){
 	pies=pies+(assistantChefAmount*assistantChefMultiplier)+piesPerSecond
-	if(getRndInteger(1,150)==1){goldenPie()}
+	if(getRndInteger(1,totalGoldenPieRarity)==1)goldenPie()
 	if(doSaveGame)saveGame()
 	refreshGame()
 	ticksUntilMSGFades=ticksUntilMSGFades-1
 	if(ticksUntilMSGFades<0)ticksUntilMSGFades=0
 	if(ticksUntilMSGFades>6)ticksUntilMSGFades=1
 	if(ticksUntilMSGFades==0)$("#messageBar").fadeOut(100)
-	//Anticheat.tick()
 	setTimeout(()=>{tickGame()},1000)
 }
 
@@ -757,96 +741,11 @@ function confirmationBox(text,btn1,btn2,btn1func,btn2func){
 }
 
 function resetGame(){
-	confirmationBox("Reset Game?","Yes","No","localStorage.clear();window.location.reload()","$('#popupMenu').fadeOut(500)")
+	confirmationBox("Reset Game?","Yes","No","localStorage.clear();setTimeout(()=>{window.location.reload()},100)","$('#popupMenu').fadeOut(500)")
 }
 
 //window.addEventListener("blur",()=>{Anticheat.pageFocused=0})
 //window.addEventListener("focus",()=>{Anticheat.pageFocused=1})
-
-function Anticheat(){CLog("Anticheat Started")}
-
-Anticheat.prototype={
-	clicks       : 0,
-	samePosition : 0,
-	susCount     : 0,
-	pageFocused  : 1,
-	isOGWidth    : 1,
-	storageEditA : 0,
-	oldaverage   : 0,
-	average      : 0,
-	matchingAvIR : 0,
-	hasClicked   : false,
-	diffData     : [],
-	banHammer    : function(){
-		$('#copyPasteLogo').attr('src','./assets/antiCheatLogo.png')
-		$('#copyPasteLogo').fadeIn(225)
-		$('#is_centerV').css({"top":"20%"})
-		$('#pieClicker').remove()
-		$('#pieUpgrades').remove()
-		$('#cheatingText').fadeIn(250)
-		$('#introScreen').fadeIn(200)
-	},
-	tick         : function(){
-		this.susCount=0
-		this.diffData=(last20clickTimestamps.map((n,i,last20clickTimestamps)=>i?n-last20clickTimestamps[i-1]:0-n))
-		this.diffData.shift()
-		this.average=0
-		for(i=0;i<this.diffData.length;i++){
-			this.average=this.average+this.diffData[i]
-		}
-		this.average=this.average/19
-		if(this.oldaverage-5<=this.average&&this.average<=this.oldaverage+5){
-			this.matchingAvIR=this.matchingAvIR+1
-		}else{this.matchingAvIR=0}
-		if(this.matchingAvIR>=15&&isClickedRecent!=0)	{this.susCount=this.susCount+2;$('#acR').text('0x001')}
-		if(this.clicks>=20)								{this.susCount=this.susCount+2;$('#acR').text('0xA42')}
-		//if(this.samePosition>=500)						{this.susCount=this.susCount+2;$('#acR').text('5xB27')}
-		if(this.susCount>=2)							{this.banHammer()}
-		this.oldaverage=this.average
-		if(isClickedRecent!=0)isClickedRecent=isClickedRecent-1
-		this.clicks=0
-	},
-	banLevel1    : function(){
-		doSaveGame=false
-		pies=round(pies/2)
-		rollingPinsPriceNew=round(rollingPinsPriceNew*1.25)
-		assistantChefPrice=round(assistantChefPrice*1.25)
-		saveGame()
-	},
-	banLevel2    : function(){
-		doSaveGame=false
-		pies=round(pies/4)
-		piesPerSecond=round(piesPerSecond/2)
-		rollingPinsPriceNew=round(rollingPinsPriceNew*1.5)
-		assistantChefPrice=round(assistantChefPrice*1.5)
-		nukePiePrice=round(nukePiePrice*1.5)
-		saveGame()
-	},
-	banLevel3    : function(){
-		doSaveGame=false
-		pies=round(pies/8)
-		piesPerSecond=round(piesPerSecond/4)
-		piesPerClick=round(piesPerClick/2)
-		rollingPinsPriceNew=round(rollingPinsPriceNew*2)
-		assistantChefPrice=round(assistantChefPrice*2)
-		nukePiePrice=round(nukePiePrice*2)
-		chefUpgradePrice=round(chefUpgradePrice*2)
-		pieClickUpgradePrice=round(pieClickUpgradePrice*2)
-		saveGame()
-	},
-	refundMySuff : function(){
-		pies=round(pies*8)
-		piesPerSecond=round(piesPerSecond*4)
-		piesPerClick=round(piesPerClick*2)
-		rollingPinsPriceNew=round(rollingPinsPriceNew/2)
-		assistantChefPrice=round(assistantChefPrice/2)
-		nukePiePrice=round(nukePiePrice/2)
-		chefUpgradePrice=round(chefUpgradePrice/2)
-		pieClickUpgradePrice=round(pieClickUpgradePrice/2)
-	}
-}
-
-//Anticheat=new Anticheat()
 
 function banMessage(){
 	$('#copyPasteLogo').attr('src','./assets/antiCheatLogo.png')
