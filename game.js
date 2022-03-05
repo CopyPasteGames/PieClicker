@@ -52,7 +52,7 @@ $(document).ready(()=>{
 	}
 	//$('[data-toggle="tooltip"]').tooltip()
 	// Reset Game If On Wrong Version
-	$('#idVer').html('Version: '+gameVersion)
+	$('#idVer').html('Version: Legacy')
 	if(lsExists("gameVersion")&&gameVersion!=currentGameVersion){
 		doSaveGame=false
 		localStorage.clear()
