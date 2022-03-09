@@ -545,7 +545,7 @@ function purchaseUpgradeRollingPins(elem){
 		if(settingsPurchaseAnimations)clickFireworks($(elem),50)
 		piesPerSecond=piesPerSecond+25
 		charge(rollingPinsPriceNew)
-		rollingPinsPriceNew=round(rollingPinsPriceNew+1.025)
+		rollingPinsPriceNew=round(rollingPinsPriceNew+1.15)
 		refreshGame()
 	}else{
 		messageGame("You Can\'t Afford This (Price: "+piesToNumber(rollingPinsPriceNew)+")")
