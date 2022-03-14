@@ -327,6 +327,10 @@ function refreshGame(){
 	if(sortType=='ppc'){
 		if($('#UpgradeFlyersContainer').css("display")!='none')$('#UpgradeFlyersContainer').css({"display":"none"})
 	}
+	// Check if it can even be displayed at this time
+	if(pieUpgradeTier>=8){
+		$("#InitialUpgradeContainer").css({"display":"none"})
+	}
 }
 
 function refreshEmpireUpgradeTrack(){
