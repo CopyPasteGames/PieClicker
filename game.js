@@ -708,7 +708,7 @@ function purchaseOven(elem){
 		if(settingsPurchaseAnimations)clickFireworks($(elem),50)
 		piesPerClick=piesPerClick+1
 		charge(pieClickOvenPrice)
-		pieClickOvenPrice=round(pieClickOvenPrice*1.125)
+		pieClickOvenPrice=round(pieClickOvenPrice*1.1)
 		refreshGame()
 	}else{
 		messageGame("You Can\'t Afford This (Price: "+piesToNumber(pieClickOvenPrice)+")")
@@ -720,7 +720,7 @@ function purchaseChef(elem){
 		if(settingsPurchaseAnimations)clickFireworks($(elem),50)
 		assistantChefAmount=assistantChefAmount+1
 		charge(assistantChefPrice)
-		assistantChefPrice=round(assistantChefPrice*1.1)
+		assistantChefPrice=round(assistantChefPrice*1.075)
 		refreshGame()
 	}else{
 		messageGame("You Can\'t Afford This (Price: "+piesToNumber(assistantChefPrice)+")")
@@ -732,7 +732,7 @@ function purchaseUpgradeRollingPins(elem){
 		if(settingsPurchaseAnimations)clickFireworks($(elem),50)
 		piesPerSecond=piesPerSecond+25
 		charge(rollingPinsPriceNew)
-		rollingPinsPriceNew=round(rollingPinsPriceNew*1.2)
+		rollingPinsPriceNew=round(rollingPinsPriceNew*1.075)
 		refreshGame()
 	}else{
 		messageGame("You Can\'t Afford This (Price: "+piesToNumber(rollingPinsPriceNew)+")")
@@ -766,7 +766,7 @@ function nuclearPieReactor(elem){
 		if(settingsPurchaseAnimations)clickFireworks($(elem),50)
 		piesPerSecond=piesPerSecond*100
 		charge(nukePiePrice)
-		nukePiePrice=round(nukePiePrice*10)
+		nukePiePrice=round(nukePiePrice*100)
 		refreshGame()
 	}else{
 		messageGame("You Can\'t Afford This (Price: "+piesToNumber(nukePiePrice)+")")
