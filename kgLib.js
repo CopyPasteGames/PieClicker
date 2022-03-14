@@ -1,17 +1,13 @@
-String.prototype.stringToBool=function(){
-	if(this=='true')return true
-	else return false
+String.prototype.toBool=function(){
+	if(this.toLowerCase()=='true')return true
+	else if(this.toLowerCase()=='false')return false
 }
 
 String.prototype.toPrice=function(){
     var string=this
-    if(string[0]!='$'){
-		string='$'+string
-	}if(string.indexOf('.')==-1){
-		string=string+'.00'
-	}if(string.split('.')[1].length==1){
-		string=string+'0'
-	}
+    if(string[0]!='$')string='$'+string
+	if(string.indexOf('.')==-1)string=string+'.00'
+	if(string.split('.')[1].length==1)string=string+'0'
 	return string
 }
 
@@ -49,6 +45,17 @@ String.prototype.isEmpty=function(){
     else return false
 }
 
-Array.prototype.append=function(data){
-	this.push(data)
+String.prototype.corrupt=function(amount){
+	var string=this
+	var replaceCharacters=["!","~","@","#","$","%","&","+","=","-",";",":","[","{","]","}","<",">","/","?","|"]
+	var endRes=""
+	for(i=0;i<string.length;i++){
+		var number=Math.floor(Math.random()*((100*amount)/100-0+1))
+		if(number==1){
+			endRes=endRes+replaceCharacters[Math.floor(Math.random()*replaceCharacters.length)]
+		}else{
+			endRes=endRes+string[i]
+		}
+	}
+	return endRes
 }

@@ -10,18 +10,29 @@
 	src:url("./assets/CenturyGothic.ttf");
 }
 
+/*
+I really want to use this in a future update.
+Basically you can change the way the entire
+website looks just from this one line in the
+code. Not sure it's very easy on the PC though.
+
+html{
+	filter:invert(1);
+}
+*/
+
 body{
-	touch-action:pan-x pan-y;
-	background-color:black;
 	font-family:CenturyGothic;
-	overflow-x:hidden;
-	padding:0px;
-	margin:0px;
-	color:var(--textColor);
+	background-color:black;
 	-webkit-user-select:none;
+	touch-action:pan-x pan-y;
+	color:var(--textColor);
 	-moz-user-select:none;
 	-ms-user-select:none;
+	overflow-x:hidden;
 	user-select:none;
+	padding:0px;
+	margin:0px;
 }
 
 #pieClicker{
@@ -106,7 +117,7 @@ body{
 }
 
 .pieUpgrade{
-	padding-bottom:20px;
+	padding-bottom:2%;
 	position:relative;
 	cursor:pointer;
 	width:90%;
@@ -212,6 +223,16 @@ body{
 	}
 }
 
+@keyframes flashbang{
+	0%{
+		filter:brightness(1);
+	}2%{
+		filter:brightness(100);
+	}100%{
+		filter:brightness(1);
+	}
+}
+
 #messageBar{
 	display:none;
 	position:absolute;
@@ -226,6 +247,7 @@ body{
 }
 
 .centerText{
+	cursor:inherit;
 	position:absolute;
 	top:50%;
 	left:0%;
@@ -575,4 +597,83 @@ table,thead,td{
 	top:50%;
 	text-align:center;
 	font-size:3.5vh;
+}
+
+#pieOtherMenuBg{
+	position:absolute;
+	background-image:url('./assets/BrickTexture.png');
+	background-repeat:repeat;
+	filter:brightness(0.75);
+	left:0%;
+	top:0%;
+	width:100%;
+	height:100%;
+	z-index:0;
+}
+
+#upgradeShowAll{
+	position:absolute;
+	width:25%;
+	height:2%;
+	left:0%;
+	top:4%;
+}
+
+#upgradeShowPPS{
+	position:absolute;
+	width:25%;
+	height:2%;
+	left:25%;
+	top:4%;
+}
+
+.sortButton{
+	font-size:2vh;
+	background-color:var(--bgTheme);
+	cursor:pointer;
+}
+
+#upgradeShowPPC{
+	position:absolute;
+	width:25%;
+	height:2%;
+	left:50%;
+	top:4%;
+}
+
+#upgradeShowPEU{
+	position:absolute;
+	width:25%;
+	height:2%;
+	left:75%;
+	top:4%;
+}
+
+.slightPaddingUpgrades{
+	position:absolute;
+	left:0%;
+	width:95%;
+	margin-left:5%;
+	height:94%;
+	top:6%;
+}
+
+#updateBarThingy{
+	display:none;
+	position:absolute;
+	z-index:top;
+	background-color:var(--bgTheme);
+	color:var(--textColor);
+	width:80%;
+	left:10%;
+	height:80%;
+	top:10%;
+	border-radius:0px;
+	border-width:2.5px;
+	border-color:black;
+	overflow-y:scroll;
+}
+
+#UBT_image{
+	padding:1.5%;
 }

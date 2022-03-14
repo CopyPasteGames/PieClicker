@@ -6,6 +6,11 @@
 		<meta name="keywords" content="Pie, Clicker, kgsensei, CopyPaste Games, Clicker Games">
 		<meta name="author" content="kgsensei & CopyPaste Games">
 		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<<<<<<< Updated upstream
+=======
+		<!--Discord-->
+        <meta name="theme-color" content="#fc496dff">
+>>>>>>> Stashed changes
 		<title>PieClicker | CopyPaste Games</title>
 		<link rel="icon" href="./assets/Pie.png">
 		<link rel="stylesheet" href="./bootstrap.css">
@@ -38,6 +43,7 @@
 					Upgrades
 				</div>
 			</div>
+<<<<<<< Updated upstream
 			<div class="slightPadding" style="overflow-y:scroll;" id="upgradesContainer">
 				<br>
 				<div class="pieUpgrade" onclick="startClickUpgrade(this)" id="InitialUpgradeContainer">
@@ -67,11 +73,78 @@
 				<div class="pieUpgrade" onclick="nuclearPieReactor(this)" id="NukePieContainer">
 					<img src="./assets/UpgradeButtonNuclearPieReactor.png" style="width:100%;height:100%;" draggable="false" id="NukePie">
 				</div>
+=======
+			<div id="upgradeShowAll" class="sortButton" onclick="sortUpgrades('all')">
+				<div class="centerText">
+					Sort: All
+				</div>
+			</div>
+			<div id="upgradeShowPPS" class="sortButton" onclick="sortUpgrades('pps')">
+				<div class="centerText">
+					Sort: PPS
+				</div>
+			</div>
+			<div id="upgradeShowPPC" class="sortButton" onclick="sortUpgrades('ppc')">
+				<div class="centerText">
+					Sort: PPC
+				</div>
+			</div>
+			<div id="upgradeShowPEU" class="sortButton" onclick="sortUpgrades('misc')">
+				<div class="centerText">
+					Sort: Misc
+				</div>
+			</div>
+			<div class="slightPaddingUpgrades" style="overflow-y:scroll;" id="upgradesContainer">
+				<br>
+				<div class="pieUpgrade sortAll sortPPC" onclick="startClickUpgrade(this)" id="InitialUpgradeContainer">
+					<img src="./assets/UpgradeButtonPumpkinPie.png" style="width:100%;height:100%;" draggable="false" id="InitialUpgrade">
+				</div>
+				<div class="pieUpgrade sortAll sortPPC" onclick="purchaseOven(this)" id="OvenUpgradeContainer">
+					<img src="./assets/UpgradeButtonOven.png" style="width:100%;height:100%;" draggable="false" id="OvenUpgrade">
+				</div>
+				<div class="pieUpgrade sortAll sortPPS" onclick="purchaseChef(this)" id="AssistantChefContainer">
+					<img src="./assets/UpgradeButtonAssistantChef.png" style="width:100%;height:100%;" draggable="false" id="AssistantChef">
+				</div>
+				<div class="pieUpgrade sortAll sortPPS" onclick="purchaseMasterChef(this)" id="MasterChefContainer">
+					<img src="./assets/UpgradeButtonApprenticeChef.png" style="width:100%;height:100%;" draggable="false" id="MasterChef">
+				</div>
+				<div class="pieUpgrade sortAll sortPPS" onclick="purchaseUpgradeRollingPins(this)" id="RollingPinsContainer">
+					<img src="./assets/UpgradeButtonRollingPin.png" style="width:100%;height:100%;" draggable="false" id="RollingPins">
+				</div>
+				<div class="pieUpgrade sortAll sortPPS" onclick="purchaseUpgradeFlyers(this)" id="UpgradeFlyersContainer">
+					<img src="./assets/UpgradeFlyers.png" style="width:100%;height:100%;" draggable="false" id="UpgradeFlyers">
+				</div>
+				<div class="pieUpgrade sortAll sortMisc" onclick="purchaseMoreGold(this)" id="MoreGoldContainer">
+					<img src="./assets/UpgradeButtonMoreGold.png" style="width:100%;height:100%;" draggable="false" id="MoreGold">
+				</div>
+				<div class="pieUpgrade sortAll sortPPC" onclick="PurchaselargeOvenUpgrade(this)" id="LargeUpgradeContainer">
+					<img src="./assets/UpgradeButtonLargeOvenUpgrade.png" style="width:100%;height:100%;" draggable="false" id="LargeUpgrade">
+				</div>
+				<div class="pieUpgrade sortAll sortPPC sortPPS" onclick="purchaseRevampKitchen(this)" id="RevampKitchenContainer">
+					<img src="./assets/UpgradeButtonRevampKitchen.png" style="width:100%;height:100%;" draggable="false" id="RevampKitchen">
+				</div>
+				<div class="pieUpgrade sortAll sortPPC sortPPS sortMisc" onclick="purchaseNewBakery(this)" id="NewBakeryContainer">
+					<img src="./assets/UpgradeButtonBakery.png" style="width:100%;height:100%;" draggable="false" id="NewBakery">
+				</div>
+				<div class="pieUpgrade sortAll sortPPC sortPPS sortMisc" onclick="purchaseHQ(this)" id="pieHQContainer">
+					<img src="./assets/UpgradeButtonHeadquarters.png" style="width:100%;height:100%;" draggable="false" id="pieHQ">
+				</div>
+				<div class="pieUpgrade sortAll sortPPS" onclick="nuclearPieReactor(this)" id="NukePieContainer">
+					<img src="./assets/UpgradeButtonNuclearPieReactor.png" style="width:100%;height:100%;" draggable="false" id="NukePie">
+				</div>
+				<div class="pieUpgrade sortAll sortPPC sortPPS sortMisc" onclick="purchaseEmpire(this)" id="pieEmpireContainer">
+					<img src="./assets/UpgradeButtonEmpire.png" style="width:100%;height:100%;" draggable="false" id="pieEmpire">
+				</div>
+>>>>>>> Stashed changes
 				<br>
 			</div>
 		</div>
 		<div id="pieRightF"></div>
 		<div id="pieOtherMenu">
+<<<<<<< Updated upstream
+=======
+			<div id="pieOtherMenuBg"></div>
+>>>>>>> Stashed changes
 			<div id="otherMenuTitle">
 				<div class="centerText">
 					Other Stuff
@@ -96,7 +169,11 @@
 					<div class="btnText">Settings</div>
 				</div>
 				<br>
+<<<<<<< Updated upstream
 				<div style="font-size:1.2vw">Discord Server: <a href="https://discord.gg/YMR5USWtw3">https://discord.gg/YMR5USWtw3</a>
+=======
+				<div style="font-size:1.25vw">Discord Server: <a href="https://discord.gg/YMR5USWtw3" style="color:aqua;">https://discord.gg/YMR5USWtw3</a>
+>>>>>>> Stashed changes
 				<br>[For dev news, Bug reports, Feature requests, etc.]
 				</div>
 			</div>
@@ -202,12 +279,56 @@
 								<td>T</td>
 								<td>10^42</td>
 							</tr>
+<<<<<<< Updated upstream
+=======
+							<tr>
+								<td>Quattuordecillion</td>
+								<td>Qt</td>
+								<td>10^45</td>
+							</tr>
+							<tr>
+								<td>Quindecillion</td>
+								<td>Qd</td>
+								<td>10^48</td>
+							</tr>
+							<tr>
+								<td>Sexdecillion</td>
+								<td>Sd</td>
+								<td>10^51</td>
+							</tr>
+							<tr>
+								<td>Septendecillion</td>
+								<td>St</td>
+								<td>10^54</td>
+							</tr>
+							<tr>
+								<td>Octodecillion</td>
+								<td>O</td>
+								<td>10^57</td>
+							</tr>
+							<tr>
+								<td>Novemdecillion</td>
+								<td>N</td>
+								<td>10^60</td>
+							</tr>
+							<tr>
+								<td>Vigintillion</td>
+								<td>v</td>
+								<td>10^63</td>
+							</tr>
+							<tr>
+								<td>Unvigintillion</td>
+								<td>c</td>
+								<td>10^66</td>
+							</tr>
+>>>>>>> Stashed changes
 						</tbody>
 					</table>
 					If you have more pies then this, how?
 				</div>
 				<h3>Goal of the Game</h3>
 				<div class="uis_half">
+<<<<<<< Updated upstream
 					Have fun. Get Pies.
 				
 				</div>
@@ -341,6 +462,13 @@
 					-Patched an issue with lag when clicking 1000+ times<br>
 					-Added upgrade menu background<br>
 					-Standard units [M=Mil,B=Bil] now work on upgrade prices
+=======
+					Have fun. <div style="display:inline;" id="notASecretMessageAtAllIPromise">Get Pies.</div>
+				</div>
+				<h3>Patch Notes [Version 2]</h3>
+				<div class="uis_half">
+					-We did so much that we can't include patch notes because it would go on forever.
+>>>>>>> Stashed changes
 				</div>
 				<br>
 				<br>
@@ -427,14 +555,54 @@
 		</div>
 		<div id="whatIsPlayingContainer">
 			<div id="whatIsPlayingCover">
+<<<<<<< Updated upstream
 				<img src="./assets/PieOreoCheesecake.png" style="width:100%;height:100%;">
+=======
+				<img src="./assets/PieOreoCheesecake.png" style="width:100%;height:100%;" id="whatIsPlayingCoverAsset">
+>>>>>>> Stashed changes
 			</div>
 			<div id="whatIsPlayingTrack">Example Track</div>
 			<div id="whatIsPlayingArtist">Ian Paris-Wright</div>
 		</div>
+<<<<<<< Updated upstream
 		<div style="position:fixed;width:10%;left:89.5%;font-size:3vh;height:5%;top:95%;text-align:right;" id="idVer">
 			Version: ?
 		</div>
+=======
+		<div style="position:fixed;width:20%;left:79.5%;font-size:3vh;height:5%;top:95%;text-align:right;" id="idVer">
+			Error
+		</div>
+		<div id="updateBarThingy">
+			<div id="UBT_image">
+				<h1>PieClicker: Empires</h1>
+				<img src="./assets/PieClickerEmpires.png" style="width:75%;height:auto;" draggable="false">
+				<p style="font-size:1vw;">
+					The PieClicker Empires update adds tons of new content to the game!<br>
+					In this update we changed prices and price multipliers for almost
+					every single item in the game.<br>
+					We also added music disk textures for different songs!<br>
+					We updated the purchase animations and added golden pie animations.<br>
+					You can also now sort upgrades by the things they will change!<br>
+					The ground work for multiplier features was set in place this update.<br>
+					This is the first update where there are upgrade purchase requirements
+					other than if you can afford it or not!<br>
+					We made an upgrade that can raise the changes of a golden pie.<br>
+					We also made a few game performance improvements!<br><br>
+					We hope you enjoy this update.<br>Have Fun!<br><br>
+					-CopyPaste Games<br><br>
+					**Development Note**<br>
+					We will be taking a long break after this update. We worked really hard on<br>
+					it and will bring more fun and interesting updates in the future but for now<br>
+					we need to rest. Thank you for understanding.
+				</p>
+			</div>
+			<div class="uis_exit" onclick="$('#updateBarThingy').fadeOut(250)">
+				<img src="./assets/x-circle-fill.svg" style="width:100%;height:100%;" draggable="false">
+			</div>
+		</div>
+		<img src="./assets/GoldenSparkle.png" id="upgradeParticalAsset" style="display:none;">
+		<script src="https://live-chat-reboot.herokuapp.com/socket.io/socket.io.js"></script>
+>>>>>>> Stashed changes
 		<script src="./bootstrap.js"></script>
 		<script src="./fireworks.js"></script>
 		<script src="./kgLib.js"></script>

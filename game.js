@@ -1,3 +1,5 @@
+inDevMode                  = false
+/*     Game Variables         */
 pies                       = 0
 piesPerClick               = 1
 piesPerSecond              = 0
@@ -16,18 +18,33 @@ hangFlyrsPriceN            = 2500
 largeOvenUpgrade           = 2500
 masterChefPrice            = 10000
 masterChefUnlocked         = false
-rollingPinsPriceNew        = 500
+rollingPinsPriceNew        = 5000
 revampKitchenPrice         = 10000
 kitchenBackgroundImage     = 0
-nukePiePrice               = 1000000000000
+nukePiePrice               = 100000000
 hasSeenCreditsThisSession  = false
 ticksUntilMSGFades         = 0
 doSaveGame                 = true
 hasPageInteracted          = false
 goldenPieID                = 0
 totalGoldenPieRarity       = 250
+moreGoldPrice              = 50000
+newBakeryPrice             = 10000000
+HQunlocked                 = false
+purchaseEmpirePrice        = 10000000000
+purchaseEmpireTeir         = 0
+bakeryCount                = 0
+saveThisTick               = false
 gameVersion                = 1
-currentGameVersion         = 1
+currentGameVersion         = 2
+flashbangPlaying           = false
+glitchTextPlaying          = false
+empirePiesPerClick         = 0
+empirePiesPerClickMult     = 1
+sortType                   = 'all'
+cursedModeActive           = false
+AFK                        = false
+awayPieCount               = 0
 /*     Anticheat Variables    */
 oldPiex                    = -1
 oldPiey                    = -1
@@ -35,24 +52,54 @@ initalPageWidth            = $(document).width()
 last20clickTimestamps      = []
 isClickedRecent            = 0
 /*     Settings Variables     */
-settingsMute               = false
+settingsMute               = true
 settingsClickAnimations    = true
 settingsPurchaseAnimations = true
 settingsAbbreviateNumbers  = true
+/*     Live Variables         */
+try{
+	socket=io('https://live-chat-reboot.herokuapp.com/')
+	onlinePlay=true
+}catch{
+	onlinePlay=false
+}
+
+if(onlinePlay){
+	socket.on('PCA',function(data){
+		if(data.action=='forceReload()')window.location.reload()
+		if(data.action=='messageGame()')messageGame(data.msg)
+		if(data.action=='rewardPlars()'){
+			pies=pies+(data.amount*1)
+			messageGame('God Gave You +'+piesToNumber(data.amount*1)+' Pies')
+		}
+		if(data.action=='banAllPlars()')banMessage()
+		if(data.action=='goldenPieYW()')goldenPie()
+	})
+}
 
 $(document).ready(()=>{
 	loadGame()
-	a=localStorage.getItem("lastLogTime")
+	var a=localStorage.getItem("lastLogTime")
 	if(a!=null&&a!=undefined&&a!=NaN){
-		a=Date.parse(a)
-		b=Date.parse(new Date())
-		c=((assistantChefAmount*assistantChefMultiplier)+piesPerSecond)*((b-a)/1000)
-		pies=pies+c
-		waitThenMessageGame("Made "+piesToNumber(c)+" Pies While Gone",2000,3)
+		var a=Date.parse(a)
+		var b=Date.parse(new Date())
+		var timeDiff=((b-a)/1000)
+		if(timeDiff>2){
+			var timeDiffCount=((assistantChefAmount*assistantChefMultiplier)+piesPerSecond)*timeDiff
+			pies=pies+timeDiffCount
+			waitThenMessageGame("Made "+piesToNumber(timeDiffCount)+" Pies While Gone!",2000,3)
+		}
+	}else{
+		$('#updateBarThingy').delay(1750).fadeIn(500)
 	}
+
 	//$('[data-toggle="tooltip"]').tooltip()
+
 	// Reset Game If On Wrong Version
+<<<<<<< Updated upstream
 	$('#idVer').html('Version: 0')
+=======
+>>>>>>> Stashed changes
 	if(lsExists("gameVersion")&&gameVersion!=currentGameVersion){
 		doSaveGame=false
 		localStorage.clear()
@@ -60,11 +107,16 @@ $(document).ready(()=>{
 			localStorage.setItem("gameVersion",currentGameVersion)
 			window.location.reload()
 		},100)
+	}else{
+		localStorage.setItem("gameVersion",currentGameVersion)
+		gameVersion=currentGameVersion
 	}
-	tickGame()
+	$('#idVer').html('Version: '+gameVersion+(inDevMode?' [Dev]':''))
 	chefsRefresh()
 	backgroundRefresh()
+	refreshEmpireUpgradeTrack()
 	refreshInitialUpgradeTrack()
+	setTimeout(()=>{tickGame()},1000)
 })
 
 async function waitThenMessageGame(message,ms,time=2){
@@ -81,16 +133,26 @@ $(window).bind("load",()=>{
 $("#pie").click((e)=>{
 	$("#pie").stop(true,false)
 	if(settingsClickAnimations){
-		$("#pie").css({"width":"90%","left":"5%","top":"15%","transform":"rotate("+pieRotationDeg+"deg)"})
+		$("#pie").css({
+			"width":"90%",
+			"left":"5%",
+			"top":"15%",
+			"transform":"rotate("+pieRotationDeg+"deg)",
+		})
+		var clickAmountComputed=(piesPerClick*pieClickMultiplier)+(empirePiesPerClick*empirePiesPerClickMult)
 		pieClickAnimationId=pieClickAnimationId+1
-		$("body").append('<div id="pieInd'+pieClickAnimationId+'" style="pointer-events:none;">+'+piesToNumber(piesPerClick*pieClickMultiplier)+'</div>')
-		$("#pieInd"+pieClickAnimationId).css("top",(e.pageY+getRndInteger(-10,10))+"px")
-		$("#pieInd"+pieClickAnimationId).css("left",(e.pageX+getRndInteger(-10,10))+"px")
-		$("#pieInd"+pieClickAnimationId).css("position","absolute")
-		$("#pieInd"+pieClickAnimationId).css("color","white")
-		$("#pieInd"+pieClickAnimationId).css("font-weight","700")
-		$("#pieInd"+pieClickAnimationId).css("font-size","25px")
-		$("#pieInd"+pieClickAnimationId).css("animation","GoUp 2s forwards linear")
+		$("body").append(`<div id="pieInd${pieClickAnimationId}">+${piesToNumber(clickAmountComputed)}</div>`)
+		$('#pieInd'+pieClickAnimationId).css({
+			"position":"absolute",
+			"top":(e.pageY+getRndInteger(-10,10))+"px",
+			"left":(e.pageX+getRndInteger(-10,10))+"px",
+			"color":"white",
+			"font-weight":"800",
+			"font-size":"29px",
+			"pointer-events":"none",
+			// Chaned this from 'linear' to 'ease-in' be sure to test each use case.
+			"animation":"GoUp 1250ms forwards ease-in"
+		})
 		$("#pieInd"+pieClickAnimationId).show()
 		$("#pie").animate({"width":"95%","left":"2.5%","top":"14%"},40)
 		$("#pie").animate({"width":"90%","left":"5%","top":"15%"},100)
@@ -100,12 +162,29 @@ $("#pie").click((e)=>{
 		hasPageInteracted=true
 		musicTick()
 	}
-	pies=pies+piesPerClick*pieClickMultiplier
+	pies=pies+clickAmountComputed
 	refreshGame()
 })
 
+// Disable Annoyances if not in dev mode
+if(!inDevMode){
+	document.addEventListener("contextmenu",(e)=>{
+		e.preventDefault()
+	})
+	document.onkeydown=function(e){
+		e=e||window.event
+		if(!e.ctrlKey)return
+		var code=e.which||e.keyCode
+		switch(code){
+			case 83:
+				e.preventDefault()
+			case 73:
+				e.preventDefault()
+		}
+	}
+}
+
 function round(number){return Math.round(number)}
-document.addEventListener("contextmenu",(e)=>{e.preventDefault()})
 function removeElem(animID){setTimeout(()=>{$(animID).remove()},2250)}
 function sleep(ms){return new Promise(resolve=>setTimeout(resolve,ms))}
 function CLog(msg){console.log("[game.js "+new Date().getTime()+"] "+msg)}
@@ -136,6 +215,14 @@ function saveGame(){
 	localStorage.setItem("largeOvenUpgrade",largeOvenUpgrade)
 	localStorage.setItem("totalGoldenPieRarity",totalGoldenPieRarity)
 	localStorage.setItem("gameVersion",gameVersion)
+	localStorage.setItem("moreGoldPrice",moreGoldPrice)
+	localStorage.setItem("newBakeryPrice",newBakeryPrice)
+	localStorage.setItem("HQunlocked",HQunlocked)
+	localStorage.setItem("bakeryCount",bakeryCount)
+	localStorage.setItem("purchaseEmpirePrice",purchaseEmpirePrice)
+	localStorage.setItem("purchaseEmpireTeir",purchaseEmpireTeir)
+	localStorage.setItem("empirePiesPerClick",empirePiesPerClick)
+	localStorage.setItem("empirePiesPerClickMult",empirePiesPerClickMult)
 	// Settings Are Saved Below
 	localStorage.setItem("settingsMute",settingsMute)
 	localStorage.setItem("settingsClickAnimations",settingsClickAnimations)
@@ -144,39 +231,48 @@ function saveGame(){
 }
 
 function loadGame(){
-	if(lsExists("pies"))pies=localStorage.getItem("pies")*1
-	if(lsExists("piesPerClick"))piesPerClick=localStorage.getItem("piesPerClick")*1
-	if(lsExists("piesPerSecond"))piesPerSecond=localStorage.getItem("piesPerSecond")*1
-	if(lsExists("pieUpgradeTier"))pieUpgradeTier=localStorage.getItem("pieUpgradeTier")*1
-	if(lsExists("pieClickMultiplier"))pieClickMultiplier=localStorage.getItem("pieClickMultiplier")*1
-	if(lsExists("pieClickUpgradePrice"))pieClickUpgradePrice=localStorage.getItem("pieClickUpgradePrice")*1
-	if(lsExists("pieClickOvenPrice"))pieClickOvenPrice=localStorage.getItem("pieClickOvenPrice")*1
-	if(lsExists("assistantChefPrice"))assistantChefPrice=localStorage.getItem("assistantChefPrice")*1
-	if(lsExists("assistantChefAmount"))assistantChefAmount=localStorage.getItem("assistantChefAmount")*1
-	if(lsExists("assistantChefMultiplier"))assistantChefMultiplier=localStorage.getItem("assistantChefMultiplier")*1
-	if(lsExists("masterChefPrice"))masterChefPrice=localStorage.getItem("masterChefPrice")*1
-	if(lsExists("masterChefUnlocked"))masterChefUnlocked=localStorage.getItem("masterChefUnlocked").stringToBool()
-	if(lsExists("rollingPinsPriceNew"))rollingPinsPriceNew=localStorage.getItem("rollingPinsPriceNew")*1
-	if(lsExists("revampKitchenPrice"))revampKitchenPrice=localStorage.getItem("revampKitchenPrice")*1
-	if(lsExists("nukePiePrice"))nukePiePrice=localStorage.getItem("nukePiePrice")*1
-	if(lsExists("chefUpgradeTier"))chefUpgradeTier=localStorage.getItem("chefUpgradeTier")*1
-	if(lsExists("chefUpgradePrice"))chefUpgradePrice=localStorage.getItem("chefUpgradePrice")*1
-	if(lsExists("kitchenBackgroundImage"))kitchenBackgroundImage=localStorage.getItem("kitchenBackgroundImage")*1
-	if(lsExists("hangFlyrsPriceN"))hangFlyrsPriceN=localStorage.getItem("hangFlyrsPriceN")*1
-	if(lsExists("hasSeenCreditsThisSession"))hasSeenCreditsThisSession=localStorage.getItem("hasSeenCreditsThisSession").stringToBool()
-	if(lsExists("largeOvenUpgrade"))largeOvenUpgrade=localStorage.getItem("largeOvenUpgrade")*1
-	if(lsExists("totalGoldenPieRarity"))totalGoldenPieRarity=localStorage.getItem("totalGoldenPieRarity")*1
-	if(lsExists("gameVersion"))gameVersion=localStorage.getItem("gameVersion")*1
+	if(lsExists("pies"))pies=localStorage.getItem("pies").toInt()
+	if(lsExists("piesPerClick"))piesPerClick=localStorage.getItem("piesPerClick").toInt()
+	if(lsExists("piesPerSecond"))piesPerSecond=localStorage.getItem("piesPerSecond").toInt()
+	if(lsExists("pieUpgradeTier"))pieUpgradeTier=localStorage.getItem("pieUpgradeTier").toInt()
+	if(lsExists("pieClickMultiplier"))pieClickMultiplier=localStorage.getItem("pieClickMultiplier").toInt()
+	if(lsExists("pieClickUpgradePrice"))pieClickUpgradePrice=localStorage.getItem("pieClickUpgradePrice").toInt()
+	if(lsExists("pieClickOvenPrice"))pieClickOvenPrice=localStorage.getItem("pieClickOvenPrice").toInt()
+	if(lsExists("assistantChefPrice"))assistantChefPrice=localStorage.getItem("assistantChefPrice").toInt()
+	if(lsExists("assistantChefAmount"))assistantChefAmount=localStorage.getItem("assistantChefAmount").toInt()
+	if(lsExists("assistantChefMultiplier"))assistantChefMultiplier=localStorage.getItem("assistantChefMultiplier").toInt()
+	if(lsExists("masterChefPrice"))masterChefPrice=localStorage.getItem("masterChefPrice").toInt()
+	if(lsExists("masterChefUnlocked"))masterChefUnlocked=localStorage.getItem("masterChefUnlocked").toBool()
+	if(lsExists("rollingPinsPriceNew"))rollingPinsPriceNew=localStorage.getItem("rollingPinsPriceNew").toInt()
+	if(lsExists("revampKitchenPrice"))revampKitchenPrice=localStorage.getItem("revampKitchenPrice").toInt()
+	if(lsExists("nukePiePrice"))nukePiePrice=localStorage.getItem("nukePiePrice").toInt()
+	if(lsExists("chefUpgradeTier"))chefUpgradeTier=localStorage.getItem("chefUpgradeTier").toInt()
+	if(lsExists("chefUpgradePrice"))chefUpgradePrice=localStorage.getItem("chefUpgradePrice").toInt()
+	if(lsExists("kitchenBackgroundImage"))kitchenBackgroundImage=localStorage.getItem("kitchenBackgroundImage").toInt()
+	if(lsExists("hangFlyrsPriceN"))hangFlyrsPriceN=localStorage.getItem("hangFlyrsPriceN").toInt()
+	if(lsExists("hasSeenCreditsThisSession"))hasSeenCreditsThisSession=localStorage.getItem("hasSeenCreditsThisSession").toBool()
+	if(lsExists("largeOvenUpgrade"))largeOvenUpgrade=localStorage.getItem("largeOvenUpgrade").toInt()
+	if(lsExists("totalGoldenPieRarity"))totalGoldenPieRarity=localStorage.getItem("totalGoldenPieRarity").toInt()
+	if(lsExists("gameVersion"))gameVersion=localStorage.getItem("gameVersion").toInt()
+	if(lsExists("moreGoldPrice"))moreGoldPrice=localStorage.getItem("moreGoldPrice").toInt()
+	if(lsExists("newBakeryPrice"))newBakeryPrice=localStorage.getItem("newBakeryPrice").toInt()
+	if(lsExists("HQunlocked"))HQunlocked=localStorage.getItem("HQunlocked").toBool()
+	if(lsExists("bakeryCount"))bakeryCount=localStorage.getItem("bakeryCount").toInt()
+	if(lsExists("purchaseEmpirePrice"))purchaseEmpirePrice=localStorage.getItem("purchaseEmpirePrice").toInt()
+	if(lsExists("purchaseEmpireTeir"))purchaseEmpireTeir=localStorage.getItem("purchaseEmpireTeir").toInt()
+	if(lsExists("empirePiesPerClick"))empirePiesPerClick=localStorage.getItem("empirePiesPerClick").toInt()
+	if(lsExists("empirePiesPerClickMult"))empirePiesPerClickMult=localStorage.getItem("empirePiesPerClickMult").toInt()
 	// Settings Are Loaded Below
-	if(lsExists("settingsMute"))settingsMute=localStorage.getItem("settingsMute").stringToBool()
-	if(lsExists("settingsClickAnimations"))settingsClickAnimations=localStorage.getItem("settingsClickAnimations").stringToBool()
-	if(lsExists("settingsPurchaseAnimations"))settingsPurchaseAnimations=localStorage.getItem("settingsPurchaseAnimations").stringToBool()
-	if(lsExists("settingsAbbreviateNumbers"))settingsAbbreviateNumbers=localStorage.getItem("settingsAbbreviateNumbers").stringToBool()
+	if(lsExists("settingsMute"))settingsMute=localStorage.getItem("settingsMute").toBool()
+	if(lsExists("settingsClickAnimations"))settingsClickAnimations=localStorage.getItem("settingsClickAnimations").toBool()
+	if(lsExists("settingsPurchaseAnimations"))settingsPurchaseAnimations=localStorage.getItem("settingsPurchaseAnimations").toBool()
+	if(lsExists("settingsAbbreviateNumbers"))settingsAbbreviateNumbers=localStorage.getItem("settingsAbbreviateNumbers").toBool()
 }
 
 function refreshGame(){
 	$("#pieCountReal").html("Pies: "+piesToNumber(pies))
-	$("#pieGRateReal").html("Pies/Sec: "+piesToNumber((assistantChefAmount*assistantChefMultiplier)+piesPerSecond))
+	var totalppscalculated=(assistantChefAmount*assistantChefMultiplier)+piesPerSecond
+	$("#pieGRateReal").html("Pies/Sec: "+piesToNumber(totalppscalculated))
 	// This is just to make the brightness change if you can afford something
 	if(canAfford(pieClickOvenPrice))$("#OvenUpgradeContainer").css({"filter":"brightness(1)"})
 	else $("#OvenUpgradeContainer").css({"filter":"brightness(0.5)"})
@@ -196,6 +292,71 @@ function refreshGame(){
 	else $("#UpgradeFlyersContainer").css({"filter":"brightness(0.5)"})
 	if(canAfford(largeOvenUpgrade))$("#LargeUpgradeContainer").css({"filter":"brightness(1)"})
 	else $("#LargeUpgradeContainer").css({"filter":"brightness(0.5)"})
+	if(canAfford(moreGoldPrice))$("#MoreGoldContainer").css({"filter":"brightness(1)"})
+	else $("#MoreGoldContainer").css({"filter":"brightness(0.5)"})
+	if(canAfford(newBakeryPrice))$("#NewBakeryContainer").css({"filter":"brightness(1)"})
+	else $("#NewBakeryContainer").css({"filter":"brightness(0.5)"})
+	if(canAfford(100000000)&&bakeryCount>=5)$("#pieHQContainer").css({"filter":"brightness(1)"})
+	else $("#pieHQContainer").css({"filter":"brightness(0.5)"})
+	if(canAfford(purchaseEmpirePrice)&&bakeryCount>=8&&HQunlocked)$("#pieEmpireContainer").css({"filter":"brightness(1)"})
+	else $("#pieEmpireContainer").css({"filter":"brightness(0.5)"})
+	// Check if the HQ is already collected
+	if(HQunlocked&&$('#pieHQContainer').css("display")!='none')$('#pieHQContainer').css({"display":"none"})
+	else if(!HQunlocked&&$('#pieHQContainer').css("display")!='block')$('#pieHQContainer').css({"display":"block"})
+	/*
+
+		This section must be at the bottom of all the refresh game [tick]
+		logic. This is because this whole section of code is for correcting
+		any different mode of sorting upgrades. It basically fixes bugs.
+
+	*/
+	// Check if it can even be displayed at this time
+	if(sortType=='pps'||sortType=='ppc'){
+		if($('#MoreGoldContainer').css("display")!='none')$('#MoreGoldContainer').css({"display":"none"})
+	}else{
+		// Hide this upgrade if it can't help anymore
+		if(totalGoldenPieRarity<10&&$('#MoreGoldContainer').css("display")!='none')$('#MoreGoldContainer').css({"display":"none"})
+		else if(totalGoldenPieRarity>10&&$('#MoreGoldContainer').css("display")!='block')$('#MoreGoldContainer').css({"display":"block"})
+	}
+	// Check if it can even be displayed at this time
+	if(sortType=='misc'){
+		if($('#LargeUpgradeContainer').css("display")!='none')$('#LargeUpgradeContainer').css({"display":"none"})
+		if($('#UpgradeFlyersContainer').css("display")!='none')$('#UpgradeFlyersContainer').css({"display":"none"})
+	}
+	// Check if it can even be displayed at this time
+	if(sortType=='pps'){
+		if($('#LargeUpgradeContainer').css("display")!='none')$('#LargeUpgradeContainer').css({"display":"none"})
+	}
+	// Check if it can even be displayed at this time
+	if(sortType=='ppc'){
+		if($('#UpgradeFlyersContainer').css("display")!='none')$('#UpgradeFlyersContainer').css({"display":"none"})
+	}
+}
+
+function refreshEmpireUpgradeTrack(){
+	if(purchaseEmpireTeir==0&&$("#pieEmpire").attr("src")!="./assets/UpgradeButtonEmpire.png"){
+		$("#pieEmpire").attr("src","./assets/UpgradeButtonEmpire.png")
+	}else if(purchaseEmpireTeir==1&&$("#pieEmpire").attr("src")!="./assets/UpgradeButtonCitizens.png"){
+		$("#pieEmpire").attr("src","./assets/UpgradeButtonCitizens.png")
+	}else if(purchaseEmpireTeir==2&&$("#pieEmpire").attr("src")!="./assets/UpgradeButtonSoldiers.png"){
+		$("#pieEmpire").attr("src","./assets/UpgradeButtonSoldiers.png")
+	}else if(purchaseEmpireTeir==3&&$("#pieEmpire").attr("src")!="./assets/UpgradeButtonBodyArmor.png"){
+		$("#pieEmpire").attr("src","./assets/UpgradeButtonBodyArmor.png")
+	}else if(purchaseEmpireTeir==4&&$("#pieEmpire").attr("src")!="./assets/UpgradeButtonImprovedHelmets.png"){
+		$("#pieEmpire").attr("src","./assets/UpgradeButtonImprovedHelmets.png")
+	}else if(purchaseEmpireTeir==5&&$("#pieEmpire").attr("src")!="./assets/UpgradeButtonSoldiersTierIII.png"){
+		$("#pieEmpire").attr("src","./assets/UpgradeButtonSoldiersTierIII.png")
+	}else if(purchaseEmpireTeir==6&&$("#pieEmpire").attr("src")!="./assets/UpgradeButtonNavy.png"){
+		$("#pieEmpire").attr("src","./assets/UpgradeButtonNavy.png")
+	}else if(purchaseEmpireTeir==7&&$("#pieEmpire").attr("src")!="./assets/UpgradeButtonArmy.png"){
+		$("#pieEmpire").attr("src","./assets/UpgradeButtonArmy.png")
+	}else if(purchaseEmpireTeir==8&&$("#pieEmpire").attr("src")!="./assets/UpgradeButtonSpheresOfInfluence.png"){
+		$("#pieEmpire").attr("src","./assets/UpgradeButtonSpheresOfInfluence.png")
+	}else if(purchaseEmpireTeir==9&&$("#pieEmpire").attr("src")!="./assets/UpgradeButtonExpandEmpire.png"){
+		$("#pieEmpire").attr("src","./assets/UpgradeButtonExpandEmpire.png")
+	}else if(purchaseEmpireTeir>9){
+		$("#pieEmpireContainer").css({"display":"none"})
+	}
 }
 
 function refreshInitialUpgradeTrack(){
@@ -243,6 +404,18 @@ function refreshInitialUpgradeTrack(){
 		$("#LargeUpgradeContainer").css({"display":"none"})
 	}else{
 		$("#LargeUpgradeContainer").css({"display":"block"})
+	}
+}
+
+function purchaseMoreGold(elem){
+	if(canAfford(moreGoldPrice)){
+		charge(moreGoldPrice)
+		moreGoldPrice=round(moreGoldPrice*1.75)
+		totalGoldenPieRarity=totalGoldenPieRarity-5
+		if(settingsPurchaseAnimations)clickFireworks($(elem),50)
+		refreshGame()
+	}else{
+		messageGame("You Can\'t Afford This (Price: "+piesToNumber(moreGoldPrice)+")")
 	}
 }
 
@@ -322,7 +495,9 @@ function chefsRefresh(){
 		$("#MasterChef").attr("src","./assets/UpgradeButtonGMChefPlatinumIII.png")
 	}else if(chefUpgradeTier==8&&$("#MasterChef").attr("src")!="./assets/UpgradeButtonGMChefPlatinumIV.png"){
 		$("#MasterChef").attr("src","./assets/UpgradeButtonGMChefPlatinumIV.png")
-	}else if(chefUpgradeTier==9){
+	}else if(chefUpgradeTier==9&&$("#MasterChef").attr("src")!="./assets/UpgradeButtonGMChefPlatinumV.png"){
+		$("#MasterChef").attr("src","./assets/UpgradeButtonGMChefPlatinumV.png")
+	}else if(chefUpgradeTier==10){
 		$("#MasterChefContainer").css({"display":"none"})
 	}
 	if(chefUpgradeTier>=3){
@@ -418,6 +593,8 @@ function purchaseMasterChef(elem){
 			assistantChefMultiplier=30
 		}else if(chefUpgradeTier==9){
 			assistantChefMultiplier=50
+		}else if(chefUpgradeTier==10){
+			assistantChefMultiplier=75
 		}
 		if(settingsPurchaseAnimations)clickFireworks($(elem),50)
 		chefsRefresh()
@@ -456,7 +633,7 @@ async function PleasePlayTheCredits(){
 	$("#creditsTitle").fadeOut(500)
 	await sleep(500)
 	$("#creditsName").html("Caleb Rhinehart")
-	$("#creditsTitle").html("Creative Director")
+	$("#creditsTitle").html("Concept Builder")
 	$("#creditsName").fadeIn(500)
 	$("#creditsTitle").fadeIn(500)
 	await sleep(2000)
@@ -472,7 +649,7 @@ async function PleasePlayTheCredits(){
 	$("#creditsTitle").fadeOut(500)
 	await sleep(500)
 	$("#creditsName").html("Kylea Reed")
-	$("#creditsTitle").html("Project Manager")
+	$("#creditsTitle").html("Concept Builder")
 	$("#creditsName").fadeIn(500)
 	$("#creditsTitle").fadeIn(500)
 	await sleep(2000)
@@ -486,6 +663,16 @@ async function PleasePlayTheCredits(){
 	await sleep(2000)
 	$("#creditsName").fadeOut(500)
 	$("#creditsTitle").fadeOut(500)
+	await sleep(500)
+	$("#creditsName").html("Thank You")
+	$("#creditsTitle").html("For Playing PieClicker!")
+	$("#creditsName").fadeIn(500)
+	$("#creditsTitle").fadeIn(500)
+	await sleep(500)
+	glitchText($('#creditsTitle'),"It\'s Not Just A Game",6,20)
+	await sleep(2000)
+	$("#creditsName").fadeOut(500)
+	$("#creditsTitle").fadeOut(500)
 	await sleep(750)
 	$("#creditsOverlay").fadeOut(1000)
 	settingsMute=false
@@ -493,9 +680,9 @@ async function PleasePlayTheCredits(){
 	if(!hasSeenCreditsThisSession&&pies>=500){
 		x=getRndInteger(round(pies/8),round(pies/10))
 		messageGame("Thanks For Watching The Credits (+"+piesToNumber(x)+" Pies)")
+		hasSeenCreditsThisSession=true
 		pies=pies+x
 	}
-	hasSeenCreditsThisSession=true
 	refreshGame()
 }
 
@@ -521,7 +708,7 @@ function purchaseOven(elem){
 		if(settingsPurchaseAnimations)clickFireworks($(elem),50)
 		piesPerClick=piesPerClick+1
 		charge(pieClickOvenPrice)
-		pieClickOvenPrice=round(pieClickOvenPrice*1.025)
+		pieClickOvenPrice=round(pieClickOvenPrice*1.125)
 		refreshGame()
 	}else{
 		messageGame("You Can\'t Afford This (Price: "+piesToNumber(pieClickOvenPrice)+")")
@@ -533,7 +720,7 @@ function purchaseChef(elem){
 		if(settingsPurchaseAnimations)clickFireworks($(elem),50)
 		assistantChefAmount=assistantChefAmount+1
 		charge(assistantChefPrice)
-		assistantChefPrice=round(assistantChefPrice*1.025)
+		assistantChefPrice=round(assistantChefPrice*1.1)
 		refreshGame()
 	}else{
 		messageGame("You Can\'t Afford This (Price: "+piesToNumber(assistantChefPrice)+")")
@@ -545,7 +732,11 @@ function purchaseUpgradeRollingPins(elem){
 		if(settingsPurchaseAnimations)clickFireworks($(elem),50)
 		piesPerSecond=piesPerSecond+25
 		charge(rollingPinsPriceNew)
+<<<<<<< Updated upstream
 		rollingPinsPriceNew=round(rollingPinsPriceNew+1.15)
+=======
+		rollingPinsPriceNew=round(rollingPinsPriceNew*1.2)
+>>>>>>> Stashed changes
 		refreshGame()
 	}else{
 		messageGame("You Can\'t Afford This (Price: "+piesToNumber(rollingPinsPriceNew)+")")
@@ -559,7 +750,7 @@ function purchaseRevampKitchen(elem){
 		piesPerClick=piesPerClick+round(piesPerClick*0.1)
 		assistantChefAmount=assistantChefAmount+round(assistantChefAmount*0.1)
 		charge(revampKitchenPrice)
-		revampKitchenPrice=round(revampKitchenPrice*2.5)
+		revampKitchenPrice=round(revampKitchenPrice*3)
 		kitchenBackgroundIMOld=kitchenBackgroundImage
 		kitchenBackgroundImage=getRndInteger(0,2)
 		if(kitchenBackgroundImage==kitchenBackgroundIMOld){
@@ -577,9 +768,9 @@ function purchaseRevampKitchen(elem){
 function nuclearPieReactor(elem){
 	if(canAfford(nukePiePrice)){
 		if(settingsPurchaseAnimations)clickFireworks($(elem),50)
-		piesPerSecond=round(piesPerSecond*100)
+		piesPerSecond=piesPerSecond*100
 		charge(nukePiePrice)
-		nukePiePrice=round(nukePiePrice*100)
+		nukePiePrice=round(nukePiePrice*10)
 		refreshGame()
 	}else{
 		messageGame("You Can\'t Afford This (Price: "+piesToNumber(nukePiePrice)+")")
@@ -600,44 +791,153 @@ function purchaseUpgradeFlyers(elem){
 	}
 }
 
+function purchaseNewBakery(elem){
+	if(canAfford(newBakeryPrice)){
+		if(settingsPurchaseAnimations)clickFireworks($(elem),50)
+		charge(newBakeryPrice)
+		newBakeryPrice=round(newBakeryPrice*2.5)
+		piesPerSecond=round(piesPerSecond*2)
+		piesPerClick=round(piesPerClick*2)
+		bakeryCount=bakeryCount+1
+		refreshGame()
+	}else{
+		messageGame("You Can\'t Afford This (Price: "+piesToNumber(newBakeryPrice)+")")
+	}
+}
+
+function purchaseHQ(elem){
+	// Requires At Least 5 Bakeries
+	if(canAfford(100000000)){
+		if(bakeryCount>=5){
+			if(settingsPurchaseAnimations)clickFireworks($(elem),50)
+			charge(100000000)
+			HQunlocked=true
+			piesPerSecond=piesPerSecond+200
+			piesPerClick=piesPerClick+200
+			refreshGame()
+		}else{
+			messageGame("You need at least 5 Bakeries (You have: "+bakeryCount+")")
+		}
+	}else{
+		messageGame("You Can\'t Afford This (Price: "+piesToNumber(100000000)+")")
+	}
+}
+
+function purchaseEmpire(elem){
+	// Requires HQ & 8 Bakeries
+	if(canAfford(purchaseEmpirePrice)){
+		if(HQunlocked){
+			if(bakeryCount>=8){
+				if(settingsPurchaseAnimations)clickFireworks($(elem),50)
+				purchaseEmpireTeir=purchaseEmpireTeir+1
+				if(purchaseEmpireTeir==1){
+					piesPerSecond=piesPerSecond+100000
+					purchaseEmpirePrice=round(purchaseEmpirePrice*0.1)
+				}if(purchaseEmpireTeir==2){
+					piesPerSecond=piesPerSecond+75
+					purchaseEmpirePrice=round(purchaseEmpirePrice*0.5)
+				}if(purchaseEmpireTeir==3){
+					empirePiesPerClick=empirePiesPerClick+10000
+					purchaseEmpirePrice=round(purchaseEmpirePrice*1.1)
+				}if(purchaseEmpireTeir==4){
+					empirePiesPerClickMult=3
+					purchaseEmpirePrice=round(purchaseEmpirePrice*1.1)
+				}if(purchaseEmpireTeir==5){
+					empirePiesPerClick=empirePiesPerClick+25000
+					purchaseEmpirePrice=round(purchaseEmpirePrice*1.1)
+				}if(purchaseEmpireTeir==6){
+					empirePiesPerClick=empirePiesPerClick+50000
+					purchaseEmpirePrice=round(purchaseEmpirePrice*1.1)
+				}if(purchaseEmpireTeir==7){
+					empirePiesPerClickMult=empirePiesPerClickMult+10
+					purchaseEmpirePrice=round(purchaseEmpirePrice*1.1)
+				}if(purchaseEmpireTeir==8){
+					empirePiesPerClick=empirePiesPerClick*500
+					purchaseEmpirePrice=round(purchaseEmpirePrice*1.1)
+				}if(purchaseEmpireTeir==9){
+					piesPerSecond=piesPerSecond*10
+					purchaseEmpirePrice=round(purchaseEmpirePrice*1.1)
+				}if(purchaseEmpireTeir==10){
+					piesPerClick=piesPerClick*50
+					piesPerSecond=piesPerSecond*50
+					piesPerSecond=piesPerSecond+100000000
+					purchaseEmpirePrice=round(purchaseEmpirePrice*1.1)
+				}
+				refreshGame()
+				refreshEmpireUpgradeTrack()
+			}else{
+				messageGame("You need at least 8 Bakeries (You have: "+bakeryCount+")")
+			}
+		}else{
+			messageGame("You must have the Pie Headquarters unlocked")
+		}
+	}else{
+		messageGame("You Can\'t Afford This (Price: "+piesToNumber(purchaseEmpirePrice)+")")
+	}
+}
+
 function piesToNumber(value){
 	if(settingsAbbreviateNumbers){
+		// 66 Zeros for Unvigintillion
+		return Math.abs(Number(value))>=1.0e+66
+		?(Math.abs(Number(value))/1.0e+66).toFixed(6)+"c"
+		// 63 Zeros for Vigintillion
+		:Math.abs(Number(value))>=1.0e+63
+		?(Math.abs(Number(value))/1.0e+63).toFixed(6)+"v"
+		// 60 Zeros for Novemdecillion
+		:Math.abs(Number(value))>=1.0e+60
+		?(Math.abs(Number(value))/1.0e+60).toFixed(6)+"N"
+		// 57 Zeros for Octodecillion
+		:Math.abs(Number(value))>=1.0e+57
+		?(Math.abs(Number(value))/1.0e+57).toFixed(5)+"O"
+		// 54 Zeros for Septendecillion
+		:Math.abs(Number(value))>=1.0e+54
+		?(Math.abs(Number(value))/1.0e+54).toFixed(5)+"St"
+		// 51 Zeros for Sexdecillion
+		:Math.abs(Number(value))>=1.0e+51
+		?(Math.abs(Number(value))/1.0e+51).toFixed(5)+"Sd"
+		// 48 Zeros for Quindecillion
+		:Math.abs(Number(value))>=1.0e+48
+		?(Math.abs(Number(value))/1.0e+48).toFixed(5)+"Qd"
+		// 45 Zeros for Quattuordecillion
+		:Math.abs(Number(value))>=1.0e+45
+		?(Math.abs(Number(value))/1.0e+45).toFixed(5)+"Qt"
 		// 42 Zeros for Tredecillion
-		return Math.abs(Number(value))>=1.0e+42
-		?(Math.abs(Number(value))/1.0e+42).toFixed(1)+"T"
+		:Math.abs(Number(value))>=1.0e+42
+		?(Math.abs(Number(value))/1.0e+42).toFixed(4)+"T"
 		// 39 Zeros for Duodecillion
 		:Math.abs(Number(value))>=1.0e+39
-		?(Math.abs(Number(value))/1.0e+39).toFixed(1)+"D"
+		?(Math.abs(Number(value))/1.0e+39).toFixed(4)+"D"
 		// 36 Zeros for Undecillion
 		:Math.abs(Number(value))>=1.0e+36
-		?(Math.abs(Number(value))/1.0e+36).toFixed(1)+"U"
+		?(Math.abs(Number(value))/1.0e+36).toFixed(4)+"U"
 		// 33 Zeros for Decillion
 		:Math.abs(Number(value))>=1.0e+33
-		?(Math.abs(Number(value))/1.0e+33).toFixed(1)+"d"
+		?(Math.abs(Number(value))/1.0e+33).toFixed(4)+"d"
 		// 30 Zeros for Nonillion
 		:Math.abs(Number(value))>=1.0e+30
-		?(Math.abs(Number(value))/1.0e+30).toFixed(1)+"n"
+		?(Math.abs(Number(value))/1.0e+30).toFixed(4)+"n"
 		// 27 Zeros for Octillion
 		:Math.abs(Number(value))>=1.0e+27
-		?(Math.abs(Number(value))/1.0e+27).toFixed(1)+"o"
+		?(Math.abs(Number(value))/1.0e+27).toFixed(3)+"o"
 		// 24 Zeroes for Septillion
 		:Math.abs(Number(value))>=1.0e+24
-		?(Math.abs(Number(value))/1.0e+24).toFixed(1)+"S"
+		?(Math.abs(Number(value))/1.0e+24).toFixed(3)+"S"
 		// 21 Zeroes for Sextillion
 		:Math.abs(Number(value))>=1.0e+21
-		?(Math.abs(Number(value))/1.0e+21).toFixed(1)+"s"
+		?(Math.abs(Number(value))/1.0e+21).toFixed(3)+"s"
 		// 18 Zeroes for Quintillion
 		:Math.abs(Number(value))>=1.0e+18
-		?(Math.abs(Number(value))/1.0e+18).toFixed(1)+"Q"
+		?(Math.abs(Number(value))/1.0e+18).toFixed(3)+"Q"
 		// 15 Zeroes for Quadrillion
 		:Math.abs(Number(value))>=1.0e+15
-		?(Math.abs(Number(value))/1.0e+15).toFixed(1)+"q"
+		?(Math.abs(Number(value))/1.0e+15).toFixed(2)+"q"
 		// 12 Zeroes for Trillions
 		:Math.abs(Number(value))>=1.0e+12
-		?(Math.abs(Number(value))/1.0e+12).toFixed(1)+"t"
+		?(Math.abs(Number(value))/1.0e+12).toFixed(2)+"t"
 		// 9 Zeroes for Billions
 		:Math.abs(Number(value))>=1.0e+9
-		?(Math.abs(Number(value))/1.0e+9).toFixed(1)+"B"
+		?(Math.abs(Number(value))/1.0e+9).toFixed(2)+"B"
 		// 6 Zeroes for Millions 
 		:Math.abs(Number(value))>=1.0e+6
 		?(Math.abs(Number(value))/1.0e+6).toFixed(1)+"M"
@@ -651,14 +951,17 @@ function piesToNumber(value){
 }
 
 function tickGame(){
-	pies=pies+(assistantChefAmount*assistantChefMultiplier)+piesPerSecond
-	if(getRndInteger(1,totalGoldenPieRarity)==1)goldenPie()
-	if(doSaveGame)saveGame()
+	var piesGainedCount=(assistantChefAmount*assistantChefMultiplier)+piesPerSecond
+	pies=pies+piesGainedCount
+	if(doSaveGame&&saveThisTick)saveGame()
+	saveThisTick=!saveThisTick
 	refreshGame()
+	randomGameValues()
 	ticksUntilMSGFades=ticksUntilMSGFades-1
 	if(ticksUntilMSGFades<0)ticksUntilMSGFades=0
 	if(ticksUntilMSGFades>6)ticksUntilMSGFades=1
 	if(ticksUntilMSGFades==0)$("#messageBar").fadeOut(100)
+	if(AFK)awayPieCount=awayPieCount+piesGainedCount
 	setTimeout(()=>{tickGame()},1000)
 }
 
@@ -676,46 +979,57 @@ function lsExists(key){
 
 function goldenPie(){
 	if(pies>=50){
-		a=$(document).width()-$(document).width()*0.1
-		b=$(document).height()-$(document).height()*0.1
-		c=0
-		d=getRndInteger(4,8)
-		x=getRndInteger(0,a)
-		y=getRndInteger(0,b)
-		z=`<div id="goldenPie${goldenPieID}" style="position:fixed;left:${x}px;top:${y}px;height:${d}%;width:auto;display:none;cursor:pointer;" onclick="goldenPieFunc(this)">
-			<img src="./assets/GoldenPie.png" style="width:100%;height:100%;">
+		var a=$(document).width()-$(document).width()*0.1
+		var b=$(document).height()-$(document).height()*0.1
+		var d=getRndInteger(6,8)
+		var x=getRndInteger(0,a)
+		var y=getRndInteger(0,b)
+		var z=`<div id="goldenPie${goldenPieID}" style="position:fixed;left:${x}px;top:${y}px;height:${d}%;width:auto;display:none;cursor:pointer;" onclick="goldenPieFunc(this);">
+			<img src="./assets/GoldenPie.png" style="width:100%;height:100%;" draggable="false">
 		</div>`
 		$('body').append(z)
-		gp=$('#goldenPie'+goldenPieID)
-		gp.fadeIn(500)
+		var gp=$('#goldenPie'+goldenPieID)
+		gp.fadeIn(150)
 		goldenPieID=goldenPieID+1
 		goldenPieSpin(gp)
+		goldenPieDestroy(gp)
 	}
 }
 
-async function goldenPieSpin(elem){
-	for(i=0;i<501;i++){
-		elem.css({"transform":"rotate("+c+"deg)"})
-		await sleep(15)
-		c=c+0.75
-	}
-	elem.fadeOut(500)
-	await sleep(500)
+async function goldenPieDestroy(elem){
+	var fadeoutdelay=getRndInteger(600,900)
+	await sleep(getRndInteger(1500,3000))
+	elem.fadeOut(fadeoutdelay)
+	await sleep(fadeoutdelay)
 	elem.remove()
 }
 
+async function goldenPieSpin(elem){
+	var rotatedeg=0
+	var forwards=getRndInteger(0,1)
+	for(let i=0;i<826;i++){
+		elem.css({"transform":"rotate("+rotatedeg+"deg)"})
+		await sleep(1)
+		if(forwards==1)rotatedeg=rotatedeg+1
+		else rotatedeg=rotatedeg-1
+	}
+}
+
 async function goldenPieFunc(elem){
+	clickFireworks($(elem),50,true)
 	$(elem).attr({"onclick":""})
 	$(elem).fadeOut(250)
-	await sleep(100)
+	await sleep(400)
 	$(elem).remove()
-	w=getRndInteger(round(pies/4),round(pies/2))
+	var w=getRndInteger(round(pies/8),round(pies/6))
 	pies=pies+w
 	messageGame("Lucky! +"+piesToNumber(w)+" pies!")
+	if(getRndInteger(1,50)==1)pieFrenzy()
 	refreshGame()
 }
 
 function devMode(){
+	inDevMode=true
 	doSaveGame=false
 	alert("*Dev Mode Enabled*\n\nWill not save progress.\nsReload to disable dev mode.")
 	pies=10**30
@@ -726,9 +1040,11 @@ function devMode(){
 	kitchenBackgroundImage=0
 	hasSeenCreditsThisSession=false
 	refreshGame()
-	messageGame("Dev Mode Enabled")
-	$('#MasterChefContainer').css({'display':'block'})
-	$('#InitialUpgradeContainer').css({'display':'block'})
+	chefsRefresh()
+	backgroundRefresh()
+	refreshInitialUpgradeTrack()
+	$('#idVer').html('Version: '+gameVersion+(inDevMode?' [Dev]':''))
+	messageGame("Dev Mode Enabled - Will Not Save Game",3)
 }
 
 function confirmationBox(text,btn1,btn2,btn1func,btn2func){
@@ -744,8 +1060,17 @@ function resetGame(){
 	confirmationBox("Reset Game?","Yes","No","localStorage.clear();setTimeout(()=>{window.location.reload()},100)","$('#popupMenu').fadeOut(500)")
 }
 
-//window.addEventListener("blur",()=>{Anticheat.pageFocused=0})
-//window.addEventListener("focus",()=>{Anticheat.pageFocused=1})
+window.addEventListener("blur",()=>{
+	AFK=true
+	awayPieCount=0
+})
+
+window.addEventListener("focus",()=>{
+	AFK=false
+	if(awayPieCount>0){
+		messageGame("While Gone You Made +"+piesToNumber(awayPieCount)+" Pies!",3)
+	}
+})
 
 function banMessage(){
 	$('#copyPasteLogo').attr('src','./assets/antiCheatLogo.png')
@@ -753,4 +1078,116 @@ function banMessage(){
 	$('#is_centerV').css({"top":"20%"})
 	$('#cheatingText').fadeIn(250)
 	$('#introScreen').fadeIn(200)
+}
+
+async function flashbang(){
+	if(!flashbangPlaying){
+		flashbangPlaying=true
+		$('html').css("animation","flashbang 5s forwards linear")
+		await sleep(5500)
+		$('html').css("animation","")
+		flashbangPlaying=false
+	}
+}
+
+async function glitchText(target,message,duration,displayLength=50,secondsBeforeAllowReplay){
+	if(!glitchTextPlaying){
+		glitchTextPlaying=true
+		var ogtext=''+target.html()
+		var animationLength=300
+		var introLength=90+(100-displayLength)
+		for(let i=0;i<(animationLength+1);i++){
+			if(i<=introLength){
+				target.html(ogtext.corrupt(i/introLength))
+			}else if(i>introLength&&i<(displayLength+introLength)){
+				target.html(message.corrupt((introLength-i)/introLength))
+			}else if(i>=(displayLength+introLength)){
+				target.html(ogtext.corrupt(Math.abs(((displayLength+introLength)-i)/introLength)))
+			}
+			await sleep(duration/animationLength)
+		}
+		target.html(ogtext)
+		await sleep(secondsBeforeAllowReplay)
+		glitchTextPlaying=false
+	}
+}
+
+async function pieFrenzy(){
+	var pieCount=getRndInteger(25,100)
+	for(let i=0;i<pieCount+1;i++){
+		goldenPie()
+		await sleep(getRndInteger(1,75))
+	}
+}
+
+function randomGameValues(){
+	if(getRndInteger(1,totalGoldenPieRarity)==1)goldenPie()
+	if(getRndInteger(1,5)==1)glitchText($('#notASecretMessageAtAllIPromise'),'Find Lore.',1,20,10)
+}
+
+function sortUpgrades(stLocal){
+	sortType=stLocal
+	if(sortType=='all'){
+		var collection=document.getElementsByClassName('sortAll')
+		for(let i=0;i<collection.length;i++){
+			collection[i].style.display='block'
+		}
+	}
+	if(sortType=='pps'){
+		hideAllUpgrades()
+		var collection=document.getElementsByClassName('sortPPS')
+		for(let i=0;i<collection.length;i++){
+			collection[i].style.display='block'
+		}
+	}
+	if(sortType=='ppc'){
+		hideAllUpgrades()
+		var collection=document.getElementsByClassName('sortPPC')
+		for(let i=0;i<collection.length;i++){
+			collection[i].style.display='block'
+		}
+	}
+	if(sortType=='misc'){
+		hideAllUpgrades()
+		var collection=document.getElementsByClassName('sortMisc')
+		for(let i=0;i<collection.length;i++){
+			collection[i].style.display='block'
+		}
+	}
+	refreshInitialUpgradeTrack()
+	refreshEmpireUpgradeTrack()
+	chefsRefresh()
+	refreshGame()
+}
+
+function hideAllUpgrades(){
+	var collection=document.getElementsByClassName('sortAll')
+	for(let i=0;i<collection.length;i++){
+		collection[i].style.display='none'
+	}
+}
+
+function toggleCursedMode(){
+	if(cursedModeActive==false){
+		cursedModeActive=true
+		$('html').css({"filter":"invert(1)"})
+	}else{
+		cursedModeActive=false
+		$('html').css({"filter":""})
+	}
+}
+
+async function lsdMode(){
+	var deg=1
+	var addSpeedAmount=0.001
+	while(true){
+		await sleep(1)
+		var index=0.1
+		$('div').each(function(){
+			$(this).css({"filter":"hue-rotate("+deg*index+"deg)"})
+			index=index+0.025
+		})
+		deg=deg+addSpeedAmount
+		if(addSpeedAmount<1)addSpeedAmount=addSpeedAmount+0.0005
+	}
 }
