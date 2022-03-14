@@ -96,10 +96,6 @@ $(document).ready(()=>{
 	//$('[data-toggle="tooltip"]').tooltip()
 
 	// Reset Game If On Wrong Version
-<<<<<<< Updated upstream
-	$('#idVer').html('Version: 0')
-=======
->>>>>>> Stashed changes
 	if(lsExists("gameVersion")&&gameVersion!=currentGameVersion){
 		doSaveGame=false
 		localStorage.clear()
@@ -732,11 +728,7 @@ function purchaseUpgradeRollingPins(elem){
 		if(settingsPurchaseAnimations)clickFireworks($(elem),50)
 		piesPerSecond=piesPerSecond+25
 		charge(rollingPinsPriceNew)
-<<<<<<< Updated upstream
-		rollingPinsPriceNew=round(rollingPinsPriceNew+1.15)
-=======
 		rollingPinsPriceNew=round(rollingPinsPriceNew*1.2)
->>>>>>> Stashed changes
 		refreshGame()
 	}else{
 		messageGame("You Can\'t Afford This (Price: "+piesToNumber(rollingPinsPriceNew)+")")
