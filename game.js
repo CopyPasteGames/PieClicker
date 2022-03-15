@@ -787,7 +787,7 @@ function purchaseNewBakery(elem){
 	if(canAfford(newBakeryPrice)){
 		if(settingsPurchaseAnimations)clickFireworks($(elem),50)
 		charge(newBakeryPrice)
-		newBakeryPrice=round(newBakeryPrice*2.5)
+		newBakeryPrice=round(newBakeryPrice*5)
 		piesPerSecond=round(piesPerSecond*2)
 		piesPerClick=round(piesPerClick*2)
 		bakeryCount=bakeryCount+1
@@ -798,9 +798,9 @@ function purchaseNewBakery(elem){
 }
 
 function purchaseHQ(elem){
-	// Requires At Least 5 Bakeries
+	// Requires At Least 4 Bakeries
 	if(canAfford(100000000)){
-		if(bakeryCount>=5){
+		if(bakeryCount>=4){
 			if(settingsPurchaseAnimations)clickFireworks($(elem),50)
 			charge(100000000)
 			HQunlocked=true
@@ -816,10 +816,10 @@ function purchaseHQ(elem){
 }
 
 function purchaseEmpire(elem){
-	// Requires HQ & 8 Bakeries
+	// Requires HQ & 6 Bakeries
 	if(canAfford(purchaseEmpirePrice)){
 		if(HQunlocked){
-			if(bakeryCount>=8){
+			if(bakeryCount>=6){
 				if(settingsPurchaseAnimations)clickFireworks($(elem),50)
 				purchaseEmpireTeir=purchaseEmpireTeir+1
 				if(purchaseEmpireTeir==1){
@@ -869,7 +869,7 @@ function purchaseEmpire(elem){
 }
 
 function piesToNumber(value){
-	if(settingsAbbreviateNumbers){
+	if(settingsAbbreviateNumbers&&value!=Infinity){
 		// 66 Zeros for Unvigintillion
 		return Math.abs(Number(value))>=1.0e+66
 		?(Math.abs(Number(value))/1.0e+66).toFixed(6)+"c"
