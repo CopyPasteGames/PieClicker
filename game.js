@@ -57,12 +57,8 @@ settingsClickAnimations    = true
 settingsPurchaseAnimations = true
 settingsAbbreviateNumbers  = true
 /*     Live Variables         */
-try{
-	const socket=io('https://live-chat-reboot.herokuapp.com/')
-	onlinePlay=true
-}catch{
-	onlinePlay=false
-}
+const socket=io('https://live-chat-reboot.herokuapp.com/')
+onlinePlay=true
 
 if(onlinePlay){
 	socket.on('PCA',function(data){
