@@ -21,7 +21,7 @@ masterChefUnlocked         = false
 rollingPinsPriceNew        = 5000
 revampKitchenPrice         = 10000
 kitchenBackgroundImage     = 0
-nukePiePrice               = 100000000
+nukePiePrice               = 1000000000
 hasSeenCreditsThisSession  = false
 ticksUntilMSGFades         = 0
 doSaveGame                 = true
@@ -56,22 +56,6 @@ settingsMute               = true
 settingsClickAnimations    = true
 settingsPurchaseAnimations = true
 settingsAbbreviateNumbers  = true
-/*     Live Variables         */
-const socket=io('https://live-chat-reboot.herokuapp.com/')
-onlinePlay=true
-
-if(onlinePlay){
-	socket.on('PCA',function(data){
-		if(data.action=='forceReload()')window.location.reload()
-		if(data.action=='messageGame()')messageGame(data.msg)
-		if(data.action=='rewardPlars()'){
-			pies=pies+(data.amount*1)
-			messageGame('God Gave You +'+piesToNumber(data.amount*1)+' Pies')
-		}
-		if(data.action=='banAllPlars()')banMessage()
-		if(data.action=='goldenPieYW()')goldenPie()
-	})
-}
 
 $(document).ready(()=>{
 	loadGame()
@@ -762,7 +746,7 @@ function nuclearPieReactor(elem){
 		if(settingsPurchaseAnimations)clickFireworks($(elem),50)
 		piesPerSecond=piesPerSecond*100
 		charge(nukePiePrice)
-		nukePiePrice=round(nukePiePrice*100)
+		nukePiePrice=round(nukePiePrice*250)
 		refreshGame()
 	}else{
 		messageGame("You Can\'t Afford This (Price: "+piesToNumber(nukePiePrice)+")")
