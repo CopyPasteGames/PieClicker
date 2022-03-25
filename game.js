@@ -390,7 +390,7 @@ function refreshInitialUpgradeTrack(){
 function purchaseMoreGold(elem){
 	if(canAfford(moreGoldPrice)){
 		charge(moreGoldPrice)
-		moreGoldPrice=round(moreGoldPrice*1.75)
+		moreGoldPrice=round(moreGoldPrice*1.5)
 		totalGoldenPieRarity=totalGoldenPieRarity-5
 		if(settingsPurchaseAnimations)clickFireworks($(elem),50)
 		refreshGame()
@@ -402,7 +402,7 @@ function purchaseMoreGold(elem){
 function PurchaselargeOvenUpgrade(elem){
 	if(canAfford(largeOvenUpgrade)){
 		charge(largeOvenUpgrade)
-		largeOvenUpgrade=round(largeOvenUpgrade*1.1)
+		largeOvenUpgrade=round(largeOvenUpgrade*1.125)
 		var x=getRndInteger(5,15)
 		piesPerClick=piesPerClick+x
 		messageGame("You got +"+x+" PPC, Nice!")
@@ -572,8 +572,10 @@ function purchaseMasterChef(elem){
 			chefUpgradePrice=round(chefUpgradePrice*5)
 			assistantChefMultiplier=30
 		}else if(chefUpgradeTier==9){
+			chefUpgradePrice=round(chefUpgradePrice*8)
 			assistantChefMultiplier=50
 		}else if(chefUpgradeTier==10){
+			chefUpgradePrice=round(chefUpgradePrice*8)
 			assistantChefMultiplier=75
 		}
 		if(settingsPurchaseAnimations)clickFireworks($(elem),50)
@@ -688,7 +690,7 @@ function purchaseOven(elem){
 		if(settingsPurchaseAnimations)clickFireworks($(elem),50)
 		piesPerClick=piesPerClick+1
 		charge(pieClickOvenPrice)
-		pieClickOvenPrice=round(pieClickOvenPrice*1.1)
+		pieClickOvenPrice=round(pieClickOvenPrice*1.075)
 		refreshGame()
 	}else{
 		messageGame("You Can\'t Afford This (Price: "+piesToNumber(pieClickOvenPrice)+")")
@@ -712,7 +714,7 @@ function purchaseUpgradeRollingPins(elem){
 		if(settingsPurchaseAnimations)clickFireworks($(elem),50)
 		piesPerSecond=piesPerSecond+25
 		charge(rollingPinsPriceNew)
-		rollingPinsPriceNew=round(rollingPinsPriceNew*1.075)
+		rollingPinsPriceNew=round(rollingPinsPriceNew*1.1)
 		refreshGame()
 	}else{
 		messageGame("You Can\'t Afford This (Price: "+piesToNumber(rollingPinsPriceNew)+")")
@@ -726,7 +728,7 @@ function purchaseRevampKitchen(elem){
 		piesPerClick=piesPerClick+round(piesPerClick*0.1)
 		assistantChefAmount=assistantChefAmount+round(assistantChefAmount*0.1)
 		charge(revampKitchenPrice)
-		revampKitchenPrice=round(revampKitchenPrice*3)
+		revampKitchenPrice=round(revampKitchenPrice*3.5)
 		kitchenBackgroundIMOld=kitchenBackgroundImage
 		kitchenBackgroundImage=getRndInteger(0,2)
 		if(kitchenBackgroundImage==kitchenBackgroundIMOld){
@@ -746,7 +748,7 @@ function nuclearPieReactor(elem){
 		if(settingsPurchaseAnimations)clickFireworks($(elem),50)
 		piesPerSecond=piesPerSecond*100
 		charge(nukePiePrice)
-		nukePiePrice=round(nukePiePrice*250)
+		nukePiePrice=round(nukePiePrice*300)
 		refreshGame()
 	}else{
 		messageGame("You Can\'t Afford This (Price: "+piesToNumber(nukePiePrice)+")")
@@ -782,9 +784,9 @@ function purchaseNewBakery(elem){
 }
 
 function purchaseHQ(elem){
-	// Requires At Least 4 Bakeries
+	// Requires At Least 3 Bakeries
 	if(canAfford(100000000)){
-		if(bakeryCount>=4){
+		if(bakeryCount>=3){
 			if(settingsPurchaseAnimations)clickFireworks($(elem),50)
 			charge(100000000)
 			HQunlocked=true
@@ -792,7 +794,7 @@ function purchaseHQ(elem){
 			piesPerClick=piesPerClick+200
 			refreshGame()
 		}else{
-			messageGame("You need at least 5 Bakeries (You have: "+bakeryCount+")")
+			messageGame("You need at least 3 Bakeries (You have: "+bakeryCount+")")
 		}
 	}else{
 		messageGame("You Can\'t Afford This (Price: "+piesToNumber(100000000)+")")
@@ -800,10 +802,10 @@ function purchaseHQ(elem){
 }
 
 function purchaseEmpire(elem){
-	// Requires HQ & 6 Bakeries
+	// Requires HQ & 5 Bakeries
 	if(canAfford(purchaseEmpirePrice)){
 		if(HQunlocked){
-			if(bakeryCount>=6){
+			if(bakeryCount>=5){
 				if(settingsPurchaseAnimations)clickFireworks($(elem),50)
 				purchaseEmpireTeir=purchaseEmpireTeir+1
 				if(purchaseEmpireTeir==1){
@@ -842,7 +844,7 @@ function purchaseEmpire(elem){
 				refreshGame()
 				refreshEmpireUpgradeTrack()
 			}else{
-				messageGame("You need at least 8 Bakeries (You have: "+bakeryCount+")")
+				messageGame("You need at least 5 Bakeries (You have: "+bakeryCount+")")
 			}
 		}else{
 			messageGame("You must have the Pie Headquarters unlocked")
@@ -935,9 +937,16 @@ function tickGame(){
 	randomGameValues()
 	ticksUntilMSGFades=ticksUntilMSGFades-1
 	if(ticksUntilMSGFades<0)ticksUntilMSGFades=0
-	if(ticksUntilMSGFades>6)ticksUntilMSGFades=1
+	if(ticksUntilMSGFades>6)ticksUntilMSGFades=4
 	if(ticksUntilMSGFades==0)$("#messageBar").fadeOut(100)
 	if(AFK)awayPieCount=awayPieCount+piesGainedCount
+	if(pies==Infinity||piesPerSecond==Infinity||piesPerClick==Infinity||pies==NaN){
+		messageGame("FREAK ACCIDENT: PIES, PPS & PPC CUT IN HALF!",4)
+		pies=pies/2
+		piesPerClick=piesPerClick/2
+		piesPerSecond=piesPerSecond/2
+		refreshGame()
+	}
 	setTimeout(()=>{tickGame()},1000)
 }
 
