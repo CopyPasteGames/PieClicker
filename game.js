@@ -598,7 +598,7 @@ async function PleasePlayTheCredits(){
 	$("#creditsName").fadeOut(500)
 	$("#creditsTitle").fadeOut(500)
 	await sleep(500)
-	$("#creditsName").html("Azuriah Jerez")
+	$("#creditsName").html("Azalea Jerez")
 	$("#creditsTitle").html("Graphic Designer")
 	$("#creditsName").fadeIn(500)
 	$("#creditsTitle").fadeIn(500)
