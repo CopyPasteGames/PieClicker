@@ -10,7 +10,6 @@
         <meta name="theme-color" content="#fc496dff">
 		<title>PieClicker | CopyPaste Games</title>
 		<link rel="icon" href="./assets/Pie.png">
-		<link rel="stylesheet" href="./bootstrap.css">
 		<link rel="stylesheet" href="./game.css">
 		<script src="https://kgsensei.dev/js/ka.js"></script>
 		<script src="./jquery.js"></script>
@@ -21,13 +20,13 @@
 				<img src="./assets/KitchenBackgroundBlue.png" style="width:100%;height:100%;" draggable="false" id="pieChild">
 			</div>
 			<div id="pieCount">
-				<div class="centerText" id="pieCountReal">
-					Pies: -
+				<div class="centerText">
+					Pies: <span id="pies">0</span>
 				</div>
 			</div>
 			<div id="pieGRate">
-				<div class="centerText" id="pieGRateReal">
-					Pies/Sec: - | Pies/Click: -
+				<div class="centerText">
+					Pies/Sec: <span id="pps">0</span> | Pies/Click: <span id="ppc">0</span>
 				</div>
 			</div>
 			<div id="pie">
@@ -63,240 +62,74 @@
 			</div>
 			<div class="slightPaddingUpgrades" style="overflow-y:scroll;" id="upgradesContainer">
 				<br>
-				<div class="pieUpgrade sortAll sortPPC" onclick="startClickUpgrade(this)" id="InitialUpgradeContainer">
-					<img src="./assets/UpgradeButtonPumpkinPie.png" style="width:100%;height:100%;" draggable="false" id="InitialUpgrade">
-				</div>
-				<div class="pieUpgrade sortAll sortPPC" onclick="purchaseOven(this)" id="OvenUpgradeContainer">
-					<img src="./assets/UpgradeButtonOven.png" style="width:100%;height:100%;" draggable="false" id="OvenUpgrade">
-				</div>
-				<div class="pieUpgrade sortAll sortPPS" onclick="purchaseChef(this)" id="AssistantChefContainer">
-					<img src="./assets/UpgradeButtonAssistantChef.png" style="width:100%;height:100%;" draggable="false" id="AssistantChef">
-				</div>
-				<div class="pieUpgrade sortAll sortPPS" onclick="purchaseMasterChef(this)" id="MasterChefContainer">
-					<img src="./assets/UpgradeButtonApprenticeChef.png" style="width:100%;height:100%;" draggable="false" id="MasterChef">
-				</div>
-				<div class="pieUpgrade sortAll sortPPS" onclick="purchaseUpgradeRollingPins(this)" id="RollingPinsContainer">
-					<img src="./assets/UpgradeButtonRollingPin.png" style="width:100%;height:100%;" draggable="false" id="RollingPins">
-				</div>
-				<div class="pieUpgrade sortAll sortPPS" onclick="purchaseUpgradeFlyers(this)" id="UpgradeFlyersContainer">
-					<img src="./assets/UpgradeFlyers.png" style="width:100%;height:100%;" draggable="false" id="UpgradeFlyers">
-				</div>
-				<div class="pieUpgrade sortAll sortMisc" onclick="purchaseMoreGold(this)" id="MoreGoldContainer">
-					<img src="./assets/UpgradeButtonMoreGold.png" style="width:100%;height:100%;" draggable="false" id="MoreGold">
-				</div>
-				<div class="pieUpgrade sortAll sortPPC" onclick="PurchaselargeOvenUpgrade(this)" id="LargeUpgradeContainer">
-					<img src="./assets/UpgradeButtonLargeOvenUpgrade.png" style="width:100%;height:100%;" draggable="false" id="LargeUpgrade">
-				</div>
-				<div class="pieUpgrade sortAll sortPPC sortPPS" onclick="purchaseRevampKitchen(this)" id="RevampKitchenContainer">
-					<img src="./assets/UpgradeButtonRevampKitchen.png" style="width:100%;height:100%;" draggable="false" id="RevampKitchen">
-				</div>
-				<div class="pieUpgrade sortAll sortPPC sortPPS sortMisc" onclick="purchaseNewBakery(this)" id="NewBakeryContainer">
-					<img src="./assets/UpgradeButtonBakery.png" style="width:100%;height:100%;" draggable="false" id="NewBakery">
-				</div>
-				<div class="pieUpgrade sortAll sortPPC sortPPS sortMisc" onclick="purchaseHQ(this)" id="pieHQContainer">
-					<img src="./assets/UpgradeButtonHeadquarters.png" style="width:100%;height:100%;" draggable="false" id="pieHQ">
-				</div>
-				<div class="pieUpgrade sortAll sortPPS" onclick="nuclearPieReactor(this)" id="NukePieContainer">
-					<img src="./assets/UpgradeButtonNuclearPieReactor.png" style="width:100%;height:100%;" draggable="false" id="NukePie">
-				</div>
-				<div class="pieUpgrade sortAll sortPPC sortPPS sortMisc" onclick="purchaseEmpire(this)" id="pieEmpireContainer">
-					<img src="./assets/UpgradeButtonEmpire.png" style="width:100%;height:100%;" draggable="false" id="pieEmpire">
-				</div>
-				<br>
 			</div>
 		</div>
+
+
 		<div id="pieRightF"></div>
 		<div id="pieOtherMenu">
-			<div id="pieOtherMenuBg"></div>
+
+
 			<div id="otherMenuTitle">
 				<div class="centerText">
 					Other Stuff
 				</div>
 			</div>
+
+
 			<div class="slightPadding">
 				<br>
 				<div class="otherMenuOption" onclick="PleasePlayTheCredits()">
 					<img src="./assets/Button.png" style="width:100%;height:100%;" draggable="false">
 					<div class="btnText">Credits</div>
 				</div>
+
+
 				<div class="otherMenuOption" onclick='resetGame()'>
 					<img src="./assets/Button.png" style="width:100%;height:100%;" draggable="false">
 					<div class="btnText">Reset</div>
 				</div>
-				<div class="otherMenuOption" onclick="$('#usefulInfoScreen').fadeIn(500)">
+
+
+				<div class="otherMenuOption">
 					<img src="./assets/Button.png" style="width:100%;height:100%;" draggable="false">
 					<div class="btnText">Useful Info</div>
 				</div>
+
+
 				<div class="otherMenuOption" onclick="settingsRefresh();$('#settingsMenu').fadeIn(500)">
 					<img src="./assets/Button.png" style="width:100%;height:100%;" draggable="false">
 					<div class="btnText">Settings</div>
 				</div>
 				<br>
+<<<<<<< Updated upstream
 				<div style="font-size:1.25vw">Discord Server: <a href="https://link.kgsensei.dev/discord" style="color:aqua;" target="_blank">https://link.kgsensei.dev/discord</a>
 				<br>[For dev news, Bug reports, Feature requests, etc.]
+=======
+
+
+				<div style="font-size:1.25vw">
+					Discord Server:
+					<a href="https://link.kgsensei.dev/discord" style="color:aqua;" target="_blank">https://link.kgsensei.dev/discord</a>
+					<br>
+					[For dev news, Bug reports, Feature requests, etc.]
+>>>>>>> Stashed changes
 				</div>
 			</div>
 		</div>
+
+
 		<div id="creditsOverlay">
-			<div id="creditsName">Example Name</div>
-			<div id="creditsTitle">Example Title</div>
+			<div id="creditsName"></div>
+			<div id="creditsTitle"></div>
 		</div>
+
+
 		<div id="messageBar">
-			<div id="messageBarText" class="centerText">
-				You Can't Afford This
-			</div>
+			<div id="messageBarText" class="centerText"></div>
 		</div>
-		<div id="usefulInfoScreen">
-			<div class="slightPadding" style="overflow-y:scroll;">
-				<h3>How to Play</h3>
-				<div class="uis_half">
-					To play PieClicker all you need to do is click on the large pie.
-					When you have enough pies buy some upgrades so you can make even
-					more profit. The process repeats itself. It is really quite fun.
-				</div>
-				<h3>How to Read the Numbers</h3>
-				<div class="uis_half">
-					Reading the numbers in PieClicker can get hard. Even more so when
-					you get really far in the game and there are new units that you
-					haven't seen before. Never fear, we have a helpful chart for you!
-					<table>
-						<thead>
-							<tr>
-								<td>Name</td>
-								<td>Symbol</td>
-								<td>Value</td>
-							</tr>
-						</thead>
-						<tbody>
-							<tr>
-								<td>Thousand</td>
-								<td>K</td>
-								<td>10^3</td>
-							</tr>
-							<tr>
-								<td>Million</td>
-								<td>M</td>
-								<td>10^6</td>
-							</tr>
-							<tr>
-								<td>Billion</td>
-								<td>B</td>
-								<td>10^9</td>
-							</tr>
-							<tr>
-								<td>Trillion</td>
-								<td>t</td>
-								<td>10^12</td>
-							</tr>
-							<tr>
-								<td>Quadrillion</td>
-								<td>q</td>
-								<td>10^15</td>
-							</tr>
-							<tr>
-								<td>Quintillion</td>
-								<td>Q</td>
-								<td>10^18</td>
-							</tr>
-							<tr>
-								<td>Sextillion</td>
-								<td>s</td>
-								<td>10^21</td>
-							</tr>
-							<tr>
-								<td>Septillion</td>
-								<td>S</td>
-								<td>10^24</td>
-							</tr>
-							<tr>
-								<td>Octillion</td>
-								<td>o</td>
-								<td>10^27</td>
-							</tr>
-							<tr>
-								<td>Nonillion</td>
-								<td>n</td>
-								<td>10^30</td>
-							</tr>
-							<tr>
-								<td>Decillion</td>
-								<td>d</td>
-								<td>10^33</td>
-							</tr>
-							<tr>
-								<td>Undecillion</td>
-								<td>U</td>
-								<td>10^36</td>
-							</tr>
-							<tr>
-								<td>Duodecillion</td>
-								<td>D</td>
-								<td>10^39</td>
-							</tr>
-							<tr>
-								<td>Tredecillion</td>
-								<td>T</td>
-								<td>10^42</td>
-							</tr>
-							<tr>
-								<td>Quattuordecillion</td>
-								<td>Qt</td>
-								<td>10^45</td>
-							</tr>
-							<tr>
-								<td>Quindecillion</td>
-								<td>Qd</td>
-								<td>10^48</td>
-							</tr>
-							<tr>
-								<td>Sexdecillion</td>
-								<td>Sd</td>
-								<td>10^51</td>
-							</tr>
-							<tr>
-								<td>Septendecillion</td>
-								<td>St</td>
-								<td>10^54</td>
-							</tr>
-							<tr>
-								<td>Octodecillion</td>
-								<td>O</td>
-								<td>10^57</td>
-							</tr>
-							<tr>
-								<td>Novemdecillion</td>
-								<td>N</td>
-								<td>10^60</td>
-							</tr>
-							<tr>
-								<td>Vigintillion</td>
-								<td>v</td>
-								<td>10^63</td>
-							</tr>
-							<tr>
-								<td>Unvigintillion</td>
-								<td>c</td>
-								<td>10^66</td>
-							</tr>
-						</tbody>
-					</table>
-					If you have more pies then this, how?
-				</div>
-				<h3>Goal of the Game</h3>
-				<div class="uis_half">
-					Have fun. <div style="display:inline;" id="notASecretMessageAtAllIPromise">Get Pies.</div>
-				</div>
-				<h3>Patch Notes [Version 2]</h3>
-				<div class="uis_half">
-					-We did so much that we can't include patch notes because it would go on forever.
-				</div>
-				<br>
-				<br>
-			</div>
-			<div class="uis_exit" onclick="$('#usefulInfoScreen').fadeOut(500)">
-				<img src="./assets/x-circle-fill.svg" style="width:100%;height:100%;" draggable="false">
-			</div>
-		</div>
+
+
 		<div id="introScreen">
 			<div id="is_centerV">
 				<div id="is_centerH">
@@ -304,6 +137,8 @@
 				</div>
 			</div>
 		</div>
+
+
 		<div id="popupMenu">
 			<div id="pm_text">Text</div>
 			<div id="pm_btn1" onclick="null">
@@ -317,6 +152,8 @@
 				</div>
 			</div>
 		</div>
+
+
 		<div id="settingsMenu">
 			<div class="slightPadding" style="overflow-y:scroll;">
 				<h3>PieClicker Game Settings</h3>
@@ -326,7 +163,7 @@
 							<tr class="tableNoBorder">
 								<td class="tableNoBorder">Mute Game</td>
 								<td class="tableNoBorder">
-									<div onclick="settingsMute=!settingsMute;$('#musicPlayer').remove();isPlayingMusic=false;settingsRefresh()" class="settingsBtn">
+									<div onclick="pcS.mute =! pcS.mute; $('#musicPlayer').remove(); pcG.isPlayingMusic = false; settingsRefresh()" class="settingsBtn">
 										<img id="settingsMuteGame" src="./assets/CheckBoxEmpty.png" style="width:100%;height:100%;">
 									</div>
 								</td>
@@ -334,7 +171,7 @@
 							<tr class="tableNoBorder">
 								<td class="tableNoBorder">Do Click Animations</td>
 								<td class="tableNoBorder">
-									<div onclick="settingsClickAnimations=!settingsClickAnimations;settingsRefresh()" class="settingsBtn">
+									<div onclick="pcS.clickAnim =! pcS.clickAnim; settingsRefresh()" class="settingsBtn">
 										<img id="settingsDoClickAnimations" src="./assets/CheckBoxEmpty.png" style="width:100%;height:100%;">
 									</div>
 								</td>
@@ -342,7 +179,7 @@
 							<tr class="tableNoBorder">
 								<td class="tableNoBorder">Do Purchase Animations</td>
 								<td class="tableNoBorder">
-									<div onclick="settingsPurchaseAnimations=!settingsPurchaseAnimations;settingsRefresh()" class="settingsBtn">
+									<div onclick="pcS.purchaseAnim =! pcS.purchaseAnim; settingsRefresh()" class="settingsBtn">
 										<img id="settingsDoPurchaseAnimations" src="./assets/CheckBoxEmpty.png" style="width:100%;height:100%;">
 									</div>
 								</td>
@@ -350,7 +187,7 @@
 							<tr class="tableNoBorder">
 								<td class="tableNoBorder">Abbreviate Numbers</td>
 								<td class="tableNoBorder">
-									<div onclick="settingsAbbreviateNumbers=!settingsAbbreviateNumbers;settingsRefresh()" class="settingsBtn">
+									<div onclick="pcS.abbreviateInts =! pcS.abbreviateInts; settingsRefresh()" class="settingsBtn">
 										<img id="settingAbbreviateNumbers" src="./assets/CheckBoxEmpty.png" style="width:100%;height:100%;">
 									</div>
 								</td>
@@ -365,57 +202,20 @@
 				<img src="./assets/x-circle-fill.svg" style="width:100%;height:100%;" draggable="false">
 			</div>
 		</div>
-		<div id="cheatingText">
-			<b><i>-Anticheat Activated-</i></b>
-			<p>
-				Cheating was detected on your account. This could be an auto clicker or just some suspicious behavior.
-				Depending on what was detected we may have reduced your number of Pies, Pies/Sec and/or Pies/Click as
-				punishment. Sorry for the inconvenience.
-			</p>
-		</div>
+
 		<div id="whatIsPlayingContainer">
 			<div id="whatIsPlayingCover">
 				<img src="./assets/PieOreoCheesecake.png" style="width:100%;height:100%;" id="whatIsPlayingCoverAsset">
 			</div>
-			<div id="whatIsPlayingTrack">Example Track</div>
-			<div id="whatIsPlayingArtist">Ian Paris-Wright</div>
+			<div id="whatIsPlayingTrack"></div>
+			<div id="whatIsPlayingArtist"></div>
 		</div>
+
 		<div style="position:fixed;width:20%;left:79.5%;font-size:3vh;height:5%;top:95%;text-align:right;" id="idVer">
 			Error
 		</div>
-		<div id="updateBarThingy">
-			<div id="UBT_image">
-				<h1>PieClicker: Empires</h1>
-				<img src="./assets/PieClickerEmpires.png" style="width:75%;height:auto;" draggable="false">
-				<p style="font-size:1vw;">
-					The PieClicker Empires update adds tons of new content to the game!<br>
-					In this update we changed prices and price multipliers for almost
-					every single item in the game.<br>
-					We also added music disk textures for different songs!<br>
-					We updated the purchase animations and added golden pie animations.<br>
-					You can also now sort upgrades by the things they will change!<br>
-					The ground work for multiplier features was set in place this update.<br>
-					This is the first update where there are upgrade purchase requirements
-					other than if you can afford it or not!<br>
-					We made an upgrade that can raise the changes of a golden pie.<br>
-					We also made a few game performance improvements!<br><br>
-					We hope you enjoy this update.<br>Have Fun!<br><br>
-					-CopyPaste Games<br><br>
-					**Development Note**<br>
-					We will be taking a long break after this update. We worked really hard on<br>
-					it and will bring more fun and interesting updates in the future but for now<br>
-					we need to rest. Thank you for understanding.
-				</p>
-			</div>
-			<div class="uis_exit" onclick="$('#updateBarThingy').fadeOut(250)">
-				<img src="./assets/x-circle-fill.svg" style="width:100%;height:100%;" draggable="false">
-			</div>
-		</div>
-		<img src="./assets/GoldenSparkle.png" id="upgradeParticalAsset" style="display:none;">
-		<script src="https://live-chat-reboot.herokuapp.com/socket.io/socket.io.js"></script>
-		<script src="./bootstrap.js"></script>
+
 		<script src="./fireworks.js"></script>
-		<script src="./kgLib.js"></script>
 		<script src="./anim.js"></script>
 		<script src="./game.js"></script>
 		<script src="./music.js"></script>

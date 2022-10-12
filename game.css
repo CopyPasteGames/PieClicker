@@ -1,216 +1,91 @@
-:root{
-	touch-action:pan-x pan-y;
-	--bgTheme:#fc496dff;
-	--textColor:rgb(255,255,255);
-	--tooltipbg:rgb(25,25,25);
+:root {
+	touch-action: pan-x pan-y;
+	--bgTheme: #fc496dff;
+	--textColor: rgb(255, 255, 255);
+	--tooltipbg: rgb(25, 25, 25);
 }
 
-@font-face{
-	font-family:CenturyGothic;
-	src:url("./assets/CenturyGothic.ttf");
+@font-face {
+	font-family: CenturyGothic;
+	src: url("./assets/CenturyGothic.ttf");
 }
 
-/*
-I really want to use this in a future update.
-Basically you can change the way the entire
-website looks just from this one line in the
-code. Not sure it's very easy on the PC though.
-
-html{
-	filter:invert(1);
-}
-*/
-
-body{
-	font-family:CenturyGothic;
-	background-color:black;
-	-webkit-user-select:none;
-	touch-action:pan-x pan-y;
-	color:var(--textColor);
-	-moz-user-select:none;
-	-ms-user-select:none;
-	overflow-x:hidden;
-	user-select:none;
-	padding:0px;
-	margin:0px;
+body {
+	font-family: CenturyGothic;
+	background-color: black;
+	touch-action: pan-x pan-y;
+	color: var(--textColor);
+	overflow-x: hidden;
+	user-select: none;
+	padding: 0px;
+	margin: 0px;
 }
 
-#pieClicker{
-	position:absolute;
-	left:0%;
-	top:0%;
-	width:30%;
-	height:100%;
+#pieClicker {
+	position: fixed;
+	left: 0%;
+	top: 0%;
+	width: 30%;
+	height: 100%;
 }
 
-#pie{
-	cursor:pointer;
-	position:absolute;
-	width:90%;
-	height:auto;
-	left:5%;
-	top:15%;
+#pie {
+	cursor: pointer;
+	position: absolute;
+	width: 90%;
+	height: auto;
+	left: 5%;
+	top: 15%;
 }
 
-#pieCount{
-	position:absolute;
-	width:100%;
-	top:0%;
-	left:0%;
-	height:3%;
-	text-align:center;
-	background-color:var(--bgTheme);
-	font-size:2.5vh;
-	overflow:hidden;
+#pieCount {
+	position: absolute;
+	width: 100%;
+	top: 0%;
+	left: 0%;
+	height: 3%;
+	text-align: center;
+	background-color: var(--bgTheme);
+	font-size: 2.5vh;
 }
 
-#pieGRate{
-	position:absolute;
-	width:100%;
-	top:3%;
-	left:0%;
-	height:3%;
-	text-align:center;
-	background-color:var(--bgTheme);
-	font-size:2.5vh;
-	overflow:hidden;
+#pieGRate {
+	position: absolute;
+	width: 100%;
+	top: 3%;
+	left: 0%;
+	height: 3%;
+	text-align: center;
+	background-color: var(--bgTheme);
+	font-size: 2.5vh;
 }
 
-#pieRightD{
-	position:absolute;
-	left:30%;
-	top:0%;
-	height:100%;
-	width:0.5%;
-	background-color:var(--bgTheme);
+#pieRightD {
+	position: absolute;
+	left: 30%;
+	top: 0%;
+	height: 100%;
+	width: 0.5%;
+	background-color: var(--bgTheme);
 }
 
-#pieUpgrades{
-	background-image:url("./assets/UpgradesBackground.png");
-	background-repeat:round;
-	position:absolute;
-	left:30.5%;
-	width:30%;
-	height:100%;
-	top:0%;
+#pieUpgrades {
+	background-image: url("./assets/UpgradesBackground.png");
+	background-repeat: round;
+	position: fixed;
+	left: 30.5%;
+	width: 30%;
+	height: 100%;
+	top: 0%;
 }
 
-.slightPadding{
-	position:absolute;
-	left:0%;
-	width:95%;
-	margin-left:5%;
-	height:96%;
-	top:4%;
-}
-
-#upgradesTitle{
-	position:absolute;
-	width:100%;
-	top:0%;
-	left:0%;
-	height:4%;
-	text-align:center;
-	background-color:var(--bgTheme);
-	font-size:3vh;
-	overflow:hidden;
-}
-
-.pieUpgrade{
-	padding-bottom:2%;
-	position:relative;
-	cursor:pointer;
-	width:90%;
-	height:auto;
-}
-
-#pieRightF{
-	position:absolute;
-	left:60.5%;
-	top:0%;
-	height:100%;
-	width:0.5%;
-	background-color:var(--bgTheme);
-}
-
-#pieOtherMenu{
-	background-color:var(--tooltipbg);
-	position:absolute;
-	left:61%;
-	width:39%;
-	height:100%;
-	top:0%;
-}
-
-#otherMenuTitle{
-	position:absolute;
-	width:100%;
-	top:0%;
-	left:0%;
-	height:4%;
-	text-align:center;
-	background-color:var(--bgTheme);
-	font-size:3vh;
-	overflow:hidden;
-}
-
-.otherMenuOption{
-	display:inline-flex;
-	cursor:pointer;
-	position:relative;
-	width:45%;
-	height:auto;
-}
-
-.btnText{
-	position:absolute;
-	top:25%;
-	left:0%;
-	width:100%;
-	text-align:center;
-	font-size:2vw;
-}
-
-#creditsOverlay{
-	display:none;
-	position:absolute;
-	z-index:999999999;
-	top:0px;
-	left:0px;
-	width:100%;
-	height:100%;
-	z-index:9999;
-	background-color:black;
-}
-
-#creditsName{
-	display:none;
-	position:absolute;
-	top:40%;
-	left:0%;
-	width:100%;
-	font-size:50px;
-	color:var(--bgTheme);
-	text-align:center;
-}
-
-#creditsTitle{
-	display:none;
-	position:absolute;
-	top:50%;
-	left:0%;
-	width:100%;
-	font-size:35px;
-	color:var(--bgTheme);
-	text-align:center;
-}
-
-#pieBackground{
-	position:fixed;
-	top:0%;
-	left:0px;
-	height:100%;
-	z-index:-5%;
+.slightPadding {
+	position: absolute;
+	left: 0%;
+	width: 95%;
+	margin-left: 5%;
+	height: 96%;
+	top: 4%;
 }
 
 @keyframes GoUp{
@@ -223,457 +98,341 @@ body{
 	}
 }
 
-@keyframes flashbang{
-	0%{
-		filter:brightness(1);
-	}2%{
-		filter:brightness(100);
-	}100%{
-		filter:brightness(1);
-	}
+#upgradesTitle {
+	position: absolute;
+	width: 100%;
+	top: 0%;
+	left: 0%;
+	height: 4%;
+	text-align: center;
+	background-color: var(--bgTheme);
+	font-size: 3vh;
 }
 
-#messageBar{
-	display:none;
-	position:absolute;
-	z-index:99999;
-	top:80%;
-	left:25%;
-	width:50%;
-	height:5%;
-	font-size:2.5vh;
-	background-color:var(--bgTheme);
-	border-radius:8px;
+.pieUpgrade {
+	padding-bottom: 2%;
+	position: relative;
+	cursor: pointer;
+	width: 90%;
+	height: auto;
 }
 
-.centerText{
-	cursor:inherit;
-	position:absolute;
-	top:50%;
-	left:0%;
-	width:100%;
-	text-align:center;
-	transform:translate(0%,-50%);
+#pieRightF {
+	position: absolute;
+	left: 60.5%;
+	top: 0%;
+	height: 100%;
+	width: 0.5%;
+	background-color: var(--bgTheme);
 }
 
-#usefulInfoScreen{
-	display:none;
-	position:absolute;
-	left:10%;
-	width:80%;
-	height:90%;
-	top:5%;
-	border-style:solid;
-	border-radius:7px;
-	border-color:black;
-	border-width:3.5px;
-	background-color:var(--bgTheme);
-	font-size:1vw;
+#pieOtherMenu {
+	background-image: url('./assets/BrickTexture.png');
+	background-repeat: repeat;
+	position: fixed;
+	left: 61%;
+	width: 39%;
+	height: 100%;
+	top: 0%;
 }
 
-.uis_half{
-	padding-left:12.5px;
-	width:50%;
-	word-wrap:break-word;
+#otherMenuTitle {
+	position: absolute;
+	width: 100%;
+	top: 0%;
+	left: 0%;
+	height: 4%;
+	text-align: center;
+	background-color: var(--bgTheme);
+	font-size: 3vh;
 }
 
-thead{
-	background-color:rgba(0,0,0,0.5);
+.otherMenuOption {
+	display: inline-flex;
+	cursor: pointer;
+	position: relative;
+	width: 45%;
+	height: auto;
 }
 
-table,thead,td{
-	padding:2px;
-	border-style:solid;
-	border-width:2px;
-	border-color:black;
-	border-collapse:collapse;
+.btnText {
+	position: absolute;
+	top: 25%;
+	left: 0%;
+	width: 100%;
+	text-align: center;
+	font-size: 2vw;
 }
 
-.tableNoBorder{
-	padding-left:10px;
-	padding-right:10px;
-	padding-bottom:5px;
-	border-style:none;
-	border-collapse:collapse;
+#creditsOverlay {
+	display: none;
+	position: absolute;
+	top: 0px;
+	left: 0px;
+	width: 100%;
+	height: 100%;
+	z-index: 9999;
+	background-color: black;
 }
 
-.uis_exit{
-	cursor:pointer;
-	position:absolute;
-	left:96%;
-	top:2%;
-	width:2%;
-	height:auto;
+#creditsName {
+	display: none;
+	position: absolute;
+	top: 40%;
+	left: 0%;
+	width: 100%;
+	font-size: 50px;
+	color: var(--bgTheme);
+	text-align: center;
 }
 
-.tooltip{
-	position:absolute;
-	z-index:99999999;
-	display:block;
-	font-family:'Courier New',Courier,monospace;
-	font-style:normal;
-	font-weight:400;
-	line-height:1.42857143;
-	line-break:auto;
-	text-align:left;
-	text-align:start;
-	text-decoration:none;
-	text-shadow:none;
-	text-transform:none;
-	letter-spacing:normal;
-	word-break:normal;
-	word-spacing:normal;
-	word-wrap:normal;
-	white-space:normal;
-	font-size:2vh;
-	filter:alpha(opacity=0);
-	opacity:0;
+#creditsTitle {
+	display: none;
+	position: absolute;
+	top: 50%;
+	left: 0%;
+	width: 100%;
+	font-size: 35px;
+	color: var(--bgTheme);
+	text-align: center;
 }
 
-.tooltip.in{
-	z-index:99999;
-	filter:alpha(opacity=90);
-	opacity:0.9;
+#pieBackground {
+	position: fixed;
+	top: 0%;
+	left: 0px;
+	height: 100%;
+	z-index: -5%;
 }
 
-.tooltip.top{
-	z-index:99999;
-	padding:5px 0;
-	margin-top:-3px;
+#messageBar {
+	display: none;
+	position: fixed;
+	z-index: 99999;
+	top: 80%;
+	left: 25%;
+	width: 50%;
+	height: 5%;
+	font-size: 2.5vh;
+	background-color: var(--bgTheme);
+	border-radius: 8px;
 }
 
-.tooltip.right{
-	z-index:99999;
-	padding:0 5px;
-	margin-left:3px;
+.centerText {
+	cursor: inherit;
+	position: absolute;
+	top: 50%;
+	left: 0%;
+	width: 100%;
+	text-align: center;
+	transform: translate(0%, -50%);
 }
 
-.tooltip.bottom{
-	z-index:99999;
-	padding:5px 0;
-	margin-top:3px;
+.uis_half {
+	padding-left: 12.5px;
+	width: 50%;
+	word-wrap: break-word;
 }
 
-.tooltip.left{
-	z-index:99999;
-	padding:0 5px;
-	margin-left:-3px;
+.uis_exit {
+	cursor: pointer;
+	position: absolute;
+	left: 96%;
+	top: 2%;
+	width: 2%;
+	height: auto;
 }
 
-.tooltip.top .tooltip-arrow{
-	z-index:99999;
-	bottom:0;
-	left:50%;
-	margin-left:-5px;
-	border-width:5px 5px 0;
-	border-top-color:var(--tooltipbg);
+#introScreen {
+	background-color: black;
+	position: fixed;
+	z-index: 99999;
+	display: block;
+	width: 100%;
+	height: 100%;
+	top: 0%;
+	left: 0%;
 }
 
-.tooltip.top-left .tooltip-arrow{
-	z-index:99999;
-	right:5px;
-	bottom:0;
-	margin-bottom:-5px;
-	border-width:5px 5px 0;
-	border-top-color:var(--tooltipbg);
+#is_centerV {
+	position: absolute;
+	height: 20%;
+	top: 35%;
+	left: 0%;
+	width: 100%;
 }
 
-.tooltip.top-right .tooltip-arrow{
-	z-index:99999;
-	bottom:0;
-	left:5px;
-	margin-bottom:-5px;
-	border-width:5px 5px 0;
-	border-top-color:var(--tooltipbg);
+#is_centerH {
+	position: absolute;
+	left: 50%;
+	top: 0%;
+	height: 100%;
+	transform: translate(-50%, 0%);
 }
 
-.tooltip.right .tooltip-arrow{
-	z-index:99999;
-	top:50%;
-	left:0;
-	margin-top:-5px;
-	border-width:5px 5px 5px 0;
-	border-right-color:var(--tooltipbg);
+#popupMenu {
+	display: none;
+	position: absolute;
+	width: 25%;
+	left: 37.5%;
+	height: 25%;
+	top: 30%;
+	background-color: var(--bgTheme);
+	border: solid black 2px;
+	border-radius: 5px;
 }
 
-.tooltip.left .tooltip-arrow{
-	z-index:99999;
-	top:50%;
-	right:0;
-	margin-top:-5px;
-	border-width:5px 0 5px 5px;
-	border-left-color:var(--tooltipbg);
+#pm_text {
+	position: absolute;
+	width: 90%;
+	height: 40%;
+	text-align: center;
+	top: 30%;
+	left: 50%;
+	font-size: 1.25vw;
+	transform: translate(-50%, -50%);
 }
 
-.tooltip.bottom .tooltip-arrow{
-	z-index:99999;
-	top:0;
-	left:50%;
-	margin-left:-5px;
-	border-width:0 5px 5px;
-	border-bottom-color:var(--tooltipbg);
+#pm_btn1 {
+	position: absolute;
+	width: 45%;
+	height: 20%;
+	text-align: center;
+	top: 75%;
+	left: 3.33%;
+	font-size: 1vw;
+	border-radius: 5px;
+	background-color: rgba(0, 0, 0, 0.5);
+	cursor: pointer;
 }
 
-.tooltip.bottom-left .tooltip-arrow{
-	z-index:99999;
-	top:0;
-	right:5px;
-	margin-top:-5px;
-	border-width:0 5px 5px;
-	border-bottom-color:var(--tooltipbg);
+#pm_btn2 {
+	position: absolute;
+	width: 45%;
+	height: 20%;
+	text-align: center;
+	top: 75%;
+	left: 51%;
+	font-size: 1vw;
+	border-radius: 5px;
+	background-color: rgba(0, 0, 0, 0.5);
+	cursor: pointer;
 }
 
-.tooltip.bottom-right .tooltip-arrow{
-	z-index:99999;
-	top:0;
-	left:5px;
-	margin-top:-5px;
-	border-width:0 5px 5px;
-	border-bottom-color:var(--tooltipbg);
+#settingsMenu {
+	display: none;
+	position: absolute;
+	width: 80%;
+	left: 10%;
+	height: 90%;
+	top: 5%;
+	border-style: solid;
+    border-radius: 7px;
+    border-color: black;
+    border-width: 3.5px;
+    background-color: var(--bgTheme);
+    font-size: 1vw;
 }
 
-.tooltip-inner{
-	z-index:99999;
-	max-width:100%;
-	padding:3px 8px;
-	text-align:center;
-	background-color:var(--tooltipbg);
-	border-radius:4px;
+.settingsBtn {
+	width: 15%;
+	height: auto;
 }
 
-.tooltip-arrow{
-	z-index:99999;
-	position:absolute;
-	width:0;
-	height:0;
-	border-color:transparent;
-	border-style:solid;
+#cheatingText {
+	position: fixed;
+	z-index: 99999;
+	top: 45%;
+	width: 60%;
+	height: 20%;
+	left: 20%;
+	text-align: center;
+	display: none;
+	font-size: 3vh;
 }
 
-#introScreen{
-	background-color:black;
-	position:fixed;
-	z-index:999999;
-	display:block;
-	width:100%;
-	height:100%;
-	top:0%;
-	left:0%;
+#whatIsPlayingContainer {
+	display: none;
+	position: absolute;
+	left: 75%;
+	width: 25%;
+	height: 12.5%;
+	top: 80%;
+	background-color: var(--bgTheme);
+	border-bottom-left-radius: 5px;
+	border-top-left-radius: 5px;
 }
 
-#is_centerV{
-	position:absolute;
-	height:20%;
-	top:35%;
-	left:0%;
-	width:100%;
+#whatIsPlayingCover {
+	padding: 6px;
+	position: absolute;
+	height: 100%;
+	width: auto;
+	left: 0%;
+	top: 0%;
 }
 
-#is_centerH{
-	position:absolute;
-	left:50%;
-	top:0%;
-	height:100%;
-	transform:translate(-50%,0%);
+#whatIsPlayingTrack {
+	position: absolute;
+	width: 80%;
+	left: 20%;
+	top: 0%;
+	text-align: center;
+	font-size: 5vh;
 }
 
-#popupMenu{
-	display:none;
-	position:absolute;
-	width:25%;
-	left:37.5%;
-	height:25%;
-	top:30%;
-	background-color:var(--bgTheme);
-	border-color:black;
-	border-style:solid;
-	border-width:2px;
-	border-radius:5px;
+#whatIsPlayingArtist {
+	position: absolute;
+	width: 80%;
+	left: 20%;
+	top: 50%;
+	text-align: center;
+	font-size: 3.5vh;
 }
 
-#pm_text{
-	position:absolute;
-	width:90%;
-	height:40%;
-	text-align:center;
-	top:30%;
-	left:50%;
-	font-size:1.25vw;
-	transform:translate(-50%,-50%);
+#upgradeShowAll {
+	position: absolute;
+	width: 25%;
+	height: 2%;
+	left: 0%;
+	top: 4%;
 }
 
-#pm_btn1{
-	position:absolute;
-	width:45%;
-	height:20%;
-	text-align:center;
-	top:75%;
-	left:3.33%;
-	font-size:1vw;
-	border-radius:5px;
-	background-color:rgba(0,0,0,0.5);
-	cursor:pointer;
+#upgradeShowPPS {
+	position: absolute;
+	width: 25%;
+	height: 2%;
+	left: 25%;
+	top: 4%;
 }
 
-#pm_btn2{
-	position:absolute;
-	width:45%;
-	height:20%;
-	text-align:center;
-	top:75%;
-	left:51%;
-	font-size:1vw;
-	border-radius:5px;
-	background-color:rgba(0,0,0,0.5);
-	cursor:pointer;
+.sortButton {
+	font-size: 2vh;
+	background-color: var(--bgTheme);
+	cursor: pointer;
 }
 
-#settingsMenu{
-	display:none;
-	position:absolute;
-	width:80%;
-	left:10%;
-	height:90%;
-	top:5%;
-	border-style:solid;
-    border-radius:7px;
-    border-color:black;
-    border-width:3.5px;
-    background-color:var(--bgTheme);
-    font-size:1vw;
+#upgradeShowPPC {
+	position: absolute;
+	width: 25%;
+	height: 2%;
+	left: 50%;
+	top: 4%;
 }
 
-.settingsBtn{
-	width:15%;
-	height:auto;
+#upgradeShowPEU {
+	position: absolute;
+	width: 25%;
+	height: 2%;
+	left: 75%;
+	top: 4%;
 }
 
-#cheatingText{
-	position:absolute;
-	z-index:999999999;
-	top:45%;
-	width:60%;
-	height:20%;
-	left:20%;
-	text-align:center;
-	display:none;
-	font-size:3vh;
-}
-
-#whatIsPlayingContainer{
-	display:none;
-	position:absolute;
-	left:75%;
-	width:25%;
-	height:12.5%;
-	top:80%;
-	background-color:var(--bgTheme);
-	border-bottom-left-radius:5px;
-	border-top-left-radius:5px;
-}
-
-#whatIsPlayingCover{
-	padding:6px;
-	position:absolute;
-	height:100%;
-	width:auto;
-	left:0%;
-	top:0%;
-}
-
-#whatIsPlayingTrack{
-	position:absolute;
-	width:80%;
-	left:20%;
-	top:0%;
-	text-align:center;
-	font-size:5vh;
-}
-
-#whatIsPlayingArtist{
-	position:absolute;
-	width:80%;
-	left:20%;
-	top:50%;
-	text-align:center;
-	font-size:3.5vh;
-}
-
-#pieOtherMenuBg{
-	position:absolute;
-	background-image:url('./assets/BrickTexture.png');
-	background-repeat:repeat;
-	filter:brightness(0.75);
-	left:0%;
-	top:0%;
-	width:100%;
-	height:100%;
-	z-index:0;
-}
-
-#upgradeShowAll{
-	position:absolute;
-	width:25%;
-	height:2%;
-	left:0%;
-	top:4%;
-}
-
-#upgradeShowPPS{
-	position:absolute;
-	width:25%;
-	height:2%;
-	left:25%;
-	top:4%;
-}
-
-.sortButton{
-	font-size:2vh;
-	background-color:var(--bgTheme);
-	cursor:pointer;
-}
-
-#upgradeShowPPC{
-	position:absolute;
-	width:25%;
-	height:2%;
-	left:50%;
-	top:4%;
-}
-
-#upgradeShowPEU{
-	position:absolute;
-	width:25%;
-	height:2%;
-	left:75%;
-	top:4%;
-}
-
-.slightPaddingUpgrades{
-	position:absolute;
-	left:0%;
-	width:95%;
-	margin-left:5%;
-	height:94%;
-	top:6%;
-}
-
-#updateBarThingy{
-	display:none;
-	position:absolute;
-	z-index:top;
-	background-color:var(--bgTheme);
-	color:var(--textColor);
-	width:80%;
-	left:10%;
-	height:80%;
-	top:10%;
-	border-radius:0px;
-	border-width:2.5px;
-	border-color:black;
-	overflow-y:scroll;
-}
-
-#UBT_image{
-	padding:1.5%;
+.slightPaddingUpgrades {
+	position: absolute;
+	left: 0%;
+	width: 95%;
+	margin-left: 5%;
+	height: 94%;
+	top: 6%;
 }
