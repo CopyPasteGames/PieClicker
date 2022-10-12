@@ -13,7 +13,7 @@ pcG = {
 	hasInteracted: false,
 	MSGtick: 0,
 	pieAnimID: 0,
-	inDev: true,
+	inDev: false,
 	isPlayingMusic: false
 }
 // PieClicker Remember Game Variables
