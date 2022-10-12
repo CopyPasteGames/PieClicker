@@ -431,7 +431,7 @@ $(document).ready(() => {
 		var b = Date.parse(new Date())
 		var timeDiff = ((b - a) / 1000)
 		if(timeDiff > 2) {
-			var timeDiffCount = ((assistantChefAmount * assistantChefMultiplier) + pcP.pps) * timeDiff
+			var timeDiffCount = (pcP.pps * pcP.ppsMult) * timeDiff
 			pies = pies + timeDiffCount
 			waitThenMessageGame("Made " + p2n(timeDiffCount) + " Pies While Gone!", 2000, 3)
 		}
