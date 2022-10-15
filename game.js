@@ -19,7 +19,8 @@ pcG = {
 // PieClicker Remember Game Variables
 pcZ = {
 	kitchenBackground: 0,
-	hasSeenCredits: false
+	hasSeenCredits: false,
+	tickSpeed: 1
 }
 // PieClicker Remember Upgrade Variables
 pcR = [
@@ -133,8 +134,8 @@ pcU = [
 
 			if(pcR[i].tier != pcU[i].assets.length) pcR[i].tier = pcR[i].tier + 1
 			let asset = pcU[i].assets[pcR[i].tier]
-			if(asset != undefined) $(elem).children()[0].src = `./assets/${asset}`
-			else $(elem).css("display", "none")
+			if(asset != undefined) $(elem).children()[0].src = `${r[13]}${asset}`
+			else $(elem).css(r[10], r[9])
 			
 			pcP.ppcMult = pcP.ppcMult + 1
 			// UPDATE THIS WITH THE pieClickMultiplier VARIABLES FROM old_game.js
@@ -208,8 +209,8 @@ pcU = [
 			
 			if(pcR[i].tier != pcU[i].assets.length) pcR[i].tier = pcR[i].tier + 1
 			let asset = pcU[i].assets[pcR[i].tier]
-			if(asset != undefined) $(elem).children()[0].src = `./assets/${asset}`
-			else $(elem).css("display", "none")
+			if(asset != undefined) $(elem).children()[0].src = `${r[13]}${asset}`
+			else $(elem).css(r[10], r[9])
 
 			pcP.ppcMult = pcP.ppcMult + 1
 			// UPDATE THIS WITH THE assistantChefMultiplier VARIABLES FROM old_game.js
@@ -389,8 +390,8 @@ pcU = [
 			
 			if(pcR[i].tier != pcU[i].assets.length) pcR[i].tier = pcR[i].tier + 1
 			let asset = pcU[i].assets[pcR[i].tier]
-			if(asset != undefined) $(elem).children()[0].src = `./assets/${asset}`
-			else $(elem).css("display", "none")
+			if(asset != undefined) $(elem).children()[0].src = `${r[13]}${asset}`
+			else $(elem).css(r[10], r[9])
 
 			pcP.ppcMult = pcP.ppcMult + 1
 			// UPDATE THIS WITH THE pps VARIABLES FROM old_game.js
@@ -416,10 +417,27 @@ pcP = {
 	ppsMult: 1
 }
 
+const r = [
+	'Version:',
+	'gameVersion',
+	'#pie',
+	'#idVer',
+	'#copyPasteLogo',
+	'#creditsName',
+	'#creditsTitle',
+	'#messageBar',
+	'[Dev]',
+	'none',
+	'display',
+	'Checked',
+	'Empty',
+	'./assets/'
+]
+
 for(let i = 0; i < pcU.length; i++) {
     $('#upgradesContainer').append(`
         <div class="pieUpgrade sort${pcU[i].sort.replace(/ /g, ' sort')}" onclick="pcU[${i}].buy(this, ${i})">
-			<img src="./assets/${pcU[i].assets[pcR[i].tier]}" id="pcu${pcU[i].id}" style="width:100%;height:100%;" draggable="false">
+			<img src="${r[13]}${pcU[i].assets[pcR[i].tier]}" id="pcu${pcU[i].id}" style="width:100%;height:100%;" draggable="false">
         </div>
     `)
 }
@@ -429,29 +447,29 @@ $(document).ready(() => {
 	if(a != undefined) {
 		var a = Date.parse(a)
 		var b = Date.parse(new Date())
-		var timeDiff = ((b - a) / 1000)
-		if(timeDiff > 2) {
-			var timeDiffCount = (pcP.pps * pcP.ppsMult) * timeDiff
-			pies = pies + timeDiffCount
-			waitThenMessageGame("Made " + p2n(timeDiffCount) + " Pies While Gone!", 2000, 3)
+		var d = ((b - a) / 1000)
+		if(d > 5) {
+			var c = (pcP.pps * pcP.ppsMult) * d
+			pies = pies + c
+			waitThenMessageGame("Made " + p2n(c) + " Pies While Gone!", 2000, 3)
 		}
 	} else {
 		$('#updateBarThingy').delay(1750).fadeIn(500)
 	}
 
 	// Reset Game If On Wrong Version
-	if(lsExists("gameVersion") && pcV.version != pcV.currentVersion) {
+	if(lsExists(r[1]) && pcV.version != pcV.currentVersion) {
 		pcG.doSaveGame = false
 		localStorage.clear()
 		setTimeout(() => {
 			window.location.reload()
 		}, 100)
 	} else {
-		localStorage.setItem("gameVersion", pcV.currentVersion)
+		localStorage.setItem(r[1], pcV.currentVersion)
 		pcV.version = pcV.currentVersion
 	}
 
-	$('#idVer').html('Version:' + pcV.version + (pcG.inDev ? '[Dev]' : ''))
+	$(r[3]).html(r[0] + pcV.version + (pcG.inDev ? r[8] : ''))
 
 	refreshAll()
 })
@@ -479,26 +497,26 @@ function loadGame() {
 	refreshAll()
 }
 
-async function waitThenMessageGame(message, ms, time=2) {
-	await sleep(ms)
-	messageGame(message, time)
+async function waitThenMessageGame(m, s, t = 2) {
+	await sleep(s)
+	messageGame(m, t)
 }
 
 // Show loading screen logo
 $(window).bind("load", () => {
 	loadGame()
-	setInterval(() => {tickGame()}, 1000)
-	$('#copyPasteLogo').delay(200).fadeIn(250)
-	$('#copyPasteLogo').delay(775).fadeOut(250)
+	pcTick=setInterval(()=>{tickGame()},pcZ.tickSpeed*1000)
+	$(r[4]).delay(200).fadeIn(250)
+	$(r[4]).delay(775).fadeOut(250)
 	$("#introScreen").delay(1500).fadeOut(750)
 })
 
 // When the user clicks on the pie
-$("#pie").click((e) => {
-	$("#pie").stop(true, false)
-	var clickAmount = pcP.ppc * pcP.ppcMult
+$(r[2]).click((e) => {
+	$(r[2]).stop(true, false)
+	var c = pcP.ppc * pcP.ppcMult
 	pcG.pieAnimID = pcG.pieAnimID + 1
-	$("body").append(`<div id="pieInd${pcG.pieAnimID}">+${p2n(clickAmount)}</div>`)
+	$("body").append(`<div id="pieInd${pcG.pieAnimID}">+${p2n(c)}</div>`)
 	$('#pieInd' + pcG.pieAnimID).css({
 		"position": "absolute",
 		"top": (e.pageY + randInt(-10, 10)) + "px",
@@ -506,19 +524,19 @@ $("#pie").click((e) => {
 		"color": "white",
 		"font-weight": "800",
 		"font-size": "29px",
-		"pointer-events": "none",
+		"pointer-events": r[9],
 		// Chaned this from 'linear' to 'ease-in' be sure to test each use case.
 		"animation": "GoUp 1250ms forwards ease-in"
 	})
 	$("#pieInd" + pcG.pieAnimID).show()
-	$("#pie").animate({"width": "95%", "left": "2.5%", "top": "14%"}, 40)
-	$("#pie").animate({"width": "90%", "left": "5%", "top": "15%"}, 100)
+	$(r[2]).animate({"width": "95%", "left": "2.5%", "top": "14%"}, 40)
+	$(r[2]).animate({"width": "90%", "left": "5%", "top": "15%"}, 100)
 	removeElem("#pieInd" + pcG.pieAnimID)
 	if(!pcG.hasInteracted) {
 		pcG.hasInteracted = true
 		setInterval(() => {musicTick()}, 10000)
 	}
-	pcP.pies = pcP.pies + clickAmount
+	pcP.pies = pcP.pies + c
 	reloadStats()
 })
 
@@ -530,8 +548,8 @@ if(!pcG.inDev) {
 	document.onkeydown = function(e) {
 		e = e || window.event
 		if(!e.ctrlKey) return
-		var code = e.which || e.keyCode
-		switch(code) {
+		var c = e.which || e.keyCode
+		switch(c) {
 			case 83: 
 				e.preventDefault()
 			case 73: 
@@ -545,11 +563,11 @@ function boughtItem(i) {
 	pcR[i].qnty = pcR[i].qnty + 1
 }
 
-function round(number) {return Math.round(number)}
-function removeElem(animID) {setTimeout(() => {$(animID).remove()}, 2250)}
-function sleep(ms) {return new Promise(resolve => setTimeout(resolve, ms))}
-function CLog(msg) {console.log("[game.js " + new Date().getTime() + "] " + msg)}
-function randInt(min, max) {return Math.floor(Math.random() * (max - min + 1)) + min}
+function round(n) {return Math.round(n)}
+function removeElem(a) {setTimeout(() => {$(a).remove()}, 2250)}
+function sleep(m) {return new Promise(r => setTimeout(r, m))}
+function CLog(m) {console.log("[game.js " + new Date().getTime() + "] " + m)}
+function randInt(n, x) {return Math.floor(Math.random() * (x - n + 1)) + n}
 
 function reloadStats() {
 	$("#pies").html(p2n(pcP.pies))
@@ -558,57 +576,61 @@ function reloadStats() {
 }
 
 function empireRefresh() {
-	let i = 11, asset = pcU[i].assets[pcR[i].tier]
-	if(asset != undefined) $(`#pcu${i}`).attr("src", `./assets/${asset}`)
-	else $(`#pcu${i}`).parent().css("display", "none")
+	let i = 11,
+		a = pcU[i].assets[pcR[i].tier]
+	if(a != undefined) $(`#pcu${i}`).attr("src", `${r[13]}${a}`)
+	else $(`#pcu${i}`).parent().css(r[10], r[9])
 }
 
 function piesRefresh() {
-	let i = 0, asset = pcU[i].assets[pcR[i].tier]
-	if(asset != undefined) $(`#pcu${i}`).attr("src", `./assets/${asset}`)
-	else $(`#pcu${i}`).parent().css("display", "none")
+	let i = 0,
+		a = pcU[i].assets[pcR[i].tier]
+	if(a != undefined) $(`#pcu${i}`).attr("src", `${r[13]}${a}`)
+	else $(`#pcu${i}`).parent().css(r[10], r[9])
 }
 
 function settingsRefresh() {
-	$("#settingsMuteGame").attr("src", `./assets/CheckBox${pcS.mute ? 'Checked' : 'Empty'}.png`)
-	$("#settingsDoClickAnimations").attr("src", `./assets/CheckBox${pcS.clickAnim ? 'Checked' : 'Empty'}.png`)
-	$("#settingsDoPurchaseAnimations").attr("src", `./assets/CheckBox${pcS.purchaseAnim ? 'Checked' : 'Empty'}.png`)
-	$("#settingAbbreviateNumbers").attr("src", `./assets/CheckBox${pcS.abbreviateInts ? 'Checked' : 'Empty'}.png`)
+	let f = `${r[13]}CheckBox`
+	$("#settingsMuteGame").attr("src", `${f}${pcS.mute ? r[11] : r[12]}.png`)
+	$("#settingsDoClickAnimations").attr("src", `${f}${pcS.clickAnim ? r[11] : r[12]}.png`)
+	$("#settingsDoPurchaseAnimations").attr("src", `${f}${pcS.purchaseAnim ? r[11] : r[12]}.png`)
+	$("#settingAbbreviateNumbers").attr("src", `${f}${pcS.abbreviateInts ? r[11] : r[12]}.png`)
 	if(pcG.doSaveGame) saveGame()
 }
 
 function chefsRefresh() {
-	let i = 3, asset = pcU[i].assets[pcR[i].tier]
-	if(asset != undefined) $(`#pcu${i}`).attr("src", `./assets/${asset}`)
-	else $(`#pcu${i}`).parent().css("display", "none")
+	let i = 3,
+		a = pcU[i].assets[pcR[i].tier]
+	if(a != undefined) $(`#pcu${i}`).attr("src", `${r[13]}${a}`)
+	else $(`#pcu${i}`).parent().css(r[10], r[9])
 }
 
 function backgroundRefresh() {
-	let bgImgs = ['KitchenBackgroundBlue', 'KitchenBackgroundPink', 'KitchenBackgroundWhite']
-	$("#pieChild").attr("src", `./assets/${bgImgs[pcZ.kitchenBackground]}.png`)
+	let b = ['KitchenBackgroundBlue', 'KitchenBackgroundPink', 'KitchenBackgroundWhite']
+	$("#pieChild").attr("src", `${r[13]}${b[pcZ.kitchenBackground]}.png`)
 }
 
 async function PleasePlayTheCredits() {
-	var credPeople = [
-		{"name": "kgsensei", "title": "Lead Programmer"},
-		{"name": "Azalea Jerez", "title": "Graphic Designer"},
-		{"name": "Ian Paris-Wright", "title": "Music Artist"},
-		{"name": "Lucient Chapin", "title": "Creative Director"},
-		{"name": "Caleb Rhinehart", "title": "Concept Builder"},
-		{"name": "Kylea Reed", "title": "Concept Builder"},
-		{"name": "CopyPaste Games", "title": "Copyright &copy; 2022"},
-		{"name": "Thank You", "title": "For Playing PieClicker!"}
+	var y = [
+		{"n": "kgsensei", "t": "Lead Programmer"},
+		{"n": "Azalea Jerez", "t": "Graphic Designer"},
+		{"n": "Ian Paris-Wright", "t": "Music Artist"},
+		{"n": "Lucient Chapin", "t": "Creative Director"},
+		{"n": "Caleb Rhinehart", "t": "Concept Builder"},
+		{"n": "Kylea Reed", "t": "Concept Builder"},
+		{"n": "CopyPaste Games", "t": "Copyright &copy; 2022"},
+		{"n": "Thank You", "t": "For Playing PieClicker!"}
 	]
 	$("#creditsOverlay").fadeIn(1000)
 	await sleep(500)
-	for(let i = 0; i < credPeople.length; i++) {
-		$("#creditsName").html(credPeople[i].name)
-		$("#creditsTitle").html(credPeople[i].title)
-		$("#creditsName").fadeIn(500)
-		$("#creditsTitle").fadeIn(500)
+	for(let i = 0; i < y.length; i++) {
+		$(r[5]).html(y[i].n)
+		$(r[6]).html(y[i].t)
+		$(r[5]).fadeIn(500)
+		$(r[6]).fadeIn(500)
 		await sleep(2000)
-		$("#creditsName").fadeOut(500)
-		$("#creditsTitle").fadeOut(500)
+		$(r[5]).fadeOut(500)
+		$(r[6]).fadeOut(500)
 		await sleep(500)
 	}
 	$("#creditsOverlay").fadeOut(1000)
@@ -621,61 +643,61 @@ async function PleasePlayTheCredits() {
 	}
 }
 
-function charge(itemPrice) {
-	if(pcP.pies >= itemPrice) {
-		pcP.pies = pcP.pies - itemPrice
+function charge(i) {
+	if(pcP.pies >= i) {
+		pcP.pies = pcP.pies - i
 		return true
 	} else {
-		messageGame("You Can\'t Afford This (Price:  "+p2n(itemPrice)+")")
+		messageGame("You Can\'t Afford This (Price:  "+p2n(i)+")")
 		return false
 	}
 }
 
-async function messageGame(message, time = 3) {
-	pcG.MSGtick = pcG.MSGtick + time
-	$("#messageBar").stop(true, true)
-	$("#messageBarText").html(message)
-	$("#messageBar").fadeIn(100)
+async function messageGame(m, t = 3) {
+	pcG.MSGtick = pcG.MSGtick + t
+	$(r[7]).stop(true, true)
+	$("#messageBarText").html(m)
+	$(r[7]).fadeIn(100)
 }
 
-function p2n(value) {
+function p2n(v) {
 	// 66 Zeros for Unvigintillion
-    return Math.abs(Number(value)) >= 1.0e+66 ? (Math.abs(Number(value)) / 1.0e+66).toFixed(6) + "c"// 63 Zeros for Vigintillion
-    : Math.abs(Number(value)) >= 1.0e+63 ? (Math.abs(Number(value)) / 1.0e+63).toFixed(6) + "v"// 60 Zeros for Novemdecillion
-    : Math.abs(Number(value)) >= 1.0e+60 ? (Math.abs(Number(value)) / 1.0e+60).toFixed(6) + "N"// 57 Zeros for Octodecillion
-    : Math.abs(Number(value)) >= 1.0e+57 ? (Math.abs(Number(value)) / 1.0e+57).toFixed(5) + "O"// 54 Zeros for Septendecillion
-    : Math.abs(Number(value)) >= 1.0e+54 ? (Math.abs(Number(value)) / 1.0e+54).toFixed(5) + "St"// 51 Zeros for Sexdecillion
-    : Math.abs(Number(value)) >= 1.0e+51 ? (Math.abs(Number(value)) / 1.0e+51).toFixed(5) + "Sd"// 48 Zeros for Quindecillion
-    : Math.abs(Number(value)) >= 1.0e+48 ? (Math.abs(Number(value)) / 1.0e+48).toFixed(5) + "Qd"// 45 Zeros for Quattuordecillion
-    : Math.abs(Number(value)) >= 1.0e+45 ? (Math.abs(Number(value)) / 1.0e+45).toFixed(5) + "Qt"// 42 Zeros for Tredecillion
-    : Math.abs(Number(value)) >= 1.0e+42 ? (Math.abs(Number(value)) / 1.0e+42).toFixed(4) + "T"// 39 Zeros for Duodecillion
-    : Math.abs(Number(value)) >= 1.0e+39 ? (Math.abs(Number(value)) / 1.0e+39).toFixed(4) + "D"// 36 Zeros for Undecillion
-    : Math.abs(Number(value)) >= 1.0e+36 ? (Math.abs(Number(value)) / 1.0e+36).toFixed(4) + "U"// 33 Zeros for Decillion
-    : Math.abs(Number(value)) >= 1.0e+33 ? (Math.abs(Number(value)) / 1.0e+33).toFixed(4) + "d"// 30 Zeros for Nonillion
-    : Math.abs(Number(value)) >= 1.0e+30 ? (Math.abs(Number(value)) / 1.0e+30).toFixed(4) + "n"// 27 Zeros for Octillion
-    : Math.abs(Number(value)) >= 1.0e+27 ? (Math.abs(Number(value)) / 1.0e+27).toFixed(3) + "o"// 24 Zeroes for Septillion
-    : Math.abs(Number(value)) >= 1.0e+24 ? (Math.abs(Number(value)) / 1.0e+24).toFixed(3) + "S"// 21 Zeroes for Sextillion
-    : Math.abs(Number(value)) >= 1.0e+21 ? (Math.abs(Number(value)) / 1.0e+21).toFixed(3) + "s"// 18 Zeroes for Quintillion
-    : Math.abs(Number(value)) >= 1.0e+18 ? (Math.abs(Number(value)) / 1.0e+18).toFixed(3) + "Q"// 15 Zeroes for Quadrillion
-    : Math.abs(Number(value)) >= 1.0e+15 ? (Math.abs(Number(value)) / 1.0e+15).toFixed(2) + "q"// 12 Zeroes for Trillions
-    : Math.abs(Number(value)) >= 1.0e+12 ? (Math.abs(Number(value)) / 1.0e+12).toFixed(2) + "t"// 9 Zeroes for Billions
-    : Math.abs(Number(value)) >= 1.0e+9 ? (Math.abs(Number(value)) / 1.0e+9).toFixed(2) + "B"// 6 Zeroes for Millions 
-    : Math.abs(Number(value)) >= 1.0e+6 ? (Math.abs(Number(value)) / 1.0e+6).toFixed(1) + "M"// 3 Zeroes for Thousands
-    : Math.abs(Number(value)) >= 1.0e+3 ? (Math.abs(Number(value)) / 1.0e+3).toFixed(1) + "K" : Math.abs(Number(value))
+    return Math.abs(Number(v)) >= 1.0e+66 ? (Math.abs(Number(v)) / 1.0e+66).toFixed(6) + "c"// 63 Zeros for Vigintillion
+    : Math.abs(Number(v)) >= 1.0e+63 ? (Math.abs(Number(v)) / 1.0e+63).toFixed(6) + "v"// 60 Zeros for Novemdecillion
+    : Math.abs(Number(v)) >= 1.0e+60 ? (Math.abs(Number(v)) / 1.0e+60).toFixed(6) + "N"// 57 Zeros for Octodecillion
+    : Math.abs(Number(v)) >= 1.0e+57 ? (Math.abs(Number(v)) / 1.0e+57).toFixed(5) + "O"// 54 Zeros for Septendecillion
+    : Math.abs(Number(v)) >= 1.0e+54 ? (Math.abs(Number(v)) / 1.0e+54).toFixed(5) + "St"// 51 Zeros for Sexdecillion
+    : Math.abs(Number(v)) >= 1.0e+51 ? (Math.abs(Number(v)) / 1.0e+51).toFixed(5) + "Sd"// 48 Zeros for Quindecillion
+    : Math.abs(Number(v)) >= 1.0e+48 ? (Math.abs(Number(v)) / 1.0e+48).toFixed(5) + "Qd"// 45 Zeros for Quattuordecillion
+    : Math.abs(Number(v)) >= 1.0e+45 ? (Math.abs(Number(v)) / 1.0e+45).toFixed(5) + "Qt"// 42 Zeros for Tredecillion
+    : Math.abs(Number(v)) >= 1.0e+42 ? (Math.abs(Number(v)) / 1.0e+42).toFixed(4) + "T"// 39 Zeros for Duodecillion
+    : Math.abs(Number(v)) >= 1.0e+39 ? (Math.abs(Number(v)) / 1.0e+39).toFixed(4) + "D"// 36 Zeros for Undecillion
+    : Math.abs(Number(v)) >= 1.0e+36 ? (Math.abs(Number(v)) / 1.0e+36).toFixed(4) + "U"// 33 Zeros for Decillion
+    : Math.abs(Number(v)) >= 1.0e+33 ? (Math.abs(Number(v)) / 1.0e+33).toFixed(4) + "d"// 30 Zeros for Nonillion
+    : Math.abs(Number(v)) >= 1.0e+30 ? (Math.abs(Number(v)) / 1.0e+30).toFixed(4) + "n"// 27 Zeros for Octillion
+    : Math.abs(Number(v)) >= 1.0e+27 ? (Math.abs(Number(v)) / 1.0e+27).toFixed(3) + "o"// 24 Zeroes for Septillion
+    : Math.abs(Number(v)) >= 1.0e+24 ? (Math.abs(Number(v)) / 1.0e+24).toFixed(3) + "S"// 21 Zeroes for Sextillion
+    : Math.abs(Number(v)) >= 1.0e+21 ? (Math.abs(Number(v)) / 1.0e+21).toFixed(3) + "s"// 18 Zeroes for Quintillion
+    : Math.abs(Number(v)) >= 1.0e+18 ? (Math.abs(Number(v)) / 1.0e+18).toFixed(3) + "Q"// 15 Zeroes for Quadrillion
+    : Math.abs(Number(v)) >= 1.0e+15 ? (Math.abs(Number(v)) / 1.0e+15).toFixed(2) + "q"// 12 Zeroes for Trillions
+    : Math.abs(Number(v)) >= 1.0e+12 ? (Math.abs(Number(v)) / 1.0e+12).toFixed(2) + "t"// 9 Zeroes for Billions
+    : Math.abs(Number(v)) >= 1.0e+9 ? (Math.abs(Number(v)) / 1.0e+9).toFixed(2) + "B"// 6 Zeroes for Millions 
+    : Math.abs(Number(v)) >= 1.0e+6 ? (Math.abs(Number(v)) / 1.0e+6).toFixed(1) + "M"// 3 Zeroes for Thousands
+    : Math.abs(Number(v)) >= 1.0e+3 ? (Math.abs(Number(v)) / 1.0e+3).toFixed(1) + "K" : Math.abs(Number(v))
 }
 
 function tickGame() {
-	var piesGained = pcP.pps * pcP.ppsMult
-	pcP.pies = pcP.pies + piesGained
+	var g = (pcP.pps * pcP.ppsMult) * pcZ.tickSpeed
+	pcP.pies = pcP.pies + g
 	if(pcG.doSaveGame && pcG.saveTick) saveGame()
 	pcG.saveTick = !pcG.saveTick
 
 	pcG.MSGtick = pcG.MSGtick - 1
 	if(pcG.MSGtick < 0) pcG.MSGtick = 0
 	if(pcG.MSGtick > 6) pcG.MSGtick = 4
-	if(pcG.MSGtick == 0) $("#messageBar").fadeOut(100)
+	if(pcG.MSGtick == 0) $(r[7]).fadeOut(100)
 
-	if(pcG.AFK) pcG.awayPies = pcG.awayPies + piesGained
+	if(pcG.AFK) pcG.awayPies = pcG.awayPies + g
 
 	if(pcP.pies == Infinity || pcP.pps == Infinity || pcP.ppc == Infinity) {
 		messageGame("FREAK ACCIDENT:  PIES,  PPS & PPC CUT IN HALF!", 4)
@@ -687,8 +709,8 @@ function tickGame() {
 	reloadStats()
 }
 
-function lsExists(key) {
-	x = localStorage.getItem(key)
+function lsExists(k) {
+	x = localStorage.getItem(k)
 	if(x == undefined) return false
 	else return true
 }
@@ -703,16 +725,16 @@ function devMode() {
 	pcZ.kitchenBackground = 0
 	pcZ.hasSeenCredits = false
 	refreshAll()
-	$('#idVer').html('Version:' + pcV.version + (pcG.inDev ? '[Dev]' : ''))
+	$(r[3]).html(r[0] + pcV.version + (pcG.inDev ? r[8] : ''))
 	messageGame("Dev Mode Enabled - Will Not Save Game", 3)
 }
 
-function confirmationBox(text, btn1, btn2, btn1func, btn2func) {
-	$('#pm_text').html(text)
-	$('#pm_btn1_real').html(btn1)
-	$('#pm_btn2_real').html(btn2)
-	$('#pm_btn1').attr("onclick", btn1func)
-	$('#pm_btn2').attr("onclick", btn2func)
+function confirmationBox(t, b1, b2, bf, bg) {
+	$('#pm_text').html(t)
+	$('#pm_btn1_real').html(b1)
+	$('#pm_btn2_real').html(b2)
+	$('#pm_btn1').attr("onclick", bf)
+	$('#pm_btn2').attr("onclick", bg)
 	$('#popupMenu').fadeIn(500)
 }
 
@@ -738,18 +760,24 @@ window.addEventListener("focus", () => {
 	}
 })
 
-function sortUpgrades(stLocal) {
-	hideAllUpgrades()
-	var collection = document.getElementsByClassName('sort' + stLocal.toUpperCase())
-	for(let i = 0; i < collection.length; i++) {
-		collection[i].style.display = 'block'
+function sortUpgrades(l) {
+	haUp()
+	var c = document.getElementsByClassName('sort' + l.toUpperCase())
+	for(let i = 0; i < c.length; i++) {
+		c[i].style.display = 'block'
 	}
 	refreshAll()
 }
 
-function hideAllUpgrades() {
-	var collection = document.getElementsByClassName('pieUpgrade')
-	for(let i = 0; i < collection.length; i++) {
-		collection[i].style.display = 'none'
+function haUp() {
+	var c = document.getElementsByClassName('pieUpgrade')
+	for(let i = 0; i < c.length; i++) {
+		c[i].style.display = r[9]
 	}
+}
+
+function updateTickSpeed(t) {
+	clearInterval(pcTick)
+	pcZ.tickSpeed=t
+	pcTick=setInterval(()=>{tickGame()},t*1000)
 }

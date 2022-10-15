@@ -1,4 +1,3 @@
-pcS.mute = false
 songs = [
     {"name": "PieClicker", "song": "piclkr1.mp3", "asset": "Record.png", "author": "Ian Paris-Wright"},
     {"name": "B-Side", "song": "bside.mp3", "asset": "RecordBSide.png", "author": "Ian Paris-Wright"},
