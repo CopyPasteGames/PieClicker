@@ -509,6 +509,7 @@ $(window).bind("load", () => {
 	$(r[4]).delay(200).fadeIn(250)
 	$(r[4]).delay(775).fadeOut(250)
 	$("#introScreen").delay(1500).fadeOut(750)
+	$("#adScreen").delay(1500).fadeIn(750)
 })
 
 // When the user clicks on the pie
