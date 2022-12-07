@@ -256,7 +256,7 @@ body {
 
 .ad {
 	background-color: rgba(0, 0, 0, .9) !important;
-	font-size: 40px;
+	font-size: 3.5vh;
 	font-family: Arial;
 }
 
@@ -265,10 +265,10 @@ body {
 }
 
 .adX {
-	font-size: 80px;
+	font-size: 7.5vh;
 	position: absolute;
-	right: 50px;
-	top: 20px;
+	right: 3vw;
+	top: 1vh;
 }
 
 #is_centerV {
