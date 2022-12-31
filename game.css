@@ -453,3 +453,13 @@ body {
 	height: 94%;
 	top: 6%;
 }
+
+.afford_cover {
+	position: absolute;
+	top: 0%;
+	left: 0%;
+	width: 100%;
+	height: 100%;
+	border-radius: 100px;
+	color: var(--bgTheme);
+}

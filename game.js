@@ -1,14 +1,14 @@
 // PieClicker Version Variables
 pcV = {
-	version: 2,
-	currentVersion: 2
+	version: 3,
+	currentVersion: 3
 }
 // PieClicker Game Variables
 pcG = {
 	AFK: false,
 	awayPies: 0,
 	sortType: 'all',
-	saveTick: false,
+	saveTick: 0,
 	doSaveGame: true,
 	hasInteracted: false,
 	MSGtick: 0,
@@ -128,6 +128,17 @@ pcU = [
 			"UpgradeButtonChocolateCreamPie.png",
 			"UpgradeButtonStrawberryPie.png"
         ],
+		"misc": [
+			"1|Pie.png",
+			"2|PiePumpkin.png",
+			"3|PieApple.png",
+			"5|PieCheesecake.png",
+			"7|PieOreoCheesecake.png",
+			"10|PieLemonMeringue.png",
+			"15|PieKeyLime.png",
+			"25|PieChocolateCream.png",
+			"35|PieStrawberry.png"
+		],
 		"buy": (elem, i) => {
 			if(!charge(pcR[i].cost)) return false
 			clickFireworks($(elem), 50)
@@ -136,8 +147,10 @@ pcU = [
 			let asset = pcU[i].assets[pcR[i].tier]
 			if(asset != undefined) $(elem).children()[0].src = `${r[13]}${asset}`
 			else $(elem).css(r[10], r[9])
-			
-			pcP.ppcMult = pcP.ppcMult + 1
+			let asseta = pcU[i].misc[pcR[i].tier].split('|')
+			if(asseta != undefined) $("#pieBtn").attr("src", `${r[13]}${asseta[1]}`)
+
+			pcP.ppcMult += asseta[0] * 1
 			// UPDATE THIS WITH THE pieClickMultiplier VARIABLES FROM old_game.js
 
 			boughtItem(i)
@@ -158,7 +171,7 @@ pcU = [
 			if(!charge(pcR[i].cost)) return false
 			clickFireworks($(elem), 50)
 			
-			pcP.ppc = pcP.ppc + 1
+			pcP.ppc += 1
 
 			boughtItem(i)
 			reloadStats()
@@ -178,7 +191,7 @@ pcU = [
 			if(!charge(pcR[i].cost)) return false
 			clickFireworks($(elem), 50)
 			
-			pcP.pps = pcP.pps + 1
+			pcP.pps += 1
 
 			boughtItem(i)
 			reloadStats()
@@ -203,6 +216,9 @@ pcU = [
 			"UpgradeButtonGMChefPlatinumIV.png",
 			"UpgradeButtonGMChefPlatinumV.png"
 		],
+		"misc": [
+			0, 2, 3, 4, 5, 8, 15, 20, 30, 50, 75
+		],
 		"buy": (elem, i) => {
 			if(!charge(pcR[i].cost)) return false
 			clickFireworks($(elem), 50)
@@ -212,8 +228,7 @@ pcU = [
 			if(asset != undefined) $(elem).children()[0].src = `${r[13]}${asset}`
 			else $(elem).css(r[10], r[9])
 
-			pcP.ppcMult = pcP.ppcMult + 1
-			// UPDATE THIS WITH THE assistantChefMultiplier VARIABLES FROM old_game.js
+			pcP.ppcMult += pcU[i].misc[pcR[i].tier]
 
 			boughtItem(i)
 			reloadStats()
@@ -222,7 +237,7 @@ pcU = [
 	{
 		"id": 4,
         "name": "Flyers",
-        "ccmc": 2.5,
+        "ccmc": 2,
         "prts": 0,
         "show": true,
         "sort": "ALL PPS",
@@ -234,7 +249,7 @@ pcU = [
 			clickFireworks($(elem), 50)
 
 			let gained = randInt(5, 15)
-			pcP.pps = pcP.pps + gained
+			pcP.pps += gained
 			messageGame(`You got +${gained} new assistant chefs!`)
 
 			boughtItem(i)
@@ -255,7 +270,9 @@ pcU = [
 			if(!charge(pcR[i].cost)) return false
 			clickFireworks($(elem), 50)
 
-			pcP.ppc = pcP.ppc + randInt(5, 15)
+			let gained = randInt(5, 15)
+			pcP.ppc += gained
+			messageGame(`You got +${gained} new oven upgrades!`)
 
 			boughtItem(i)
 			reloadStats()
@@ -264,7 +281,7 @@ pcU = [
 	{
 		"id": 6,
         "name": "Rolling Pins",
-        "ccmc": 1.1,
+        "ccmc": 1.025,
         "prts": 0,
         "show": true,
         "sort": "ALL PPS",
@@ -275,7 +292,7 @@ pcU = [
 			if(!charge(pcR[i].cost)) return false
 			clickFireworks($(elem), 50)
 			
-			pcP.pps = pcP.pps + 25
+			pcP.pps += 25
 
 			boughtItem(i)
 			reloadStats()
@@ -295,8 +312,8 @@ pcU = [
 			if(!charge(pcR[i].cost)) return false
 			clickFireworks($(elem), 50)
 			
-			pcP.ppc = pcP.ppc + round(pcP.ppc * 0.1)
-			pcP.pps = pcP.pps + round(pcP.pps * 0.1)
+			pcP.ppc += round(pcP.ppc * 0.1)
+			pcP.pps += round(pcP.pps * 0.1)
 			pcZ.kitchenBackground = randInt(0, 2)
 
 			backgroundRefresh()
@@ -317,7 +334,7 @@ pcU = [
 		"buy": (elem, i) => {
 			if(!charge(pcR[i].cost)) return false
 			clickFireworks($(elem), 50)
-			
+
 			pcP.pps = pcP.pps * 100
 
 			boughtItem(i)
@@ -337,7 +354,7 @@ pcU = [
 		"buy": (elem, i) => {
 			if(!charge(pcR[i].cost)) return false
 			clickFireworks($(elem), 50)
-			
+
 			pcP.ppc = pcP.ppc * 2
 			pcP.pps = pcP.pps * 2
 
@@ -358,9 +375,9 @@ pcU = [
 		"buy": (elem, i) => {
 			if(!charge(pcR[i].cost)) return false
 			clickFireworks($(elem), 50)
-			
-			pcP.ppc = pcP.ppc + 200
-			pcP.pps = pcP.pps + 200
+
+			pcP.ppc += 200
+			pcP.pps += 200
 
 			boughtItem(i)
 			reloadStats()
@@ -374,27 +391,57 @@ pcU = [
         "show": true,
         "sort": "ALL PPS PPC",
         "assets": [
+			"UpgradeButtonEmpire.png",
 			"UpgradeButtonExpandEmpire.png",
 			"UpgradeButtonBodyArmor.png",
 			"UpgradeButtonArmy.png",
 			"UpgradeButtonCitizens.png",
-			"UpgradeButtonEmpire.png",
-			"UpgradeButtonNavy",
+			"UpgradeButtonNavy.png",
             "UpgradeButtonSoldiers.png",
 			"UpgradeButtonSoldiersTierIII.png",
 			"UpgradeButtonSpheresOfInfluence.png"
         ],
+		"misc": [
+			() => {
+				pcP.pps += 100000
+			},
+			() => {
+				pcP.ppsMult += 50
+				pcP.ppcMult += 50
+				pcP.pps += 100000000
+			},
+			() => {
+				pcP.ppcMult = pcP.ppcMult * 3
+			},
+			() => {
+				pcP.ppsMult = pcP.ppsMult * 5
+			},
+			() => {
+				pcP.pps += 75
+			},
+			() => {
+				pcP.ppsMult = pcP.ppsMult * 10
+			},
+			() => {
+				pcP.ppc += 10000
+			},
+			() => {
+				pcP.ppc += 50000
+			},
+			() => {
+				pcP.pps = pcP.pps * 10
+			}
+		],
 		"buy": (elem, i) => {
 			if(!charge(pcR[i].cost)) return false
 			clickFireworks($(elem), 50)
 			
+			pcU[i].misc[pcR[i].tier]()
+
 			if(pcR[i].tier != pcU[i].assets.length) pcR[i].tier = pcR[i].tier + 1
 			let asset = pcU[i].assets[pcR[i].tier]
 			if(asset != undefined) $(elem).children()[0].src = `${r[13]}${asset}`
 			else $(elem).css(r[10], r[9])
-
-			pcP.ppcMult = pcP.ppcMult + 1
-			// UPDATE THIS WITH THE pps VARIABLES FROM old_game.js
 
 			boughtItem(i)
 			reloadStats()
@@ -434,9 +481,31 @@ const r = [
 	'./assets/'
 ]
 
+function hoverEnter(elem, i) {
+	if(!canAfford(pcR[i].cost)) {
+		$(`#pcu${i}`).css("filter", "brightness(0.25)")
+		$(elem).append(`
+			<div class="afford_cover" id="afrdcovr">
+				<div class="centerText">
+					<h1>Too Expensive</h1>
+				</div>
+			</div>
+		`)
+	}
+}
+
+function hoverLeave(elem, i) {
+	$(`#pcu${i}`).css("filter", "")
+	$("#afrdcovr").remove()
+}
+
 for(let i = 0; i < pcU.length; i++) {
     $('#upgradesContainer').append(`
-        <div class="pieUpgrade sort${pcU[i].sort.replace(/ /g, ' sort')}" onclick="pcU[${i}].buy(this, ${i})">
+        <div 	class="pieUpgrade sort${pcU[i].sort.replace(/ /g, ' sort')}" 
+				onclick="pcU[${i}].buy(this, ${i})"
+				onmouseenter="hoverEnter(this, ${i})"
+				onmouseleave="hoverLeave(this, ${i})"
+					>
 			<img src="${r[13]}${pcU[i].assets[pcR[i].tier]}" id="pcu${pcU[i].id}" style="width:100%;height:100%;" draggable="false">
         </div>
     `)
@@ -483,6 +552,7 @@ function refreshAll() {
 }
 
 function saveGame() {
+	localStorage.setItem("lastLogTime", new Date())
 	localStorage.setItem("pcS", JSON.stringify(pcS))
 	localStorage.setItem("pcP", JSON.stringify(pcP))
 	localStorage.setItem("pcR", JSON.stringify(pcR))
@@ -537,31 +607,27 @@ $(r[2]).click((e) => {
 		pcG.hasInteracted = true
 		setInterval(() => {musicTick()}, 10000)
 	}
-	pcP.pies = pcP.pies + c
+	pcP.pies += c
 	reloadStats()
 })
 
 // Disable Annoyances if not in dev mode
 if(!pcG.inDev) {
-	document.addEventListener("contextmenu", (e) => {
-		e.preventDefault()
-	})
+	document.addEventListener("contextmenu", (e) => {e.preventDefault()})
 	document.onkeydown = function(e) {
 		e = e || window.event
 		if(!e.ctrlKey) return
 		var c = e.which || e.keyCode
 		switch(c) {
-			case 83: 
-				e.preventDefault()
-			case 73: 
-				e.preventDefault()
+			case 83: e.preventDefault()
+			case 73: e.preventDefault()
 		}
 	}
 }
 
 function boughtItem(i) {
 	pcR[i].cost = round(pcR[i].cost * pcU[i].ccmc)
-	pcR[i].qnty = pcR[i].qnty + 1
+	pcR[i].qnty += 1
 }
 
 function round(n) {return Math.round(n)}
@@ -577,17 +643,16 @@ function reloadStats() {
 }
 
 function empireRefresh() {
-	let i = 11,
-		a = pcU[i].assets[pcR[i].tier]
+	let i = 11, a = pcU[i].assets[pcR[i].tier]
 	if(a != undefined) $(`#pcu${i}`).attr("src", `${r[13]}${a}`)
 	else $(`#pcu${i}`).parent().css(r[10], r[9])
 }
 
 function piesRefresh() {
-	let i = 0,
-		a = pcU[i].assets[pcR[i].tier]
+	let i = 0, a = pcU[i].assets[pcR[i].tier], b = pcU[i].misc[pcR[i].tier].split('|')
 	if(a != undefined) $(`#pcu${i}`).attr("src", `${r[13]}${a}`)
 	else $(`#pcu${i}`).parent().css(r[10], r[9])
+	if(b != undefined) $("#pieBtn").attr("src", `${r[13]}${b[1]}`)
 }
 
 function settingsRefresh() {
@@ -600,8 +665,7 @@ function settingsRefresh() {
 }
 
 function chefsRefresh() {
-	let i = 3,
-		a = pcU[i].assets[pcR[i].tier]
+	let i = 3, a = pcU[i].assets[pcR[i].tier]
 	if(a != undefined) $(`#pcu${i}`).attr("src", `${r[13]}${a}`)
 	else $(`#pcu${i}`).parent().css(r[10], r[9])
 }
@@ -637,25 +701,26 @@ async function PleasePlayTheCredits() {
 	$("#creditsOverlay").fadeOut(1000)
 	await sleep(300)
 	if(!pcZ.hasSeenCredits && pcP.pies >= 500) {
-		let x = randInt(round(pcP.pies / 8), round(pcP.pies / 10))
+		let x = randInt(round(pcP.pies / 4), round(pcP.pies / 6))
 		messageGame(`Thanks For Watching The Credits (+${p2n(x)} Pies)`)
 		pcZ.hasSeenCredits = true
-		pcP.pies = pcP.pies + x
+		pcP.pies += x
 	}
 }
+
+function canAfford(i) {return pcP.pies >= i}
 
 function charge(i) {
 	if(pcP.pies >= i) {
-		pcP.pies = pcP.pies - i
+		pcP.pies -= i
 		return true
-	} else {
-		messageGame("You Can\'t Afford This (Price:  "+p2n(i)+")")
-		return false
 	}
+	messageGame("You Can\'t Afford This (Price:  "+p2n(i)+")")
+	return false
 }
 
 async function messageGame(m, t = 3) {
-	pcG.MSGtick = pcG.MSGtick + t
+	pcG.MSGtick += t
 	$(r[7]).stop(true, true)
 	$("#messageBarText").html(m)
 	$(r[7]).fadeIn(100)
@@ -689,22 +754,25 @@ function p2n(v) {
 
 function tickGame() {
 	var g = (pcP.pps * pcP.ppsMult) * pcZ.tickSpeed
-	pcP.pies = pcP.pies + g
-	if(pcG.doSaveGame && pcG.saveTick) saveGame()
-	pcG.saveTick = !pcG.saveTick
+	pcP.pies += g
+	if(pcG.doSaveGame && pcG.saveTick == 10) {
+		saveGame()
+		pcG.saveTick = 0
+	}
+	pcG.saveTick += 1
 
-	pcG.MSGtick = pcG.MSGtick - 1
+	pcG.MSGtick -= 1
 	if(pcG.MSGtick < 0) pcG.MSGtick = 0
 	if(pcG.MSGtick > 6) pcG.MSGtick = 4
 	if(pcG.MSGtick == 0) $(r[7]).fadeOut(100)
 
-	if(pcG.AFK) pcG.awayPies = pcG.awayPies + g
+	if(pcG.AFK) pcG.awayPies += g
 
 	if(pcP.pies == Infinity || pcP.pps == Infinity || pcP.ppc == Infinity) {
-		messageGame("FREAK ACCIDENT:  PIES,  PPS & PPC CUT IN HALF!", 4)
-		pcP.pies = pcP.pies / 2
-		pcP.ppc = pcP.ppc / 2
-		pcP.pps = pcP.pps / 2
+		messageGame("FREAK ACCIDENT:  PIES, PPS & PPC DESTROYED!", 4)
+		pcP.pies = 5 * 10 ** 9
+		pcP.pps  = 5 * 10 ** 8
+		pcP.ppc  = 5 * 10 ** 7
 	}
 
 	reloadStats()
@@ -713,7 +781,7 @@ function tickGame() {
 function lsExists(k) {
 	x = localStorage.getItem(k)
 	if(x == undefined) return false
-	else return true
+	return true
 }
 
 function devMode() {
@@ -721,8 +789,8 @@ function devMode() {
 	pcG.doSaveGame = false
 	alert("*Dev Mode Enabled*\n\nWill not save progress.\nReload to disable dev mode.")
 	pcP.pies = 10 ** 30
-	pcP.ppc = 10 ** 10
-	pcP.pps = 10 ** 10
+	pcP.ppc  = 10 ** 10
+	pcP.pps  = 10 ** 10
 	pcZ.kitchenBackground = 0
 	pcZ.hasSeenCredits = false
 	refreshAll()
@@ -739,9 +807,7 @@ function confirmationBox(t, b1, b2, bf, bg) {
 	$('#popupMenu').fadeIn(500)
 }
 
-function resetGame() {
-	confirmationBox("Reset Game?", "Yes", "No", "pcReset()", "$('#popupMenu').fadeOut(500)")
-}
+function resetGame() {confirmationBox("Reset Game?", "Yes", "No", "pcReset()", "$('#popupMenu').fadeOut(500)")}
 
 function pcReset() {
 	pcG.doSaveGame = false
@@ -779,6 +845,6 @@ function haUp() {
 
 function updateTickSpeed(t) {
 	clearInterval(pcTick)
-	pcZ.tickSpeed=t
-	pcTick=setInterval(()=>{tickGame()},t*1000)
+	pcZ.tickSpeed = t
+	pcTick = setInterval(() => {tickGame()}, t * 1000)
 }
