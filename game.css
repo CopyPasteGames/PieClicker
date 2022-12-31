@@ -243,7 +243,7 @@ body {
 	height: auto;
 }
 
-#introScreen {
+.introScreen {
 	background-color: black;
 	position: fixed;
 	z-index: 99999;
@@ -252,6 +252,23 @@ body {
 	height: 100%;
 	top: 0%;
 	left: 0%;
+}
+
+.ad {
+	background-color: rgba(0, 0, 0, .9) !important;
+	font-size: 3.5vh;
+	font-family: Arial;
+}
+
+.innerAd {
+	text-align: center;
+}
+
+.adX {
+	font-size: 7.5vh;
+	position: absolute;
+	right: 3vw;
+	top: 1vh;
 }
 
 #is_centerV {
