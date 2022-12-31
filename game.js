@@ -488,6 +488,7 @@ function hoverEnter(elem, i) {
 			<div class="afford_cover" id="afrdcovr">
 				<div class="centerText">
 					<h1>Too Expensive</h1>
+					<h3>[${p2n(pcR[i].cost)} Pies]</h3>
 				</div>
 			</div>
 		`)
