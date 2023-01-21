@@ -21,6 +21,12 @@ body {
 	margin: 0px;
 }
 
+#ads_container {
+	width: 90%;
+	height: 50%;
+	overflow: hidden;
+}
+
 #pieClicker {
 	position: fixed;
 	left: 0%;
