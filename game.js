@@ -507,7 +507,7 @@ for(let i = 0; i < pcU.length; i++) {
 				onmouseenter="hoverEnter(this, ${i})"
 				onmouseleave="hoverLeave(this, ${i})"
 					>
-			<img src="${r[13]}${pcU[i].assets[pcR[i].tier]}" id="pcu${pcU[i].id}" style="width:100%;height:100%;" draggable="false">
+			<img loading="lazy" src="${r[13]}${pcU[i].assets[pcR[i].tier]}" id="pcu${pcU[i].id}" style="width:100%;height:100%;" draggable="false">
         </div>
     `)
 }
@@ -580,7 +580,6 @@ $(window).bind("load", () => {
 	$(r[4]).delay(200).fadeIn(250)
 	$(r[4]).delay(775).fadeOut(250)
 	$("#introScreen").delay(1500).fadeOut(750)
-	$("#adScreen").delay(1500).fadeIn(750)
 })
 
 // When the user clicks on the pie
@@ -780,8 +779,7 @@ function tickGame() {
 }
 
 function lsExists(k) {
-	x = localStorage.getItem(k)
-	if(x == undefined) return false
+	if(localStorage.getItem(k) == null) return false
 	return true
 }
 
