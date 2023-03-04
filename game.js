@@ -153,8 +153,8 @@ pcU = [
 			pcP.ppcMult += asseta[0] * 1
 			// UPDATE THIS WITH THE pieClickMultiplier VARIABLES FROM old_game.js
 
-			hoverEnter(elem, i)
 			boughtItem(i)
+			hoverEnter(elem, i)
 			reloadStats()
 		}
     },
@@ -174,8 +174,8 @@ pcU = [
 			
 			pcP.ppc += 1
 
-			hoverEnter(elem, i)
 			boughtItem(i)
+			hoverEnter(elem, i)
 			reloadStats()
 		}
     },
@@ -195,8 +195,8 @@ pcU = [
 			
 			pcP.pps += 1
 
-			hoverEnter(elem, i)
 			boughtItem(i)
+			hoverEnter(elem, i)
 			reloadStats()
 		}
     },
@@ -231,10 +231,10 @@ pcU = [
 			if(asset != undefined) $(elem).children()[0].src = `${r[13]}${asset}`
 			else $(elem).css(r[10], r[9])
 
-			pcP.ppcMult += pcU[i].misc[pcR[i].tier]
+			pcP.ppsMult += pcU[i].misc[pcR[i].tier]
 
-			hoverEnter(elem, i)
 			boughtItem(i)
+			hoverEnter(elem, i)
 			reloadStats()
 		}
 	},
@@ -256,8 +256,8 @@ pcU = [
 			pcP.pps += gained
 			messageGame(`You got +${gained} new assistant chefs!`)
 
-			hoverEnter(elem, i)
 			boughtItem(i)
+			hoverEnter(elem, i)
 			reloadStats()
 		}
 	},
@@ -279,8 +279,8 @@ pcU = [
 			pcP.ppc += gained
 			messageGame(`You got +${gained} new oven upgrades!`)
 
-			hoverEnter(elem, i)
 			boughtItem(i)
+			hoverEnter(elem, i)
 			reloadStats()
 		}
 	},
@@ -300,8 +300,8 @@ pcU = [
 			
 			pcP.pps += 25
 
-			hoverEnter(elem, i)
 			boughtItem(i)
+			hoverEnter(elem, i)
 			reloadStats()
 		}
 	},
@@ -345,8 +345,8 @@ pcU = [
 
 			pcP.pps = pcP.pps * 100
 
-			hoverEnter(elem, i)
 			boughtItem(i)
+			hoverEnter(elem, i)
 			reloadStats()
 		}
 	},
@@ -367,8 +367,8 @@ pcU = [
 			pcP.ppc = pcP.ppc * 2
 			pcP.pps = pcP.pps * 2
 
-			hoverEnter(elem, i)
 			boughtItem(i)
+			hoverEnter(elem, i)
 			reloadStats()
 		}
 	},
@@ -389,8 +389,8 @@ pcU = [
 			pcP.ppc += 200
 			pcP.pps += 200
 
-			hoverEnter(elem, i)
 			boughtItem(i)
+			hoverEnter(elem, i)
 			reloadStats()
 		}
 	},
@@ -454,8 +454,8 @@ pcU = [
 			if(asset != undefined) $(elem).children()[0].src = `${r[13]}${asset}`
 			else $(elem).css(r[10], r[9])
 
-			hoverEnter(elem, i)
 			boughtItem(i)
+			hoverEnter(elem, i)
 			reloadStats()
 		}
 	}
@@ -519,7 +519,7 @@ for(let i = 0; i < pcU.length; i++) {
 				onmouseenter="hoverEnter(this, ${i})"
 				onmouseleave="hoverLeave(this, ${i})"
 					>
-			<img loading="lazy" src="${r[13]}${pcU[i].assets[pcR[i].tier]}" id="pcu${pcU[i].id}" style="width:100%;height:100%;" draggable="false">
+			<img loading="lazy" src="${r[13]}${pcU[i].assets[pcR[i].tier]}" id="pcu${pcU[i].id}" style="width:100%;height:100%;" draggable="false" alt="Update ${pcU[i].name}">
         </div>
     `)
 }

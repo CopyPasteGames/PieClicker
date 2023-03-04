@@ -12,12 +12,12 @@
 		<link rel="icon" href="./assets/Pie.webp">
 		<link rel="stylesheet" href="./game.css">
 		<script async src="./ka.js"></script>
-		<script async src="./jquery.js"></script>
+		<script src="./jquery.js"></script>
 	</head>
 	<body>
 		<div id="pieClicker">
 			<div id="pieBackground">
-				<img src="./assets/KitchenBackgroundBlue.webp" style="width:100%;height:100%;" draggable="false" id="pieChild">
+				<img src="./assets/KitchenBackgroundBlue.webp" style="width:100%;height:100%;" draggable="false" id="pieChild" alt="PieClicker Background">
 			</div>
 			<div id="pieCount">
 				<div class="centerText">
@@ -30,7 +30,7 @@
 				</div>
 			</div>
 			<div id="pie">
-				<img src="./assets/Pie.webp" style="width:100%;height:100%;" draggable="false" id="pieBtn">
+				<img src="./assets/Pie.webp" style="width:100%;height:100%;" draggable="false" id="pieBtn" alt="PieClicker Pie">
 			</div>
 		</div>
 		<div id="pieRightD"></div>
@@ -80,19 +80,19 @@
 			<div class="slightPadding">
 				<br>
 				<div class="otherMenuOption" onclick="PleasePlayTheCredits()">
-					<img src="./assets/Button.webp" style="width:100%;height:100%;" draggable="false" alt="PieClicker Credits">
+					<img loading="lazy" src="./assets/Button.webp" style="width:100%;height:100%;" draggable="false" alt="PieClicker Credits">
 					<div class="btnText">Credits</div>
 				</div>
 
 
 				<div class="otherMenuOption" onclick='resetGame()'>
-					<img src="./assets/Button.webp" style="width:100%;height:100%;" draggable="false" alt="PieClicker Reset Game">
+					<img loading="lazy" src="./assets/Button.webp" style="width:100%;height:100%;" draggable="false" alt="PieClicker Reset Game">
 					<div class="btnText">Reset</div>
 				</div>
 
 
 				<div class="otherMenuOption" onclick="settingsRefresh();$('#settingsMenu').fadeIn(500)">
-					<img src="./assets/Button.webp" style="width:100%;height:100%;" draggable="false"  alt="PieClicker Settings">
+					<img loading="lazy" src="./assets/Button.webp" style="width:100%;height:100%;" draggable="false"  alt="PieClicker Settings">
 					<div class="btnText">Settings</div>
 				</div>
 				<br>
@@ -124,7 +124,7 @@
 		<div id="introScreen" class="introScreen">
 			<div id="is_centerV">
 				<div id="is_centerH">
-					<img src="./assets/CopyPasteGames.webp" style="height:100%;width:auto;display:none;" draggable="false" id="copyPasteLogo">
+					<img loading="lazy" src="./assets/CopyPasteGames.webp" style="height:100%;width:auto;display:none;" draggable="false" id="copyPasteLogo" alt="CopyPaste Games Logo">
 				</div>
 			</div>
 		</div>
@@ -155,7 +155,7 @@
 								<td class="tableNoBorder">Mute Game</td>
 								<td class="tableNoBorder">
 									<div onclick="pcS.mute =! pcS.mute; $('#musicPlayer').remove(); pcG.isPlayingMusic = false; settingsRefresh()" class="settingsBtn">
-										<img id="settingsMuteGame" src="./assets/CheckBoxEmpty.webp" style="width:100%;height:100%;">
+										<img loading="lazy" id="settingsMuteGame" src="./assets/CheckBoxEmpty.webp" style="width:100%;height:100%;" alt="Settings Checkbox">
 									</div>
 								</td>
 							</tr>
@@ -163,7 +163,7 @@
 								<td class="tableNoBorder">Do Click Animations</td>
 								<td class="tableNoBorder">
 									<div onclick="pcS.clickAnim =! pcS.clickAnim; settingsRefresh()" class="settingsBtn">
-										<img id="settingsDoClickAnimations" src="./assets/CheckBoxEmpty.webp" style="width:100%;height:100%;">
+										<img loading="lazy" id="settingsDoClickAnimations" src="./assets/CheckBoxEmpty.webp" style="width:100%;height:100%;" alt="Settings Checkbox">
 									</div>
 								</td>
 							</tr>
@@ -171,7 +171,7 @@
 								<td class="tableNoBorder">Do Purchase Animations</td>
 								<td class="tableNoBorder">
 									<div onclick="pcS.purchaseAnim =! pcS.purchaseAnim; settingsRefresh()" class="settingsBtn">
-										<img id="settingsDoPurchaseAnimations" src="./assets/CheckBoxEmpty.webp" style="width:100%;height:100%;">
+										<img loading="lazy" id="settingsDoPurchaseAnimations" src="./assets/CheckBoxEmpty.webp" style="width:100%;height:100%;" alt="Settings Checkbox">
 									</div>
 								</td>
 							</tr>
@@ -179,7 +179,7 @@
 								<td class="tableNoBorder">Abbreviate Numbers</td>
 								<td class="tableNoBorder">
 									<div onclick="pcS.abbreviateInts =! pcS.abbreviateInts; settingsRefresh()" class="settingsBtn">
-										<img id="settingAbbreviateNumbers" src="./assets/CheckBoxEmpty.webp" style="width:100%;height:100%;">
+										<img loading="lazy" id="settingAbbreviateNumbers" src="./assets/CheckBoxEmpty.webp" style="width:100%;height:100%;" alt="Settings Checkbox">
 									</div>
 								</td>
 							</tr>
@@ -190,13 +190,13 @@
 				<div style="font-size:2vh;">*Settings should autosave within 10 seconds of being changed</div>
 			</div>
 			<div class="uis_exit" onclick="$('#settingsMenu').fadeOut(500)">
-				<img src="./assets/x-circle-fill.svg" style="width:100%;height:100%;" draggable="false">
+				<img loading="lazy" src="./assets/x-circle-fill.svg" style="width:100%;height:100%;" draggable="false" alt="Exit Settings">
 			</div>
 		</div>
 
 		<div id="whatIsPlayingContainer">
 			<div id="whatIsPlayingCover">
-				<img src="./assets/PieOreoCheesecake.webp" style="width:100%;height:100%;" id="whatIsPlayingCoverAsset">
+				<img loading="lazy" src="./assets/PieOreoCheesecake.webp" style="width:100%;height:100%;" id="whatIsPlayingCoverAsset" alt="Album Cover">
 			</div>
 			<div id="whatIsPlayingTrack"></div>
 			<div id="whatIsPlayingArtist"></div>

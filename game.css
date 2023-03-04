@@ -17,6 +17,7 @@ body {
 	color: var(--textColor);
 	overflow-x: hidden;
 	user-select: none;
+	-webkit-user-select: none;
 	padding: 0px;
 	margin: 0px;
 }
