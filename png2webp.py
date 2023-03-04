@@ -3,6 +3,7 @@ import os
 
 for filename in os.scandir("assets"):
     if filename.is_file():
-        if(".png" in filename):
-            im = Image.open(filename)
-            im.save(filename.replace("png", "webp"), format = "WebP", lossless = True)
+        print(filename.path)
+        if(".png" in filename.path):
+            im = Image.open(filename.path)
+            im.save(filename.path.replace("png", "webp"), format = "WebP", lossless = True)

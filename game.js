@@ -119,25 +119,25 @@ pcU = [
         "show": true,            // To Show Upgrade or Not
         "sort": "ALL MISC",      // ALL, PPS, PPC, MISC; Different sort types, can use multiple or all
         "assets": [              // All Upgrade Assets, If only one tier use one asset, max tier is final asset
-			"UpgradeButtonPumpkinPie.png",
-			"UpgradeButtonApplePie.png",
-			"UpgradeButtonCheesecake.png",
-			"UpgradeButtonOreoCheesecake.png",
-			"UpgradeButtonLemonMeringuePie.png",
-			"UpgradeButtonKeyLimePie.png",
-			"UpgradeButtonChocolateCreamPie.png",
-			"UpgradeButtonStrawberryPie.png"
+			"UpgradeButtonPumpkinPie.webp",
+			"UpgradeButtonApplePie.webp",
+			"UpgradeButtonCheesecake.webp",
+			"UpgradeButtonOreoCheesecake.webp",
+			"UpgradeButtonLemonMeringuePie.webp",
+			"UpgradeButtonKeyLimePie.webp",
+			"UpgradeButtonChocolateCreamPie.webp",
+			"UpgradeButtonStrawberryPie.webp"
         ],
 		"misc": [
-			"1|Pie.png",
-			"2|PiePumpkin.png",
-			"3|PieApple.png",
-			"5|PieCheesecake.png",
-			"7|PieOreoCheesecake.png",
-			"10|PieLemonMeringue.png",
-			"15|PieKeyLime.png",
-			"25|PieChocolateCream.png",
-			"35|PieStrawberry.png"
+			"1|Pie.webp",
+			"2|PiePumpkin.webp",
+			"3|PieApple.webp",
+			"5|PieCheesecake.webp",
+			"7|PieOreoCheesecake.webp",
+			"10|PieLemonMeringue.webp",
+			"15|PieKeyLime.webp",
+			"25|PieChocolateCream.webp",
+			"35|PieStrawberry.webp"
 		],
 		"buy": (elem, i) => {
 			if(!charge(pcR[i].cost)) return false
@@ -153,6 +153,7 @@ pcU = [
 			pcP.ppcMult += asseta[0] * 1
 			// UPDATE THIS WITH THE pieClickMultiplier VARIABLES FROM old_game.js
 
+			hoverEnter(elem, i)
 			boughtItem(i)
 			reloadStats()
 		}
@@ -165,7 +166,7 @@ pcU = [
         "show": true,
         "sort": "ALL MISC",
         "assets": [
-            "UpgradeButtonOven.png"
+            "UpgradeButtonOven.webp"
         ],
 		"buy": (elem, i) => {
 			if(!charge(pcR[i].cost)) return false
@@ -173,6 +174,7 @@ pcU = [
 			
 			pcP.ppc += 1
 
+			hoverEnter(elem, i)
 			boughtItem(i)
 			reloadStats()
 		}
@@ -185,7 +187,7 @@ pcU = [
         "show": true,
         "sort": "ALL MISC",
         "assets": [
-            "UpgradeButtonAssistantChef.png"
+            "UpgradeButtonAssistantChef.webp"
         ],
 		"buy": (elem, i) => {
 			if(!charge(pcR[i].cost)) return false
@@ -193,6 +195,7 @@ pcU = [
 			
 			pcP.pps += 1
 
+			hoverEnter(elem, i)
 			boughtItem(i)
 			reloadStats()
 		}
@@ -205,16 +208,16 @@ pcU = [
         "show": true,
         "sort": "ALL MISC",
         "assets": [
-			"UpgradeButtonApprenticeChef.png",
-            "UpgradeButtonAdvancedChef.png",
-			"UpgradeButtonExpertChef.png",
-			"UpgradeButtonMasterChef.png",
-			"UpgradeButtonGrandmasterChef.png",
-			"UpgradeButtonGMChefPlatinumI.png",
-			"UpgradeButtonGMChefPlatinumII.png",
-			"UpgradeButtonGMChefPlatinumIII.png",
-			"UpgradeButtonGMChefPlatinumIV.png",
-			"UpgradeButtonGMChefPlatinumV.png"
+			"UpgradeButtonApprenticeChef.webp",
+            "UpgradeButtonAdvancedChef.webp",
+			"UpgradeButtonExpertChef.webp",
+			"UpgradeButtonMasterChef.webp",
+			"UpgradeButtonGrandmasterChef.webp",
+			"UpgradeButtonGMChefPlatinumI.webp",
+			"UpgradeButtonGMChefPlatinumII.webp",
+			"UpgradeButtonGMChefPlatinumIII.webp",
+			"UpgradeButtonGMChefPlatinumIV.webp",
+			"UpgradeButtonGMChefPlatinumV.webp"
 		],
 		"misc": [
 			0, 2, 3, 4, 5, 8, 15, 20, 30, 50, 75
@@ -230,6 +233,7 @@ pcU = [
 
 			pcP.ppcMult += pcU[i].misc[pcR[i].tier]
 
+			hoverEnter(elem, i)
 			boughtItem(i)
 			reloadStats()
 		}
@@ -242,7 +246,7 @@ pcU = [
         "show": true,
         "sort": "ALL PPS",
         "assets": [
-            "UpgradeFlyers.png"
+            "UpgradeFlyers.webp"
         ],
 		"buy": (elem, i) => {
 			if(!charge(pcR[i].cost)) return false
@@ -252,6 +256,7 @@ pcU = [
 			pcP.pps += gained
 			messageGame(`You got +${gained} new assistant chefs!`)
 
+			hoverEnter(elem, i)
 			boughtItem(i)
 			reloadStats()
 		}
@@ -264,7 +269,7 @@ pcU = [
         "show": true,
         "sort": "ALL PPS",
         "assets": [
-            "UpgradeButtonLargeOvenUpgrade.png"
+            "UpgradeButtonLargeOvenUpgrade.webp"
         ],
 		"buy": (elem, i) => {
 			if(!charge(pcR[i].cost)) return false
@@ -274,6 +279,7 @@ pcU = [
 			pcP.ppc += gained
 			messageGame(`You got +${gained} new oven upgrades!`)
 
+			hoverEnter(elem, i)
 			boughtItem(i)
 			reloadStats()
 		}
@@ -286,7 +292,7 @@ pcU = [
         "show": true,
         "sort": "ALL PPS",
         "assets": [
-            "UpgradeButtonRollingPin.png"
+            "UpgradeButtonRollingPin.webp"
         ],
 		"buy": (elem, i) => {
 			if(!charge(pcR[i].cost)) return false
@@ -294,6 +300,7 @@ pcU = [
 			
 			pcP.pps += 25
 
+			hoverEnter(elem, i)
 			boughtItem(i)
 			reloadStats()
 		}
@@ -306,7 +313,7 @@ pcU = [
         "show": true,
         "sort": "ALL PPS",
         "assets": [
-            "UpgradeButtonRevampKitchen.png"
+            "UpgradeButtonRevampKitchen.webp"
         ],
 		"buy": (elem, i) => {
 			if(!charge(pcR[i].cost)) return false
@@ -316,6 +323,7 @@ pcU = [
 			pcP.pps += round(pcP.pps * 0.1)
 			pcZ.kitchenBackground = randInt(0, 2)
 
+			hoverEnter(elem, i)
 			backgroundRefresh()
 			boughtItem(i)
 			reloadStats()
@@ -329,7 +337,7 @@ pcU = [
         "show": true,
         "sort": "ALL PPS",
         "assets": [
-            "UpgradeButtonNuclearPieReactor.png"
+            "UpgradeButtonNuclearPieReactor.webp"
         ],
 		"buy": (elem, i) => {
 			if(!charge(pcR[i].cost)) return false
@@ -337,6 +345,7 @@ pcU = [
 
 			pcP.pps = pcP.pps * 100
 
+			hoverEnter(elem, i)
 			boughtItem(i)
 			reloadStats()
 		}
@@ -349,7 +358,7 @@ pcU = [
         "show": true,
         "sort": "ALL PPS PPC",
         "assets": [
-            "UpgradeButtonBakery.png"
+            "UpgradeButtonBakery.webp"
         ],
 		"buy": (elem, i) => {
 			if(!charge(pcR[i].cost)) return false
@@ -358,6 +367,7 @@ pcU = [
 			pcP.ppc = pcP.ppc * 2
 			pcP.pps = pcP.pps * 2
 
+			hoverEnter(elem, i)
 			boughtItem(i)
 			reloadStats()
 		}
@@ -370,7 +380,7 @@ pcU = [
         "show": true,
         "sort": "ALL PPS PPC",
         "assets": [
-            "UpgradeButtonHeadquarters.png"
+            "UpgradeButtonHeadquarters.webp"
         ],
 		"buy": (elem, i) => {
 			if(!charge(pcR[i].cost)) return false
@@ -379,6 +389,7 @@ pcU = [
 			pcP.ppc += 200
 			pcP.pps += 200
 
+			hoverEnter(elem, i)
 			boughtItem(i)
 			reloadStats()
 		}
@@ -391,15 +402,15 @@ pcU = [
         "show": true,
         "sort": "ALL PPS PPC",
         "assets": [
-			"UpgradeButtonEmpire.png",
-			"UpgradeButtonExpandEmpire.png",
-			"UpgradeButtonBodyArmor.png",
-			"UpgradeButtonArmy.png",
-			"UpgradeButtonCitizens.png",
-			"UpgradeButtonNavy.png",
-            "UpgradeButtonSoldiers.png",
-			"UpgradeButtonSoldiersTierIII.png",
-			"UpgradeButtonSpheresOfInfluence.png"
+			"UpgradeButtonEmpire.webp",
+			"UpgradeButtonExpandEmpire.webp",
+			"UpgradeButtonBodyArmor.webp",
+			"UpgradeButtonArmy.webp",
+			"UpgradeButtonCitizens.webp",
+			"UpgradeButtonNavy.webp",
+            "UpgradeButtonSoldiers.webp",
+			"UpgradeButtonSoldiersTierIII.webp",
+			"UpgradeButtonSpheresOfInfluence.webp"
         ],
 		"misc": [
 			() => {
@@ -443,6 +454,7 @@ pcU = [
 			if(asset != undefined) $(elem).children()[0].src = `${r[13]}${asset}`
 			else $(elem).css(r[10], r[9])
 
+			hoverEnter(elem, i)
 			boughtItem(i)
 			reloadStats()
 		}
@@ -657,10 +669,10 @@ function piesRefresh() {
 
 function settingsRefresh() {
 	let f = `${r[13]}CheckBox`
-	$("#settingsMuteGame").attr("src", `${f}${pcS.mute ? r[11] : r[12]}.png`)
-	$("#settingsDoClickAnimations").attr("src", `${f}${pcS.clickAnim ? r[11] : r[12]}.png`)
-	$("#settingsDoPurchaseAnimations").attr("src", `${f}${pcS.purchaseAnim ? r[11] : r[12]}.png`)
-	$("#settingAbbreviateNumbers").attr("src", `${f}${pcS.abbreviateInts ? r[11] : r[12]}.png`)
+	$("#settingsMuteGame").attr("src", `${f}${pcS.mute ? r[11] : r[12]}.webp`)
+	$("#settingsDoClickAnimations").attr("src", `${f}${pcS.clickAnim ? r[11] : r[12]}.webp`)
+	$("#settingsDoPurchaseAnimations").attr("src", `${f}${pcS.purchaseAnim ? r[11] : r[12]}.webp`)
+	$("#settingAbbreviateNumbers").attr("src", `${f}${pcS.abbreviateInts ? r[11] : r[12]}.webp`)
 	if(pcG.doSaveGame) saveGame()
 }
 
@@ -672,7 +684,7 @@ function chefsRefresh() {
 
 function backgroundRefresh() {
 	let b = ['KitchenBackgroundBlue', 'KitchenBackgroundPink', 'KitchenBackgroundWhite']
-	$("#pieChild").attr("src", `${r[13]}${b[pcZ.kitchenBackground]}.png`)
+	$("#pieChild").attr("src", `${r[13]}${b[pcZ.kitchenBackground]}.webp`)
 }
 
 async function PleasePlayTheCredits() {

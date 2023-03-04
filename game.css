@@ -76,7 +76,7 @@ body {
 }
 
 #pieUpgrades {
-	background-image: url("./assets/UpgradesBackground.png");
+	background-image: url("./assets/UpgradesBackground.webp");
 	background-repeat: round;
 	position: fixed;
 	left: 30.5%;
@@ -133,7 +133,7 @@ body {
 }
 
 #pieOtherMenu {
-	background-image: url('./assets/BrickTexture.png');
+	background-image: url('./assets/BrickTexture.webp');
 	background-repeat: repeat;
 	position: fixed;
 	left: 61%;
