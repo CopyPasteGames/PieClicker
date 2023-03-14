@@ -22,10 +22,21 @@ body {
 	margin: 0px;
 }
 
-#ads_container {
-	width: 90%;
-	height: 50%;
-	overflow: hidden;
+.ccc {
+	position: absolute;
+	color: white;
+	font-weight: 900;
+	font-size: 22px;
+	pointer-events: none;
+	animation: GoUp 750ms forwards ease-in;
+}
+
+.fireworks_vid {
+	pointer-events: none;
+	position: absolute;
+	z-index: 50;
+    height: 100%;
+	left: 0%;
 }
 
 #pieClicker {
@@ -95,13 +106,14 @@ body {
 	top: 4%;
 }
 
-@keyframes GoUp{
-	0%{
-	  	opacity:1;
-	}100%{
-		font-size:17px;
-		top:15%;
-		opacity:0;
+@keyframes GoUp {
+	0% {
+	  	opacity: 1;
+	}
+	100% {
+		font-size: 17px;
+		top: 20%;
+		opacity: 0;
 	}
 }
 
@@ -122,6 +134,7 @@ body {
 	cursor: pointer;
 	width: 90%;
 	height: auto;
+	overflow: hidden;
 }
 
 #pieRightF {

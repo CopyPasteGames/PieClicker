@@ -29,7 +29,7 @@
 		<link rel="stylesheet" href="./game.css">
 		<script src="./jquery.js"></script>
 	</head>
-	<body>
+	<body onload="startGame()">
 		<div id="pieClicker">
 			<div id="pieBackground">
 				<img src="./assets/KitchenBackgroundBlue.webp" style="width:100%;height:100%;" draggable="false" id="pieChild" alt="PieClicker Background">
@@ -202,7 +202,7 @@
 					</table>
 				</div>
 				<br>
-				<div style="font-size:2vh;">*Settings should autosave within 10 seconds of being changed</div>
+				<div style="font-size:2vh;">*Settings should autosave within 30 seconds of being changed</div>
 			</div>
 			<div class="uis_exit" onclick="$('#settingsMenu').fadeOut(500)">
 				<img loading="lazy" src="./assets/x-circle-fill.svg" style="width:100%;height:100%;" draggable="false" alt="Exit Settings">
@@ -225,5 +225,15 @@
 		<script async src="./anim.js"></script>
 		<script async src="./game.js"></script>
 		<script async src="./music.js"></script>
+		<div id="preloadBuyAnims">
+			<link rel="preload" href="./assets/anim0.webm" as="video">
+			<link rel="preload" href="./assets/anim1.webm" as="video">
+			<link rel="preload" href="./assets/anim2.webm" as="video">
+			<link rel="preload" href="./assets/anim3.webm" as="video">
+			<link rel="preload" href="./assets/anim4.webm" as="video">
+			<link rel="preload" href="./assets/anim5.webm" as="video">
+			<link rel="preload" href="./assets/anim6.webm" as="video">
+			<link rel="preload" href="./assets/anim7.webm" as="video">
+		</div>
 	</body>
 </html>

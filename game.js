@@ -141,7 +141,7 @@ pcU = [
 		],
 		"buy": (elem, i) => {
 			if(!charge(pcR[i].cost)) return false
-			clickFireworks($(elem), 50)
+			clickFireworks(elem)
 
 			if(pcR[i].tier != pcU[i].assets.length) pcR[i].tier = pcR[i].tier + 1
 			let asset = pcU[i].assets[pcR[i].tier]
@@ -170,7 +170,7 @@ pcU = [
         ],
 		"buy": (elem, i) => {
 			if(!charge(pcR[i].cost)) return false
-			clickFireworks($(elem), 50)
+			clickFireworks(elem)
 			
 			pcP.ppc += 1
 
@@ -191,7 +191,7 @@ pcU = [
         ],
 		"buy": (elem, i) => {
 			if(!charge(pcR[i].cost)) return false
-			clickFireworks($(elem), 50)
+			clickFireworks(elem)
 			
 			pcP.pps += 1
 
@@ -224,7 +224,7 @@ pcU = [
 		],
 		"buy": (elem, i) => {
 			if(!charge(pcR[i].cost)) return false
-			clickFireworks($(elem), 50)
+			clickFireworks(elem)
 			
 			if(pcR[i].tier != pcU[i].assets.length) pcR[i].tier = pcR[i].tier + 1
 			let asset = pcU[i].assets[pcR[i].tier]
@@ -250,7 +250,7 @@ pcU = [
         ],
 		"buy": (elem, i) => {
 			if(!charge(pcR[i].cost)) return false
-			clickFireworks($(elem), 50)
+			clickFireworks(elem)
 
 			let gained = randInt(5, 15)
 			pcP.pps += gained
@@ -273,7 +273,7 @@ pcU = [
         ],
 		"buy": (elem, i) => {
 			if(!charge(pcR[i].cost)) return false
-			clickFireworks($(elem), 50)
+			clickFireworks(elem)
 
 			let gained = randInt(5, 15)
 			pcP.ppc += gained
@@ -296,7 +296,7 @@ pcU = [
         ],
 		"buy": (elem, i) => {
 			if(!charge(pcR[i].cost)) return false
-			clickFireworks($(elem), 50)
+			clickFireworks(elem)
 			
 			pcP.pps += 25
 
@@ -317,7 +317,7 @@ pcU = [
         ],
 		"buy": (elem, i) => {
 			if(!charge(pcR[i].cost)) return false
-			clickFireworks($(elem), 50)
+			clickFireworks(elem)
 			
 			pcP.ppc += round(pcP.ppc * 0.1)
 			pcP.pps += round(pcP.pps * 0.1)
@@ -341,7 +341,7 @@ pcU = [
         ],
 		"buy": (elem, i) => {
 			if(!charge(pcR[i].cost)) return false
-			clickFireworks($(elem), 50)
+			clickFireworks(elem)
 
 			pcP.pps = pcP.pps * 100
 
@@ -362,7 +362,7 @@ pcU = [
         ],
 		"buy": (elem, i) => {
 			if(!charge(pcR[i].cost)) return false
-			clickFireworks($(elem), 50)
+			clickFireworks(elem)
 
 			pcP.ppc = pcP.ppc * 2
 			pcP.pps = pcP.pps * 2
@@ -384,7 +384,7 @@ pcU = [
         ],
 		"buy": (elem, i) => {
 			if(!charge(pcR[i].cost)) return false
-			clickFireworks($(elem), 50)
+			clickFireworks(elem)
 
 			pcP.ppc += 200
 			pcP.pps += 200
@@ -445,7 +445,7 @@ pcU = [
 		],
 		"buy": (elem, i) => {
 			if(!charge(pcR[i].cost)) return false
-			clickFireworks($(elem), 50)
+			clickFireworks(elem)
 			
 			pcU[i].misc[pcR[i].tier]()
 
@@ -475,12 +475,19 @@ pcP = {
 	ppcMult: 1,
 	ppsMult: 1
 }
+precomp = {
+	ca: 0,
+	cad: 0,
+	pps: 0,
+	ppc: 0,
+	tick: 0
+}
 
 const r = [
 	'Version:',
 	'gameVersion',
 	'#pie',
-	'#idVer',
+	'idVer',
 	'#copyPasteLogo',
 	'#creditsName',
 	'#creditsTitle',
@@ -493,9 +500,11 @@ const r = [
 	'./assets/'
 ]
 
+function gid(x) {return document.getElementById(x)}
+
 function hoverEnter(elem, i) {
 	if(!canAfford(pcR[i].cost)) {
-		$(`#pcu${i}`).css("filter", "brightness(0.25)")
+		$('#pcu'+i).css("filter", "brightness(0.25)")
 		$(elem).append(`
 			<div class="afford_cover" id="afrdcovr">
 				<div class="centerText">
@@ -508,31 +517,30 @@ function hoverEnter(elem, i) {
 }
 
 function hoverLeave(elem, i) {
-	$(`#pcu${i}`).css("filter", "")
+	$('#pcu'+i).css("filter", "")
 	$("#afrdcovr").remove()
 }
 
 for(let i = 0; i < pcU.length; i++) {
-    $('#upgradesContainer').append(`
+    gid('upgradesContainer').innerHTML += `
         <div 	class="pieUpgrade sort${pcU[i].sort.replace(/ /g, ' sort')}" 
 				onclick="pcU[${i}].buy(this, ${i})"
 				onmouseenter="hoverEnter(this, ${i})"
-				onmouseleave="hoverLeave(this, ${i})"
-					>
+				onmouseleave="hoverLeave(this, ${i})">
 			<img loading="lazy" src="${r[13]}${pcU[i].assets[pcR[i].tier]}" id="pcu${pcU[i].id}" style="width:100%;height:100%;" draggable="false" alt="Update ${pcU[i].name}">
         </div>
-    `)
+    `
 }
 
-$(document).ready(() => {
-	var a = localStorage.getItem("lastLogTime")
+function startGame() {
+	let a = localStorage.getItem("lastLogTime")
 	if(a != undefined) {
-		var a = Date.parse(a)
-		var b = Date.parse(new Date())
-		var d = ((b - a) / 1000)
+		let llt = Date.parse(a)
+		let b = Date.parse(new Date())
+		let d = ((b - llt) / 1000)
 		if(d > 5) {
-			var c = (pcP.pps * pcP.ppsMult) * d
-			pies = pies + c
+			let c = (pcP.pps * pcP.ppsMult) * d
+			pcP.pies += c
 			waitThenMessageGame("Made " + p2n(c) + " Pies While Gone!", 2000, 3)
 		}
 	} else {
@@ -551,12 +559,13 @@ $(document).ready(() => {
 		pcV.version = pcV.currentVersion
 	}
 
-	$(r[3]).html(r[0] + pcV.version + (pcG.inDev ? r[8] : ''))
+	gid(r[3]).innerHTML = "Version:4" + (pcG.inDev ? r[8] : '')
 
 	refreshAll()
-})
+}
 
 function refreshAll() {
+	precompute()
 	chefsRefresh()
 	backgroundRefresh()
 	empireRefresh()
@@ -597,29 +606,20 @@ $(window).bind("load", () => {
 // When the user clicks on the pie
 $(r[2]).click((e) => {
 	$(r[2]).stop(true, false)
-	var c = pcP.ppc * pcP.ppcMult
 	pcG.pieAnimID = pcG.pieAnimID + 1
-	$("body").append(`<div id="pieInd${pcG.pieAnimID}">+${p2n(c)}</div>`)
+	$("body").append(`<div id="pieInd${pcG.pieAnimID}" class="ccc">+${precomp.cad}</div>`)
 	$('#pieInd' + pcG.pieAnimID).css({
-		"position": "absolute",
-		"top": (e.pageY + randInt(-10, 10)) + "px",
-		"left": (e.pageX + randInt(-10, 10)) + "px",
-		"color": "white",
-		"font-weight": "800",
-		"font-size": "29px",
-		"pointer-events": r[9],
-		// Chaned this from 'linear' to 'ease-in' be sure to test each use case.
-		"animation": "GoUp 1250ms forwards ease-in"
+		"top": (e.pageY + randInt(-12, 12)) + "px",
+		"left": (e.pageX + randInt(-12, 12)) + "px"
 	})
-	$("#pieInd" + pcG.pieAnimID).show()
 	$(r[2]).animate({"width": "95%", "left": "2.5%", "top": "14%"}, 40)
 	$(r[2]).animate({"width": "90%", "left": "5%", "top": "15%"}, 100)
-	removeElem("#pieInd" + pcG.pieAnimID)
+	removeElem("pieInd" + pcG.pieAnimID, 750)
 	if(!pcG.hasInteracted) {
 		pcG.hasInteracted = true
 		setInterval(() => {musicTick()}, 10000)
 	}
-	pcP.pies += c
+	pcP.pies += precomp.ca
 	reloadStats()
 })
 
@@ -638,20 +638,21 @@ if(!pcG.inDev) {
 }
 
 function boughtItem(i) {
+	precompute()
 	pcR[i].cost = round(pcR[i].cost * pcU[i].ccmc)
 	pcR[i].qnty += 1
 }
 
 function round(n) {return Math.round(n)}
-function removeElem(a) {setTimeout(() => {$(a).remove()}, 2250)}
+function removeElem(a, w) {setTimeout(() => {gid(a).remove()}, w)}
 function sleep(m) {return new Promise(r => setTimeout(r, m))}
 function CLog(m) {console.log("[game.js " + new Date().getTime() + "] " + m)}
 function randInt(n, x) {return Math.floor(Math.random() * (x - n + 1)) + n}
 
 function reloadStats() {
 	$("#pies").html(p2n(pcP.pies))
-	$("#pps").html(p2n(pcP.pps))
-	$("#ppc").html(p2n(pcP.ppc))
+	$("#pps").html(precomp.pps)
+	$("#ppc").html(precomp.ppc)
 }
 
 function empireRefresh() {
@@ -688,7 +689,7 @@ function backgroundRefresh() {
 }
 
 async function PleasePlayTheCredits() {
-	var y = [
+	let y = [
 		{"n": "kgsensei", "t": "Lead Programmer"},
 		{"n": "Azalea Jerez", "t": "Graphic Designer"},
 		{"n": "Ian Paris-Wright", "t": "Music Artist"},
@@ -720,7 +721,9 @@ async function PleasePlayTheCredits() {
 	}
 }
 
-function canAfford(i) {return pcP.pies >= i}
+function canAfford(i) {
+	return pcP.pies >= i
+}
 
 function charge(i) {
 	if(pcP.pies >= i) {
@@ -739,35 +742,23 @@ async function messageGame(m, t = 3) {
 }
 
 function p2n(v) {
-	// 66 Zeros for Unvigintillion
-    return Math.abs(Number(v)) >= 1.0e+66 ? (Math.abs(Number(v)) / 1.0e+66).toFixed(6) + "c"// 63 Zeros for Vigintillion
-    : Math.abs(Number(v)) >= 1.0e+63 ? (Math.abs(Number(v)) / 1.0e+63).toFixed(6) + "v"// 60 Zeros for Novemdecillion
-    : Math.abs(Number(v)) >= 1.0e+60 ? (Math.abs(Number(v)) / 1.0e+60).toFixed(6) + "N"// 57 Zeros for Octodecillion
-    : Math.abs(Number(v)) >= 1.0e+57 ? (Math.abs(Number(v)) / 1.0e+57).toFixed(5) + "O"// 54 Zeros for Septendecillion
-    : Math.abs(Number(v)) >= 1.0e+54 ? (Math.abs(Number(v)) / 1.0e+54).toFixed(5) + "St"// 51 Zeros for Sexdecillion
-    : Math.abs(Number(v)) >= 1.0e+51 ? (Math.abs(Number(v)) / 1.0e+51).toFixed(5) + "Sd"// 48 Zeros for Quindecillion
-    : Math.abs(Number(v)) >= 1.0e+48 ? (Math.abs(Number(v)) / 1.0e+48).toFixed(5) + "Qd"// 45 Zeros for Quattuordecillion
-    : Math.abs(Number(v)) >= 1.0e+45 ? (Math.abs(Number(v)) / 1.0e+45).toFixed(5) + "Qt"// 42 Zeros for Tredecillion
-    : Math.abs(Number(v)) >= 1.0e+42 ? (Math.abs(Number(v)) / 1.0e+42).toFixed(4) + "T"// 39 Zeros for Duodecillion
-    : Math.abs(Number(v)) >= 1.0e+39 ? (Math.abs(Number(v)) / 1.0e+39).toFixed(4) + "D"// 36 Zeros for Undecillion
-    : Math.abs(Number(v)) >= 1.0e+36 ? (Math.abs(Number(v)) / 1.0e+36).toFixed(4) + "U"// 33 Zeros for Decillion
-    : Math.abs(Number(v)) >= 1.0e+33 ? (Math.abs(Number(v)) / 1.0e+33).toFixed(4) + "d"// 30 Zeros for Nonillion
-    : Math.abs(Number(v)) >= 1.0e+30 ? (Math.abs(Number(v)) / 1.0e+30).toFixed(4) + "n"// 27 Zeros for Octillion
-    : Math.abs(Number(v)) >= 1.0e+27 ? (Math.abs(Number(v)) / 1.0e+27).toFixed(3) + "o"// 24 Zeroes for Septillion
-    : Math.abs(Number(v)) >= 1.0e+24 ? (Math.abs(Number(v)) / 1.0e+24).toFixed(3) + "S"// 21 Zeroes for Sextillion
-    : Math.abs(Number(v)) >= 1.0e+21 ? (Math.abs(Number(v)) / 1.0e+21).toFixed(3) + "s"// 18 Zeroes for Quintillion
-    : Math.abs(Number(v)) >= 1.0e+18 ? (Math.abs(Number(v)) / 1.0e+18).toFixed(3) + "Q"// 15 Zeroes for Quadrillion
-    : Math.abs(Number(v)) >= 1.0e+15 ? (Math.abs(Number(v)) / 1.0e+15).toFixed(2) + "q"// 12 Zeroes for Trillions
-    : Math.abs(Number(v)) >= 1.0e+12 ? (Math.abs(Number(v)) / 1.0e+12).toFixed(2) + "t"// 9 Zeroes for Billions
-    : Math.abs(Number(v)) >= 1.0e+9 ? (Math.abs(Number(v)) / 1.0e+9).toFixed(2) + "B"// 6 Zeroes for Millions 
-    : Math.abs(Number(v)) >= 1.0e+6 ? (Math.abs(Number(v)) / 1.0e+6).toFixed(1) + "M"// 3 Zeroes for Thousands
-    : Math.abs(Number(v)) >= 1.0e+3 ? (Math.abs(Number(v)) / 1.0e+3).toFixed(1) + "K" : Math.abs(Number(v))
+	return Intl.NumberFormat('en-US', {
+		notation: "compact",
+		maximumFractionDigits: 1
+	}).format(v)
+}
+
+function precompute() {
+	precomp.ca = pcP.ppc * pcP.ppcMult
+	precomp.cad = p2n(precomp.ca)
+	precomp.pps = p2n(pcP.pps)
+	precomp.ppc = p2n(pcP.ppc)
+	precomp.tick = (pcP.pps * pcP.ppsMult) * pcZ.tickSpeed
 }
 
 function tickGame() {
-	var g = (pcP.pps * pcP.ppsMult) * pcZ.tickSpeed
-	pcP.pies += g
-	if(pcG.doSaveGame && pcG.saveTick == 10) {
+	pcP.pies += precomp.tick
+	if(pcG.doSaveGame && pcG.saveTick == 30) {
 		saveGame()
 		pcG.saveTick = 0
 	}
@@ -778,7 +769,7 @@ function tickGame() {
 	if(pcG.MSGtick > 6) pcG.MSGtick = 4
 	if(pcG.MSGtick == 0) $(r[7]).fadeOut(100)
 
-	if(pcG.AFK) pcG.awayPies += g
+	if(pcG.AFK) pcG.awayPies += precomp.tick
 
 	if(pcP.pies == Infinity || pcP.pps == Infinity || pcP.ppc == Infinity) {
 		messageGame("FREAK ACCIDENT:  PIES, PPS & PPC DESTROYED!", 4)
@@ -805,20 +796,22 @@ function devMode() {
 	pcZ.kitchenBackground = 0
 	pcZ.hasSeenCredits = false
 	refreshAll()
-	$(r[3]).html(r[0] + pcV.version + (pcG.inDev ? r[8] : ''))
+	gid(r[3]).innerHTML = r[0] + pcV.version + (pcG.inDev ? r[8] : '')
 	messageGame("Dev Mode Enabled - Will Not Save Game", 3)
 }
 
 function confirmationBox(t, b1, b2, bf, bg) {
-	$('#pm_text').html(t)
-	$('#pm_btn1_real').html(b1)
-	$('#pm_btn2_real').html(b2)
+	gid('pm_text').innerHTML = t
+	gid('pm_btn1_real').innerHTML = b1
+	gid('pm_btn2_real').innerHTML = b2
 	$('#pm_btn1').attr("onclick", bf)
 	$('#pm_btn2').attr("onclick", bg)
 	$('#popupMenu').fadeIn(500)
 }
 
-function resetGame() {confirmationBox("Reset Game?", "Yes", "No", "pcReset()", "$('#popupMenu').fadeOut(500)")}
+function resetGame() {
+	confirmationBox("Reset Game?", "Yes", "No", "pcReset()", "$('#popupMenu').fadeOut(500)")
+}
 
 function pcReset() {
 	pcG.doSaveGame = false
