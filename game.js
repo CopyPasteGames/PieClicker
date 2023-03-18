@@ -83,7 +83,7 @@ pcR = [
 	{
 		"id": 8,
         "qnty": 0,
-        "cost": 100000000000,
+        "cost": 1000000000000,
         "tier": 0,
         "show": true
 	},
@@ -332,7 +332,7 @@ pcU = [
 	{
 		"id": 8,
         "name": "Nuke Pie",
-        "ccmc": 1000,
+        "ccmc": 10000,
         "prts": 0,
         "show": true,
         "sort": "ALL PPS",
