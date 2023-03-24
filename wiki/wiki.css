@@ -1,0 +1,31 @@
+@font-face {
+	font-family: CenturyGothic;
+	src: url("./assets/CenturyGothic.ttf");
+}
+
+body {
+    background-color: rgb(20, 20, 20);
+    font-family: CenturyGothic;
+    padding: 0;
+    margin: 0;
+    color: rgb(255, 255, 255);
+}
+
+#wiki_title {
+    position: absolute;
+    top: 0%;
+    left: 0%;
+    width: 25%;
+}
+
+#content {
+    font-family: CenturyGothic;
+    position: absolute;
+    top: 20%;
+    left: 20%;
+    width: 60%;
+}
+
+a {
+    color: rgb(224, 70, 70);
+}

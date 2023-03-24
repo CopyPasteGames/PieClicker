@@ -1,0 +1,194 @@
+@font-face {
+	font-family: CenturyGothic;
+	src: url("./assets/CenturyGothic.ttf");
+}
+
+body {
+    background-color: rgb(20, 20, 20);
+    font-family: CenturyGothic;
+    padding: 0;
+    margin: 0;
+    color: rgb(255, 255, 255);
+}
+
+#game_intro_panel {
+    position: absolute;
+    top: 10%;
+    left: 30%;
+    height: 50%;
+    width: 40%;
+}
+
+#game_intro_title {
+    position: absolute;
+    text-align: center;
+    width: 100%;
+    top: 53%;
+    font-size: 4vw;
+    color: rgb(224, 70, 70);
+    opacity: 0;
+    transform: translate(0, 50%);
+    animation: fadeInUp 800ms ease-in-out 100ms forwards;
+}
+
+.special_text {
+    color: rgb(224, 70, 70);
+}
+
+#game_intro_pie {
+    position: absolute;
+    top: 0%;
+    left: calc(50% - 350px);
+    width: 700px;
+    height: 700px;
+    animation: rotate 12s linear 100ms infinite;
+}
+
+@keyframes rotate {
+    0% {
+        transform: rotate(0deg);
+    }
+    100% {
+        transform: rotate(360deg);
+    }
+}
+
+@keyframes fadeInUp {
+	100% {
+		transform: translate(0, 0);
+		opacity: 1;
+	}
+}
+
+#new_area_one {
+    position: absolute;
+    top: 95%;
+    left: 70%;
+    width: 30%;
+}
+
+#new_area_two {
+    position: absolute;
+    top: 95%;
+    left: 0%;
+    width: 30%;
+}
+
+#section_two_panel {
+    position: absolute;
+    top: 120%;
+    left: 37%;
+    height: 50%;
+    width: 40%;
+}
+
+.fullImg {
+    height: 100%;
+}
+
+#new_area_thr {
+    position: absolute;
+    overflow: hidden;
+    top: 150%;
+    left: 80%;
+    height: 700px;
+    width: 20%;
+}
+
+#section_thr_panel {
+    position: absolute;
+    top: 183%;
+    left: 22%;
+    height: 50%;
+    width: 40%;
+}
+
+#new_area_for {
+    position: absolute;
+    overflow: hidden;
+    top: 220%;
+    left: -20%;
+    height: 700px;
+    width: 40%;
+}
+
+#section_for_panel {
+    position: absolute;
+    top: 243%;
+    left: 35%;
+    height: 50%;
+    width: 40%;
+}
+
+.btn_link {
+    background-color: rgb(224, 70, 70);
+    display: inline-block;
+    padding: 8px;
+    margin: 5px 5px 0px 5px;
+    border-radius: 6px;
+    color: rgb(255, 255, 255);
+    cursor: pointer;
+}
+
+.special_or::before, .special_or::after {
+    margin: 10px;
+    content: "---------------";
+}
+
+#section_fiv_panel {
+    position: absolute;
+    top: 310%;
+    left: 20%;
+    height: 30%;
+    width: 60%;
+    text-align: center;
+}
+
+@media only screen and (max-device-width: 915px) {
+    #game_intro_pie {
+        top: 0%;
+        left: calc(50% - 150px);
+        width: 300px;
+        height: 300px;
+    }
+
+    #game_intro_title {
+        top: 30%;
+        font-size: 7vw;
+    }
+
+    #new_area_one, #new_area_two {
+        top: 70%;
+    }
+
+    #section_two_panel {
+        top: 83%;
+        left: 30%;
+        width: 60%;
+    }
+
+    #section_thr_panel {
+        top: 127%;
+        left: 10%;
+        width: 80%;
+    }
+
+    #new_area_thr, #new_area_for {
+        display: none;
+    }
+
+    #section_for_panel {
+        top: 194%;
+        left: 10%;
+        width: 80%;
+    }
+
+    #section_fiv_panel {
+        position: absolute;
+        top: 259%;
+        left: 10%;
+        height: 70%;
+        width: 80%;
+        text-align: center;
+    }
+}

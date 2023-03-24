@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="en-us">
+	<head>
+		<meta charset="utf-8">
+		<title>PieClicker | Web Demo</title>
+
+		<meta name="description" content="PieClicker, A pie themed clicker game by CopyPaste Games.">
+		<meta name="keywords" content="Pie, Clicker, kgsensei, CopyPaste Games, Clicker Games">
+		<meta name="author" content="kgsensei & CopyPaste Games">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<meta name="url" content="https://pieclicker.com">
+		<meta name="copyright" content="kgsensei">
+
+		<meta name="og:url" content="https://pieclicker.com">
+		<meta name="og:title" content="PieClicker Web Demo">
+		<meta name="og:image" content="https://pieclicker.com/assets/PieClickerEmpires.webp">
+		<meta name="og:image:width" content="1366">
+		<meta name="og:image:height" content="768">
+		<meta name="og:site_name" content="PieClicker.com">
+		<meta name="og:description" content="PieClicker, A pie themed clicker game by CopyPaste Games.">
+
+		<meta name="twitter:card" content="summary_large_image">
+        <meta name="theme-color" content="#fc496dff">
+
+		<script async src="./ka.js"></script>
+
+		<link rel="icon" href="./assets/Pie.webp">
+
+		<link rel="stylesheet" href="./game.css">
+		<script src="./jquery.js"></script>
+
+		<!-- Publisher Tag Manager -->
+		<script>(function(w,d,s,a){var f=d.getElementsByTagName(s)[0],
+			j=d.createElement(s),dl='&.='+new Date().getTime()
+			,r=d.referrer;r=!!r&&r!==d.location.href?'&r='+r:'';j.async=true;
+			w['.']=a;j.src= '//pubtagmanager.com/ptm.js?id='+a+dl+r;
+			f.parentNode.insertBefore(j,f);
+		})(window,document,'script','2799');</script>
+		<!-- End Publisher Tag Manager -->
+	</head>
+	<body onload="startGame()">
+		<div id="pieClicker">
+			<div id="pieBackground">
+				<img src="./assets/KitchenBackgroundBlue.webp" style="width:100%;height:100%;" draggable="false" id="pieChild" alt="PieClicker Background">
+			</div>
+			<div id="pieCount">
+				<div class="centerText">
+					Pies: <span id="pies">0</span>
+				</div>
+			</div>
+			<div id="pieGRate">
+				<div class="centerText">
+					Pies/Sec: <span id="pps">0</span> | Pies/Click: <span id="ppc">0</span>
+				</div>
+			</div>
+			<div id="pie">
+				<img src="./assets/Pie.webp" style="width:100%;height:100%;" draggable="false" id="pieBtn" alt="PieClicker Pie">
+			</div>
+		</div>
+		<div id="pieRightD"></div>
+		<div id="pieUpgrades">
+			<div id="upgradesTitle">
+				<div class="centerText">
+					Upgrades
+				</div>
+			</div>
+			<div id="upgradeShowAll" class="sortButton" onclick="sortUpgrades('all')">
+				<div class="centerText">
+					Sort: All
+				</div>
+			</div>
+			<div id="upgradeShowPPS" class="sortButton" onclick="sortUpgrades('pps')">
+				<div class="centerText">
+					Sort: PPS
+				</div>
+			</div>
+			<div id="upgradeShowPPC" class="sortButton" onclick="sortUpgrades('ppc')">
+				<div class="centerText">
+					Sort: PPC
+				</div>
+			</div>
+			<div id="upgradeShowPEU" class="sortButton" onclick="sortUpgrades('misc')">
+				<div class="centerText">
+					Sort: Misc
+				</div>
+			</div>
+			<div class="slightPaddingUpgrades" style="overflow-y:scroll;" id="upgradesContainer">
+				<br>
+			</div>
+		</div>
+
+
+		<div id="pieRightF"></div>
+		<div id="pieOtherMenu">
+
+
+			<div id="otherMenuTitle">
+				<div class="centerText">
+					Other Stuff
+				</div>
+			</div>
+
+
+			<div class="slightPadding">
+				<br>
+				<div class="otherMenuOption" onclick="PleasePlayTheCredits()">
+					<img loading="lazy" src="./assets/Button.webp" style="width:100%;height:100%;" draggable="false" alt="PieClicker Credits">
+					<div class="btnText">Credits</div>
+				</div>
+
+
+				<div class="otherMenuOption" onclick='resetGame()'>
+					<img loading="lazy" src="./assets/Button.webp" style="width:100%;height:100%;" draggable="false" alt="PieClicker Reset Game">
+					<div class="btnText">Reset</div>
+				</div>
+
+
+				<div class="otherMenuOption" onclick="settingsRefresh();$('#settingsMenu').fadeIn(500)">
+					<img loading="lazy" src="./assets/Button.webp" style="width:100%;height:100%;" draggable="false"  alt="PieClicker Settings">
+					<div class="btnText">Settings</div>
+				</div>
+				<br>
+
+
+				<div style="font-size:1.25vw">
+					Discord Server:
+					<a href="https://link.kgsensei.dev/discord" style="color:aqua;" target="_blank">https://link.kgsensei.dev/discord</a>
+					<br>
+					[For dev news, Bug reports, Feature requests, etc.]
+					<br>
+					Copyright &copy; kgsensei & CopyPasteGames 2023.
+				</div>
+			</div>
+		</div>
+
+
+		<div id="creditsOverlay">
+			<div id="creditsName"></div>
+			<div id="creditsTitle"></div>
+		</div>
+
+
+		<div id="messageBar">
+			<div id="messageBarText" class="centerText"></div>
+		</div>
+
+
+		<div id="introScreen" class="introScreen">
+			<div id="is_centerV">
+				<div id="is_centerH">
+					<img loading="lazy" src="./assets/CopyPasteGames.webp" style="height:100%;width:auto;display:none;" draggable="false" id="copyPasteLogo" alt="CopyPaste Games Logo">
+				</div>
+			</div>
+		</div>
+
+
+		<div id="popupMenu">
+			<div id="pm_text">Text</div>
+			<div id="pm_btn1" onclick="null">
+				<div class="centerText" id="pm_btn1_real">
+					Btn1
+				</div>
+			</div>
+			<div id="pm_btn2" onclick="null">
+				<div class="centerText" id="pm_btn2_real">
+					Btn2
+				</div>
+			</div>
+		</div>
+
+
+		<div id="settingsMenu">
+			<div class="slightPadding" style="overflow-y:scroll;">
+				<h3>PieClicker Game Settings</h3>
+				<div class="uis_half">
+					<table class="tableNoBorder">
+						<tbody class="tableNoBorder">
+							<tr class="tableNoBorder">
+								<td class="tableNoBorder">Mute Game</td>
+								<td class="tableNoBorder">
+									<div onclick="pcS.mute =! pcS.mute; $('#musicPlayer').remove(); pcG.isPlayingMusic = false; settingsRefresh()" class="settingsBtn">
+										<img loading="lazy" id="settingsMuteGame" src="./assets/CheckBoxEmpty.webp" style="width:100%;height:100%;" alt="Settings Checkbox">
+									</div>
+								</td>
+							</tr>
+							<tr class="tableNoBorder">
+								<td class="tableNoBorder">Do Click Animations</td>
+								<td class="tableNoBorder">
+									<div onclick="pcS.clickAnim =! pcS.clickAnim; settingsRefresh()" class="settingsBtn">
+										<img loading="lazy" id="settingsDoClickAnimations" src="./assets/CheckBoxEmpty.webp" style="width:100%;height:100%;" alt="Settings Checkbox">
+									</div>
+								</td>
+							</tr>
+							<tr class="tableNoBorder">
+								<td class="tableNoBorder">Do Purchase Animations</td>
+								<td class="tableNoBorder">
+									<div onclick="pcS.purchaseAnim =! pcS.purchaseAnim; settingsRefresh()" class="settingsBtn">
+										<img loading="lazy" id="settingsDoPurchaseAnimations" src="./assets/CheckBoxEmpty.webp" style="width:100%;height:100%;" alt="Settings Checkbox">
+									</div>
+								</td>
+							</tr>
+							<tr class="tableNoBorder">
+								<td class="tableNoBorder">Abbreviate Numbers</td>
+								<td class="tableNoBorder">
+									<div onclick="pcS.abbreviateInts =! pcS.abbreviateInts; settingsRefresh()" class="settingsBtn">
+										<img loading="lazy" id="settingAbbreviateNumbers" src="./assets/CheckBoxEmpty.webp" style="width:100%;height:100%;" alt="Settings Checkbox">
+									</div>
+								</td>
+							</tr>
+						</tbody>
+					</table>
+				</div>
+				<br>
+				<div style="font-size:2vh;">*Settings should autosave within 30 seconds of being changed</div>
+			</div>
+			<div class="uis_exit" onclick="$('#settingsMenu').fadeOut(500)">
+				<img loading="lazy" src="./assets/x-circle-fill.svg" style="width:100%;height:100%;" draggable="false" alt="Exit Settings">
+			</div>
+		</div>
+
+		<div id="whatIsPlayingContainer">
+			<div id="whatIsPlayingCover">
+				<img loading="lazy" src="./assets/PieOreoCheesecake.webp" style="width:100%;height:100%;" id="whatIsPlayingCoverAsset" alt="Album Cover">
+			</div>
+			<div id="whatIsPlayingTrack"></div>
+			<div id="whatIsPlayingArtist"></div>
+		</div>
+
+		<div style="position:fixed;width:20%;left:79.5%;font-size:3vh;height:5%;top:95%;text-align:right;" id="idVer">
+			Error
+		</div>
+
+		<script async src="./fireworks.js"></script>
+		<script async src="./anim.js"></script>
+		<script async src="./game.js"></script>
+		<script async src="./music.js"></script>
+		<div id="preloadBuyAnims">
+			<link rel="preload" href="./assets/anim0.webm" as="video">
+			<link rel="preload" href="./assets/anim1.webm" as="video">
+			<link rel="preload" href="./assets/anim2.webm" as="video">
+			<link rel="preload" href="./assets/anim3.webm" as="video">
+			<link rel="preload" href="./assets/anim4.webm" as="video">
+			<link rel="preload" href="./assets/anim5.webm" as="video">
+			<link rel="preload" href="./assets/anim6.webm" as="video">
+			<link rel="preload" href="./assets/anim7.webm" as="video">
+		</div>
+	</body>
+</html>
