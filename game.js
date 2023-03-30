@@ -46,65 +46,9 @@ pcR = [
         "show": true
 	},
 	{
-		"id": 3,
-        "qnty": 0,
-        "cost": 10000,
-        "tier": 0,
-        "show": true
-	},
-	{
-		"id": 4,
-        "qnty": 0,
-        "cost": 2500,
-        "tier": 0,
-        "show": true
-	},
-	{
-		"id": 5,
-        "qnty": 0,
-        "cost": 2500,
-        "tier": 0,
-        "show": true
-	},
-	{
 		"id": 6,
         "qnty": 0,
         "cost": 5000,
-        "tier": 0,
-        "show": true
-	},
-	{
-		"id": 7,
-        "qnty": 0,
-        "cost": 10000,
-        "tier": 0,
-        "show": true
-	},
-	{
-		"id": 8,
-        "qnty": 0,
-        "cost": 1000000000000,
-        "tier": 0,
-        "show": true
-	},
-	{
-		"id": 9,
-        "qnty": 0,
-        "cost": 10000000,
-        "tier": 0,
-        "show": true
-	},
-	{
-		"id": 10,
-        "qnty": 0,
-        "cost": 100000000,
-        "tier": 0,
-        "show": true
-	},
-	{
-		"id": 11,
-        "qnty": 0,
-        "cost": 10000000000,
         "tier": 0,
         "show": true
 	}
@@ -121,23 +65,13 @@ pcU = [
         "assets": [              // All Upgrade Assets, If only one tier use one asset, max tier is final asset
 			"UpgradeButtonPumpkinPie.webp",
 			"UpgradeButtonApplePie.webp",
-			"UpgradeButtonCheesecake.webp",
-			"UpgradeButtonOreoCheesecake.webp",
-			"UpgradeButtonLemonMeringuePie.webp",
-			"UpgradeButtonKeyLimePie.webp",
-			"UpgradeButtonChocolateCreamPie.webp",
-			"UpgradeButtonStrawberryPie.webp"
+			"UpgradeButtonCheesecake.webp"
         ],
 		"misc": [
 			"1|Pie.webp",
 			"2|PiePumpkin.webp",
 			"3|PieApple.webp",
-			"5|PieCheesecake.webp",
-			"7|PieOreoCheesecake.webp",
-			"10|PieLemonMeringue.webp",
-			"15|PieKeyLime.webp",
-			"25|PieChocolateCream.webp",
-			"35|PieStrawberry.webp"
+			"5|PieCheesecake.webp"
 		],
 		"buy": (elem, i) => {
 			if(!charge(pcR[i].cost)) return false
@@ -201,90 +135,6 @@ pcU = [
 		}
     },
 	{
-		"id": 3,
-        "name": "Master Chef",
-        "ccmc": 3,
-        "prts": 0,
-        "show": true,
-        "sort": "ALL MISC",
-        "assets": [
-			"UpgradeButtonApprenticeChef.webp",
-            "UpgradeButtonAdvancedChef.webp",
-			"UpgradeButtonExpertChef.webp",
-			"UpgradeButtonMasterChef.webp",
-			"UpgradeButtonGrandmasterChef.webp",
-			"UpgradeButtonGMChefPlatinumI.webp",
-			"UpgradeButtonGMChefPlatinumII.webp",
-			"UpgradeButtonGMChefPlatinumIII.webp",
-			"UpgradeButtonGMChefPlatinumIV.webp",
-			"UpgradeButtonGMChefPlatinumV.webp"
-		],
-		"misc": [
-			0, 2, 3, 4, 5, 8, 15, 20, 30, 50, 75
-		],
-		"buy": (elem, i) => {
-			if(!charge(pcR[i].cost)) return false
-			clickFireworks(elem)
-			
-			if(pcR[i].tier != pcU[i].assets.length) pcR[i].tier = pcR[i].tier + 1
-			let asset = pcU[i].assets[pcR[i].tier]
-			if(asset != undefined) $(elem).children()[0].src = `${r[13]}${asset}`
-			else $(elem).css(r[10], r[9])
-
-			pcP.ppsMult += pcU[i].misc[pcR[i].tier]
-
-			boughtItem(i)
-			hoverEnter(elem, i)
-			reloadStats()
-		}
-	},
-	{
-		"id": 4,
-        "name": "Flyers",
-        "ccmc": 2,
-        "prts": 0,
-        "show": true,
-        "sort": "ALL PPS",
-        "assets": [
-            "UpgradeFlyers.webp"
-        ],
-		"buy": (elem, i) => {
-			if(!charge(pcR[i].cost)) return false
-			clickFireworks(elem)
-
-			let gained = randInt(5, 15)
-			pcP.pps += gained
-			messageGame(`You got +${gained} new assistant chefs!`)
-
-			boughtItem(i)
-			hoverEnter(elem, i)
-			reloadStats()
-		}
-	},
-	{
-		"id": 5,
-        "name": "Large Ovens",
-        "ccmc": 1.075,
-        "prts": 0,
-        "show": true,
-        "sort": "ALL PPS",
-        "assets": [
-            "UpgradeButtonLargeOvenUpgrade.webp"
-        ],
-		"buy": (elem, i) => {
-			if(!charge(pcR[i].cost)) return false
-			clickFireworks(elem)
-
-			let gained = randInt(5, 15)
-			pcP.ppc += gained
-			messageGame(`You got +${gained} new oven upgrades!`)
-
-			boughtItem(i)
-			hoverEnter(elem, i)
-			reloadStats()
-		}
-	},
-	{
 		"id": 6,
         "name": "Rolling Pins",
         "ccmc": 1.025,
@@ -299,160 +149,6 @@ pcU = [
 			clickFireworks(elem)
 			
 			pcP.pps += 25
-
-			boughtItem(i)
-			hoverEnter(elem, i)
-			reloadStats()
-		}
-	},
-	{
-		"id": 7,
-        "name": "Revamp Kitchen",
-        "ccmc": 3.5,
-        "prts": 0,
-        "show": true,
-        "sort": "ALL PPS",
-        "assets": [
-            "UpgradeButtonRevampKitchen.webp"
-        ],
-		"buy": (elem, i) => {
-			if(!charge(pcR[i].cost)) return false
-			clickFireworks(elem)
-			
-			pcP.ppc += round(pcP.ppc * 0.1)
-			pcP.pps += round(pcP.pps * 0.1)
-			pcZ.kitchenBackground = randInt(0, 2)
-
-			hoverEnter(elem, i)
-			backgroundRefresh()
-			boughtItem(i)
-			reloadStats()
-		}
-	},
-	{
-		"id": 8,
-        "name": "Nuke Pie",
-        "ccmc": 10000,
-        "prts": 0,
-        "show": true,
-        "sort": "ALL PPS",
-        "assets": [
-            "UpgradeButtonNuclearPieReactor.webp"
-        ],
-		"buy": (elem, i) => {
-			if(!charge(pcR[i].cost)) return false
-			clickFireworks(elem)
-
-			pcP.pps = pcP.pps * 100
-
-			boughtItem(i)
-			hoverEnter(elem, i)
-			reloadStats()
-		}
-	},
-	{
-		"id": 9,
-        "name": "New Bakery",
-        "ccmc": 5,
-        "prts": 0,
-        "show": true,
-        "sort": "ALL PPS PPC",
-        "assets": [
-            "UpgradeButtonBakery.webp"
-        ],
-		"buy": (elem, i) => {
-			if(!charge(pcR[i].cost)) return false
-			clickFireworks(elem)
-
-			pcP.ppc = pcP.ppc * 2
-			pcP.pps = pcP.pps * 2
-
-			boughtItem(i)
-			hoverEnter(elem, i)
-			reloadStats()
-		}
-	},
-	{
-		"id": 10,
-        "name": "Headquarters",
-        "ccmc": 10000000,
-        "prts": 0,
-        "show": true,
-        "sort": "ALL PPS PPC",
-        "assets": [
-            "UpgradeButtonHeadquarters.webp"
-        ],
-		"buy": (elem, i) => {
-			if(!charge(pcR[i].cost)) return false
-			clickFireworks(elem)
-
-			pcP.ppc += 200
-			pcP.pps += 200
-
-			boughtItem(i)
-			hoverEnter(elem, i)
-			reloadStats()
-		}
-	},
-	{
-		"id": 11,
-        "name": "Pie Empire",
-        "ccmc": 2,
-        "prts": 0,
-        "show": true,
-        "sort": "ALL PPS PPC",
-        "assets": [
-			"UpgradeButtonEmpire.webp",
-			"UpgradeButtonExpandEmpire.webp",
-			"UpgradeButtonBodyArmor.webp",
-			"UpgradeButtonArmy.webp",
-			"UpgradeButtonCitizens.webp",
-			"UpgradeButtonNavy.webp",
-            "UpgradeButtonSoldiers.webp",
-			"UpgradeButtonSoldiersTierIII.webp",
-			"UpgradeButtonSpheresOfInfluence.webp"
-        ],
-		"misc": [
-			() => {
-				pcP.pps += 100000
-			},
-			() => {
-				pcP.ppsMult += 50
-				pcP.ppcMult += 50
-				pcP.pps += 100000000
-			},
-			() => {
-				pcP.ppcMult = pcP.ppcMult * 3
-			},
-			() => {
-				pcP.ppsMult = pcP.ppsMult * 5
-			},
-			() => {
-				pcP.pps += 75
-			},
-			() => {
-				pcP.ppsMult = pcP.ppsMult * 10
-			},
-			() => {
-				pcP.ppc += 10000
-			},
-			() => {
-				pcP.ppc += 50000
-			},
-			() => {
-				pcP.pps = pcP.pps * 10
-			}
-		],
-		"buy": (elem, i) => {
-			if(!charge(pcR[i].cost)) return false
-			clickFireworks(elem)
-			
-			pcU[i].misc[pcR[i].tier]()
-
-			if(pcR[i].tier != pcU[i].assets.length) pcR[i].tier = pcR[i].tier + 1
-			let asset = pcU[i].assets[pcR[i].tier]
-			if(asset != undefined) $(elem).children()[0].src = `${r[13]}${asset}`
-			else $(elem).css(r[10], r[9])
 
 			boughtItem(i)
 			hoverEnter(elem, i)
@@ -559,16 +255,13 @@ function startGame() {
 		pcV.version = pcV.currentVersion
 	}
 
-	gid(r[3]).innerHTML = "Version:4" + (pcG.inDev ? r[8] : '')
+	gid(r[3]).innerHTML = "Version:DEMO"
 
 	refreshAll()
 }
 
 function refreshAll() {
 	precompute()
-	chefsRefresh()
-	backgroundRefresh()
-	empireRefresh()
 	piesRefresh()
 	reloadStats()
 }
@@ -655,12 +348,6 @@ function reloadStats() {
 	$("#ppc").html(precomp.ppc)
 }
 
-function empireRefresh() {
-	let i = 11, a = pcU[i].assets[pcR[i].tier]
-	if(a != undefined) $(`#pcu${i}`).attr("src", `${r[13]}${a}`)
-	else $(`#pcu${i}`).parent().css(r[10], r[9])
-}
-
 function piesRefresh() {
 	let i = 0, a = pcU[i].assets[pcR[i].tier], b = pcU[i].misc[pcR[i].tier].split('|')
 	if(a != undefined) $(`#pcu${i}`).attr("src", `${r[13]}${a}`)
@@ -675,17 +362,6 @@ function settingsRefresh() {
 	$("#settingsDoPurchaseAnimations").attr("src", `${f}${pcS.purchaseAnim ? r[11] : r[12]}.webp`)
 	$("#settingAbbreviateNumbers").attr("src", `${f}${pcS.abbreviateInts ? r[11] : r[12]}.webp`)
 	if(pcG.doSaveGame) saveGame()
-}
-
-function chefsRefresh() {
-	let i = 3, a = pcU[i].assets[pcR[i].tier]
-	if(a != undefined) $(`#pcu${i}`).attr("src", `${r[13]}${a}`)
-	else $(`#pcu${i}`).parent().css(r[10], r[9])
-}
-
-function backgroundRefresh() {
-	let b = ['KitchenBackgroundBlue', 'KitchenBackgroundPink', 'KitchenBackgroundWhite']
-	$("#pieChild").attr("src", `${r[13]}${b[pcZ.kitchenBackground]}.webp`)
 }
 
 async function PleasePlayTheCredits() {
