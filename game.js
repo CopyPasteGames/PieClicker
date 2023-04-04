@@ -266,22 +266,6 @@ function refreshAll() {
 	reloadStats()
 }
 
-function saveGame() {
-	localStorage.setItem("lastLogTime", new Date())
-	localStorage.setItem("pcS", JSON.stringify(pcS))
-	localStorage.setItem("pcP", JSON.stringify(pcP))
-	localStorage.setItem("pcR", JSON.stringify(pcR))
-	localStorage.setItem("pcZ", JSON.stringify(pcZ))
-}
-
-function loadGame() {
-	if(lsExists("pcP")) pcP = JSON.parse(localStorage.getItem("pcP"))
-	if(lsExists("pcS")) pcS = JSON.parse(localStorage.getItem("pcS"))
-	if(lsExists("pcR")) pcR = JSON.parse(localStorage.getItem("pcR"))
-	if(lsExists("pcZ")) pcZ = JSON.parse(localStorage.getItem("pcZ"))
-	refreshAll()
-}
-
 async function waitThenMessageGame(m, s, t = 2) {
 	await sleep(s)
 	messageGame(m, t)
@@ -289,7 +273,6 @@ async function waitThenMessageGame(m, s, t = 2) {
 
 // Show loading screen logo
 $(window).bind("load", () => {
-	loadGame()
 	pcTick=setInterval(()=>{tickGame()},pcZ.tickSpeed*1000)
 	$(r[4]).delay(200).fadeIn(250)
 	$(r[4]).delay(775).fadeOut(250)
@@ -361,7 +344,6 @@ function settingsRefresh() {
 	$("#settingsDoClickAnimations").attr("src", `${f}${pcS.clickAnim ? r[11] : r[12]}.webp`)
 	$("#settingsDoPurchaseAnimations").attr("src", `${f}${pcS.purchaseAnim ? r[11] : r[12]}.webp`)
 	$("#settingAbbreviateNumbers").attr("src", `${f}${pcS.abbreviateInts ? r[11] : r[12]}.webp`)
-	if(pcG.doSaveGame) saveGame()
 }
 
 async function PleasePlayTheCredits() {
@@ -373,7 +355,7 @@ async function PleasePlayTheCredits() {
 		{"n": "Caleb Rhinehart", "t": "Concept Builder"},
 		{"n": "Kylea Reed", "t": "Concept Builder"},
 		{"n": "CopyPaste Games", "t": "Copyright &copy; 2022"},
-		{"n": "Thank You", "t": "For Playing PieClicker!"}
+		{"n": "Full Game", "t": "Is On Steam"}
 	]
 	$("#creditsOverlay").fadeIn(1000)
 	await sleep(500)
@@ -434,11 +416,6 @@ function precompute() {
 
 function tickGame() {
 	pcP.pies += precomp.tick
-	if(pcG.doSaveGame && pcG.saveTick == 30) {
-		saveGame()
-		pcG.saveTick = 0
-	}
-	pcG.saveTick += 1
 
 	pcG.MSGtick -= 1
 	if(pcG.MSGtick < 0) pcG.MSGtick = 0
@@ -446,13 +423,6 @@ function tickGame() {
 	if(pcG.MSGtick == 0) $(r[7]).fadeOut(100)
 
 	if(pcG.AFK) pcG.awayPies += precomp.tick
-
-	if(pcP.pies == Infinity || pcP.pps == Infinity || pcP.ppc == Infinity) {
-		messageGame("FREAK ACCIDENT:  PIES, PPS & PPC DESTROYED!", 4)
-		pcP.pies = 5 * 10 ** 9
-		pcP.pps  = 5 * 10 ** 8
-		pcP.ppc  = 5 * 10 ** 7
-	}
 
 	reloadStats()
 }
