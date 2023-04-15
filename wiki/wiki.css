@@ -29,3 +29,7 @@ body {
 a {
     color: rgb(224, 70, 70);
 }
+
+hr {
+    width: 30%;
+}

@@ -4,8 +4,8 @@
 		<meta charset="utf-8">
 		<title>PieClicker | Wiki</title>
 
-		<meta name="description" content="The PieClicker Wiki, A place to learn all about upgrades and game features built into the idle clicker game.">
-		<meta name="keywords" content="Pie, Clicker, kgsensei, CopyPaste Games, Clicker Games">
+		<meta name="description" content="PieClicker, A pie themed clicker game by CopyPaste Games.">
+		<meta name="keywords" content="Pie, Clicker, kgsensei, CopyPaste Games, Clicker Games, PieClicker">
 		<meta name="author" content="kgsensei & CopyPaste Games">
 		<meta name="viewport" content="width=device-width, initial-scale=1.0">
 		<meta name="url" content="https://pieclicker.com">
@@ -17,12 +17,12 @@
 		<meta name="og:image:width" content="1366">
 		<meta name="og:image:height" content="768">
 		<meta name="og:site_name" content="PieClicker.com">
-		<meta name="og:description" content="The PieClicker Wiki, A place to learn all about upgrades and game features built into the idle clicker game.">
+		<meta name="og:description" content="PieClicker, A pie themed clicker game by CopyPaste Games.">
 
 		<meta name="twitter:card" content="summary_large_image">
         <meta name="theme-color" content="#fc496dff">
 
-		<script async src="./ka.js"></script>
+		<script async src="/ka.js"></script>
 
 		<link rel="icon" href="/assets/Pie.webp">
 
@@ -38,28 +38,30 @@
 		<!-- End Publisher Tag Manager -->
 	</head>
 	<body>
-		<img id="wiki_title" src="/assets/wiki_title.svg">
+        <a href="/wiki/home">
+            <img id="wiki_title" src="/assets/wiki_title.svg">
+        </a>
 		<div id="content">
-			<h1>PieClicker Wiki | Home</h1>
-
-			<hr>
-			<h3>Upgrades</h3>
-			<a href="./wiki_oven_upgrade">Oven Upgrade</a>
-			<br>
-			<a href="./wiki_assist_chef_upgrade">Assistant Chef Upgrade</a>
-			<br>
-			<a href="./wiki_large_oven_upgrade">Large Oven Upgrade</a>
-
-			<hr>
-			<h3>Game Resources</h3>
-			<a href="./wiki?itm=play">How to Play</a>
-			<br>
-			<a href="./wiki?itm=moding">Mod History and Basic Usage</a>
-			<br>
-			<a href="./wiki?itm=steam">History of PieClicker and Development</a>
-			<br>
-			<a href="./wiki?itm=achievements">Steam Achievements</a>
-			<br>
+			<h1>PieClicker Wiki | <span id="r_name"></span></h1>
+            <hr>
+			<h3 id="r_sect_title"></h3>
+			<p id="r_sect"></p>
+            <hr>
+			<h3>History</h3>
+			<p id="r_hist"></p>
 		</div>
+        <script>
+            function s(i,d) {document.getElementById(i).innerHTML=d}
+            const n = new URL(window.location.href)
+            const u = n.searchParams.get('itm')
+            fetch("/data/" + u + ".json")
+            .then(r => r.json())
+            .then(r => {
+                s("r_name", r.name)
+                s("r_sect_title", r.sect_title)
+                s("r_sect", r.sect)
+                s("r_hist", r.hist)
+            })
+        </script>
 	</body>
 </html>

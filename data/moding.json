@@ -1,0 +1,6 @@
+{
+    "name": "Mod Support",
+    "sect_title": "Building Mods",
+    "sect": "Mod files must use the <code>.pcmod</code> file extension and must use valid command syntax. PieClicker mods must be added in a folder titled 'mods' in the game files and a full game re-launch must be done to activate any mods added.",
+    "hist": "Mod support was added as a last minute feature in the first release of PieClicker on Steam and doesn't exist in any other version."
+}
