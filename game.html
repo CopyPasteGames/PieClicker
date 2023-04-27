@@ -5,38 +5,45 @@
 		<title>PieClicker | Web Demo</title>
 
 		<meta name="description" content="A short preview of the fun, idle clicker game, PieClicker.">
-		<meta name="keywords" content="Pie, Clicker, kgsensei, CopyPaste Games, Clicker Games">
-		<meta name="author" content="kgsensei & CopyPaste Games">
-		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<meta name="keywords" content="Pie, Clicker, kgsensei, CopyPaste Games, Clicker Games, Cookie Clicker, Pie Inc, Game, Steam">
+		<meta name="author" content="kgsensei">
+        <meta name="author" content="CopyPaste Games">
 		<meta name="url" content="https://pieclicker.com">
 		<meta name="copyright" content="kgsensei">
 
-		<meta name="og:url" content="https://pieclicker.com">
-		<meta name="og:title" content="PieClicker Web Demo">
-		<meta name="og:image" content="https://pieclicker.com/assets/PieClickerEmpires.webp">
-		<meta name="og:image:width" content="1366">
-		<meta name="og:image:height" content="768">
-		<meta name="og:site_name" content="PieClicker.com">
-		<meta name="og:description" content="A short preview of the fun, idle clicker game, PieClicker.">
+		<meta property="og:type" content="website">
+		<meta property="og:url" content="https://pieclicker.com/game">
+		<meta property="og:title" content="PieClicker Web Demo">
+		<meta property="og:site_name" content="PieClicker">
+		<meta property="og:description" content="A short preview of the fun, idle clicker game, PieClicker.">
+
+		<meta property="og:image:type" content="image/png">
+        <meta property="og:image:url" content="http://pieclicker.com/imgs/Header_Capsule.png">
+		<meta property="og:image:secure_url" content="https://pieclicker.com/imgs/Header_Capsule.png">
+		<meta property="og:image:width" content="460">
+		<meta property="og:image:height" content="215">
+        <meta property="og:image:alt" content="PieClicker is an interesting idle clicker game with a baking theme!">
+
+        <meta property="og:image:type" content="image/png">
+        <meta property="og:image:url" content="http://pieclicker.com/imgs/Library_Capsule.png">
+		<meta property="og:image:secure_url" content="https://pieclicker.com/imgs/Library_Capsule.png">
+		<meta property="og:image:width" content="600">
+		<meta property="og:image:height" content="900">
+        <meta property="og:image:alt" content="PieClicker is an interesting idle clicker game with a baking theme!">
+
+		<meta name="robots" content="index,follow,max-image-preview:standard">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 		<meta name="twitter:card" content="summary_large_image">
+        <meta name="twitter:creator" content="@realkgsensei">
+
         <meta name="theme-color" content="#fc496dff">
 
 		<script async src="./ka.js"></script>
-
 		<link rel="icon" href="./assets/Pie.webp">
-
+		
 		<link rel="stylesheet" href="./game.css">
 		<script src="./jquery.js"></script>
-
-		<!-- Publisher Tag Manager -->
-		<script>(function(w,d,s,a){var f=d.getElementsByTagName(s)[0],
-			j=d.createElement(s),dl='&.='+new Date().getTime()
-			,r=d.referrer;r=!!r&&r!==d.location.href?'&r='+r:'';j.async=true;
-			w['.']=a;j.src= '//pubtagmanager.com/ptm.js?id='+a+dl+r;
-			f.parentNode.insertBefore(j,f);
-		})(window,document,'script','2799');</script>
-		<!-- End Publisher Tag Manager -->
 	</head>
 	<body onload="startGame()">
 		<div id="pieClicker">
@@ -103,20 +110,20 @@
 
 			<div class="slightPadding">
 				<br>
+				<div class="otherMenuOption" onclick="window.location.href='https\:\/\/store.steampowered.com/app/2380870/PieClicker?utm_source=PieClickerWebdemo'">
+					<img loading="lazy" src="./assets/Button.webp" style="width:100%;height:100%;" draggable="false" alt="PieClicker Full Game">
+					<div class="btnText">Full Game</div>
+				</div>
+
+
 				<div class="otherMenuOption" onclick="PleasePlayTheCredits()">
 					<img loading="lazy" src="./assets/Button.webp" style="width:100%;height:100%;" draggable="false" alt="PieClicker Credits">
 					<div class="btnText">Credits</div>
 				</div>
 
 
-				<div class="otherMenuOption" onclick='resetGame()'>
-					<img loading="lazy" src="./assets/Button.webp" style="width:100%;height:100%;" draggable="false" alt="PieClicker Reset Game">
-					<div class="btnText">Reset</div>
-				</div>
-
-
 				<div class="otherMenuOption" onclick="settingsRefresh();$('#settingsMenu').fadeIn(500)">
-					<img loading="lazy" src="./assets/Button.webp" style="width:100%;height:100%;" draggable="false"  alt="PieClicker Settings">
+					<img loading="lazy" src="./assets/Button.webp" style="width:100%;height:100%;" draggable="false" alt="PieClicker Settings">
 					<div class="btnText">Settings</div>
 				</div>
 				<br>
@@ -124,7 +131,7 @@
 
 				<div style="font-size:1.25vw">
 					<h1>THIS IS A DEMO GAME</h1>
-					Get the <a href="https://store.steampowered.com/app/2380870/PieClicker?utm_source=PieClickerWebdemo" target="_blank">Full Game</a> for All Features:</br>
+					Get the <a class="btn_link" href="https://store.steampowered.com/app/2380870/PieClicker?utm_source=PieClickerWebdemo" target="_blank">Full Game</a> for All Features:</br>
 					+ 3 Save Slots</br>
 					+ Tons More Upgrades</br>
 					+ Better Performance</br>
@@ -185,7 +192,7 @@
 							<tr class="tableNoBorder">
 								<td class="tableNoBorder">Mute Game</td>
 								<td class="tableNoBorder">
-									<div onclick="pcS.mute =! pcS.mute; $('#musicPlayer').remove(); pcG.isPlayingMusic = false; settingsRefresh()" class="settingsBtn">
+									<div class="settingsBtn">
 										<img loading="lazy" id="settingsMuteGame" src="./assets/CheckBoxEmpty.webp" style="width:100%;height:100%;" alt="Settings Checkbox">
 									</div>
 								</td>
@@ -193,7 +200,7 @@
 							<tr class="tableNoBorder">
 								<td class="tableNoBorder">Do Click Animations</td>
 								<td class="tableNoBorder">
-									<div onclick="pcS.clickAnim =! pcS.clickAnim; settingsRefresh()" class="settingsBtn">
+									<div class="settingsBtn">
 										<img loading="lazy" id="settingsDoClickAnimations" src="./assets/CheckBoxEmpty.webp" style="width:100%;height:100%;" alt="Settings Checkbox">
 									</div>
 								</td>
@@ -201,7 +208,7 @@
 							<tr class="tableNoBorder">
 								<td class="tableNoBorder">Do Purchase Animations</td>
 								<td class="tableNoBorder">
-									<div onclick="pcS.purchaseAnim =! pcS.purchaseAnim; settingsRefresh()" class="settingsBtn">
+									<div class="settingsBtn">
 										<img loading="lazy" id="settingsDoPurchaseAnimations" src="./assets/CheckBoxEmpty.webp" style="width:100%;height:100%;" alt="Settings Checkbox">
 									</div>
 								</td>
@@ -209,7 +216,7 @@
 							<tr class="tableNoBorder">
 								<td class="tableNoBorder">Abbreviate Numbers</td>
 								<td class="tableNoBorder">
-									<div onclick="pcS.abbreviateInts =! pcS.abbreviateInts; settingsRefresh()" class="settingsBtn">
+									<div class="settingsBtn">
 										<img loading="lazy" id="settingAbbreviateNumbers" src="./assets/CheckBoxEmpty.webp" style="width:100%;height:100%;" alt="Settings Checkbox">
 									</div>
 								</td>
@@ -241,15 +248,5 @@
 		<script async src="./anim.js"></script>
 		<script async src="./game.js"></script>
 		<script async src="./music.js"></script>
-		<div id="preloadBuyAnims">
-			<link rel="preload" href="./assets/anim0.webm" as="video">
-			<link rel="preload" href="./assets/anim1.webm" as="video">
-			<link rel="preload" href="./assets/anim2.webm" as="video">
-			<link rel="preload" href="./assets/anim3.webm" as="video">
-			<link rel="preload" href="./assets/anim4.webm" as="video">
-			<link rel="preload" href="./assets/anim5.webm" as="video">
-			<link rel="preload" href="./assets/anim6.webm" as="video">
-			<link rel="preload" href="./assets/anim7.webm" as="video">
-		</div>
 	</body>
 </html>

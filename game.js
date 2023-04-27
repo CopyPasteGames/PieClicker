@@ -422,8 +422,6 @@ function tickGame() {
 	if(pcG.MSGtick > 6) pcG.MSGtick = 4
 	if(pcG.MSGtick == 0) $(r[7]).fadeOut(100)
 
-	if(pcG.AFK) pcG.awayPies += precomp.tick
-
 	reloadStats()
 }
 
@@ -454,28 +452,6 @@ function confirmationBox(t, b1, b2, bf, bg) {
 	$('#pm_btn2').attr("onclick", bg)
 	$('#popupMenu').fadeIn(500)
 }
-
-function resetGame() {
-	confirmationBox("Reset Game?", "Yes", "No", "pcReset()", "$('#popupMenu').fadeOut(500)")
-}
-
-function pcReset() {
-	pcG.doSaveGame = false
-	localStorage.clear()
-	window.location.reload()
-}
-
-window.addEventListener("blur", () => {
-	pcG.AFK = true
-	pcG.awayPies = 0
-})
-
-window.addEventListener("focus", () => {
-	pcG.AFK = false
-	if(pcG.awayPies > 0) {
-		messageGame(`While Gone You Made +${p2n(pcG.awayPies)} Pies!`, 3)
-	}
-})
 
 function sortUpgrades(l) {
 	haUp()

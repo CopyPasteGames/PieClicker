@@ -10,6 +10,16 @@
 	src: url("./assets/CenturyGothic.ttf");
 }
 
+.btn_link {
+    background-color: rgb(224, 70, 70);
+    display: inline-block;
+    padding: 8px;
+    margin: 5px 5px 0px 5px;
+    border-radius: 6px;
+    color: rgb(255, 255, 255);
+    cursor: pointer;
+}
+
 body {
 	font-family: CenturyGothic;
 	background-color: black;

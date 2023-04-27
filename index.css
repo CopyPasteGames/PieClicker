@@ -14,9 +14,24 @@ body {
 #game_intro_panel {
     position: absolute;
     top: 10%;
-    left: 30%;
+    left: 10%;
     height: 50%;
     width: 40%;
+}
+
+#video {
+    border: none;
+    position: absolute;
+    top: 25%;
+    left: 55%;
+    height: 40%;
+    width: 35%;
+}
+
+#video_sub {
+    position: absolute;
+    top: 66%;
+    left: 55.5%;
 }
 
 #game_intro_title {
@@ -35,12 +50,19 @@ body {
     color: rgb(224, 70, 70);
 }
 
+#secondImage {
+    height: 100%;
+    left: 100%;
+    position: absolute;
+    transform: translate(-100%, 0px);
+}
+
 #game_intro_pie {
     position: absolute;
     top: 0%;
-    left: calc(50% - 350px);
-    width: 700px;
-    height: 700px;
+    left: -25%;
+    width: 150%;
+    height: 150%;
     animation: rotate 12s linear 100ms infinite;
 }
 
@@ -107,7 +129,7 @@ body {
     position: absolute;
     overflow: hidden;
     top: 220%;
-    left: -20%;
+    left: -21%;
     height: 700px;
     width: 40%;
 }
@@ -145,6 +167,25 @@ body {
 }
 
 @media only screen and (max-device-width: 915px) {
+    h1 {
+        font-size: 7.5vw !important;
+    }
+
+    h2 {
+        font-size: 4.5vw !important;
+    }
+
+    #video, #video_sub {
+        display: none;
+    }
+
+    #game_intro_panel {
+        top: 10%;
+        left: 30%;
+        height: 50%;
+        width: 40%;
+    }
+
     #game_intro_pie {
         top: 0%;
         left: calc(50% - 150px);
@@ -158,17 +199,18 @@ body {
     }
 
     #new_area_one, #new_area_two {
-        top: 70%;
+        display: none;
     }
 
     #section_two_panel {
-        top: 83%;
+        top: 76%;
         left: 30%;
         width: 60%;
+        text-align: right;
     }
 
     #section_thr_panel {
-        top: 127%;
+        top: 119%;
         left: 10%;
         width: 80%;
     }
@@ -178,14 +220,15 @@ body {
     }
 
     #section_for_panel {
-        top: 194%;
+        top: 170%;
         left: 10%;
         width: 80%;
+        text-align: right;
     }
 
     #section_fiv_panel {
         position: absolute;
-        top: 259%;
+        top: 222%;
         left: 10%;
         height: 70%;
         width: 80%;
