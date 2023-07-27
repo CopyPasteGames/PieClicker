@@ -11,6 +11,46 @@ body {
     color: rgb(255, 255, 255);
 }
 
+#qbox {
+    position: relative;
+    width: 100%;
+}
+
+.centerText {
+	cursor: inherit;
+	position: absolute;
+	top: 50%;
+	left: 0%;
+	width: 100%;
+	text-align: center;
+	transform: translate(0%, 100%);
+}
+
+.wheel_btn {
+    position: absolute;
+    top: 0%;
+    width: 5%;
+    height: 100%;
+    cursor: pointer;
+    user-select: none;
+}
+
+#qlt {
+    left: 0%;
+}
+
+#qgt {
+    left: 95%;
+}
+
+#quotes {
+    position: absolute;
+    font-size: 20px;
+    width: 90%;
+    left: 5%;
+    word-wrap: break-word;
+}
+
 #game_intro_panel {
     position: absolute;
     top: 10%;
