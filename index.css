@@ -99,12 +99,11 @@ body {
 }
 
 #game_intro_pie {
-    position: absolute;
-    top: 0%;
-    left: -25%;
-    width: 150%;
-    height: 150%;
-    animation: rotate 12s linear 100ms infinite;
+	position: absolute;
+	top: 0%;
+	left: 3%;
+	height: 155%;
+	animation: rotate 12s linear 100ms infinite;
 }
 
 @keyframes rotate {
