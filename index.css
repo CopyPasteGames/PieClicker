@@ -60,12 +60,13 @@ body {
 }
 
 #video {
-    border: none;
-    position: absolute;
-    top: 25%;
-    left: 55%;
-    height: 40%;
-    width: 35%;
+	border: none;
+	position: absolute;
+	top: 25%;
+	left: 55%;
+	height: auto;
+	width: 35%;
+	aspect-ratio: 16 / 9;
 }
 
 #video_sub {
